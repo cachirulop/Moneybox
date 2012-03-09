@@ -7,7 +7,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
 
 import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.data.MoneyboxDataHelper;
@@ -59,7 +58,6 @@ public class MovementsManager {
 	
 	public static double getTotalAmount (Context ctx) {
 		SQLiteDatabase db;
-		SQLiteStatement st;
 		Cursor c;
 		
 		db = new MoneyboxDataHelper(ctx).getReadableDatabase();
