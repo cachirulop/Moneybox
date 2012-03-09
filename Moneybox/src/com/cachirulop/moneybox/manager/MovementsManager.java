@@ -7,7 +7,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
+import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.data.MoneyboxDataHelper;
 import com.cachirulop.moneybox.entity.Movement;
 
@@ -53,5 +55,18 @@ public class MovementsManager {
 		values.put("insert_date", m.getInsertDateDB());
 		
 		db.insert("movements", null, values);
+	}
+	
+	public static double getTotalAmount (Context ctx) {
+		SQLiteDatabase db;
+		SQLiteStatement st;
+		Cursor c;
+		
+		db = new MoneyboxDataHelper(ctx).getReadableDatabase();
+		
+		c = db.rawQuery(ctx.getString(R.string.moneyboxDatabase_SQL_movements_sumAmount), null);
+		c.moveToFirst();
+		
+		return c.getDouble(0);
 	}
 }

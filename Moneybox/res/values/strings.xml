@@ -13,4 +13,8 @@
     <string name="moneyboxDatabase_onUpgrade">
 		DROP TABLE IF EXISTS movements;
     </string>
+    
+    <string name="moneyboxDatabase_SQL_movements_sumAmount">
+        SELECT sum(amount) FROM movements;
+    </string>
 </resources>

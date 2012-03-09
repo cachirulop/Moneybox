@@ -55,6 +55,6 @@ public class MoneyboxActivity extends Activity {
         
         MovementsManager.addMovement(this, m);
     	
-        Toast.makeText(this, name + " pa la hucha!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, name + " pa la hucha! Total: " + MovementsManager.getTotalAmount(this), Toast.LENGTH_SHORT).show();
     }
 }
