@@ -2,14 +2,17 @@ package com.cachirulop.moneybox.activity;
 
 import java.util.Date;
 
-import com.cachirulop.moneybox.R;
-import com.cachirulop.moneybox.entity.Movement;
-import com.cachirulop.moneybox.manager.MovementsManager;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.cachirulop.moneybox.R;
+import com.cachirulop.moneybox.entity.Movement;
+import com.cachirulop.moneybox.manager.MovementsManager;
 
 public class MoneyboxActivity extends Activity {
     /** Called when the activity is first created. */
@@ -54,6 +57,11 @@ public class MoneyboxActivity extends Activity {
         m.setInsertDate(new Date());
         
         MovementsManager.addMovement(this, m);
+        
+        ImageView spaceshipImage = (ImageView) findViewById(R.id.img1cent);
+
+        Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(this, R.anim.money_fall);
+        spaceshipImage.startAnimation(hyperspaceJumpAnimation);
     	
         Toast.makeText(this, name + " pa la hucha! Total: " + MovementsManager.getTotalAmount(this), Toast.LENGTH_SHORT).show();
     }
