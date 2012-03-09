@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, MoneyboxActivity!</string>
+    <string name="app_name">Moneybox</string>
+    <string name="moneyboxDatabase_oncreate">
+        CREATE TABLE movements (id_movement INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                                amount NUMERIC NOT NULL,
+                                insert_date TIMESTAMP NOT NULL DEFAULT current_timestamp,
+                                description TEXT);
+        
+    </string>
+    <string name="moneyboxDatabase_onUpgrade">
+		DROP TABLE IF EXISTS movements;
+    </string>
+</resources>
