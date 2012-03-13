@@ -58,11 +58,11 @@ public class MoneyboxActivity extends Activity {
         
         MovementsManager.addMovement(this, m);
         
+        Toast.makeText(this, name + " pa la hucha! Total: " + MovementsManager.getTotalAmount(this), Toast.LENGTH_SHORT).show();
+
         ImageView spaceshipImage = (ImageView) findViewById(R.id.img1cent);
 
         Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(this, R.anim.money_fall);
         spaceshipImage.startAnimation(hyperspaceJumpAnimation);
-    	
-        Toast.makeText(this, name + " pa la hucha! Total: " + MovementsManager.getTotalAmount(this), Toast.LENGTH_SHORT).show();
     }
 }
