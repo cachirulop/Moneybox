@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <array name="euro_money_icons">
+        <item>@drawable/ic_euro_1cent</item>
+        <item>@drawable/ic_euro_2cent</item>
+        <item>@drawable/ic_euro_5cent</item>
+        <item>@drawable/ic_euro_10cent</item>
+        <item>@drawable/ic_euro_20cent</item>
+        <item>@drawable/ic_euro_50cent</item>
+        <item>@drawable/ic_euro_1euro</item>
+        <item>@drawable/ic_euro_2euro</item>
+        <item>@drawable/ic_euro_5euro</item>
+        <item>@drawable/ic_euro_10euro</item>
+        <item>@drawable/ic_euro_20euro</item>
+        <item>@drawable/ic_euro_50euro</item>
+        <item>@drawable/ic_euro_100euro</item>
+        <item>@drawable/ic_euro_200euro</item>
+        <item>@drawable/ic_euro_500euro</item>
+    </array>
+    
+    <array name="euro_money_values">
+        <item>0.01</item>
+        <item>0.02</item>
+        <item>0.05</item>
+        <item>0.10</item>
+        <item>0.20</item>
+        <item>0.50</item>
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+        <item>50</item>
+        <item>100</item>
+        <item>200</item>
+        <item>500</item>
+    </array>
+    <string name="currency_name">euro</string>
+    
+</resources>
