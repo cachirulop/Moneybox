@@ -4,17 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/img1cent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher_1cent" />    
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hello" />
-
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
@@ -28,54 +17,100 @@
             android:fillViewport="true" >
 
             <LinearLayout
-                android:id="@+id/linearLayout2"
+                android:id="@+id/moneyButtonsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/btn1cent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_launcher_1cent" 
-                    android:background="@null" 
-                    android:onClick="onMoneyClicked" />
+                    android:background="@null"
+                    android:onClick="onMoneyClicked"
+                    android:soundEffectsEnabled="true"
+                    android:src="@drawable/ic_launcher_1cent" />
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/btn2cent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_launcher_2cent"
-                    android:background="@null"  
-                    android:onClick="onMoneyClicked"/>
+                    android:background="@null"
+                    android:onClick="onMoneyClicked"
+                    android:src="@drawable/ic_launcher_2cent" />
 
-                <ImageButton                   
+                <ImageView
                     android:id="@+id/btn5cent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_launcher_5cent"
-                    android:background="@null" 
-                    android:onClick="onMoneyClicked"/>
+                    android:background="@null"
+                    android:onClick="onMoneyClicked"
+                    android:src="@drawable/ic_launcher_5cent" />
 
-                <ImageButton                   
+                <ImageView
                     android:id="@+id/btn10cent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_launcher_10cent"
-                    android:background="@null" 
-                    android:onClick="onMoneyClicked"/>
-                
-                <ImageButton                   
+                    android:background="@null"
+                    android:onClick="onMoneyClicked"
+                    android:src="@drawable/ic_launcher_10cent" />
+
+                <ImageView
                     android:id="@+id/btn5euro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_launcher_5euro"
-                    android:background="@null" 
-                    android:onClick="onMoneyClicked"/>
-
-
-
+                    android:background="@null"
+                    android:onClick="onMoneyClicked"
+                    android:src="@drawable/ic_launcher_5euro" />
             </LinearLayout>
         </HorizontalScrollView>
+
+        <RelativeLayout
+            android:id="@+id/moneyBoxLayout"
+            android:layout_width="match_parent"
+            android:layout_height="404dp"
+            android:gravity="fill" >
+
+            <ImageView
+                android:id="@+id/imgMoneyFall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="14dp"
+                android:src="@drawable/ic_launcher_1cent"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/moneyButtonsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/txtTotalTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:text="@string/txtTotalTitle"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+            
+            <TextView
+                android:id="@+id/txtTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:src="@drawable/ic_menu_hammer" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
