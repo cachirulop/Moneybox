@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cachirulop.moneybox.R;
@@ -68,19 +73,67 @@ public class MoneyboxActivity extends Activity {
 	    		break;
         }
         
+        View buttons;
+        
+        buttons = (View) findViewById(R.id.moneyButtonsLayout);
+        // buttons.setEnabled(false);
+        
+        addMovement (amount);
+        throwMoney ((ImageView) v);
+        updateTotals ();
+
+        // buttons.setEnabled(false);
+    }
+    
+    /**
+     * Add a moneybox movement to the database
+     * @param amount Amount of money to add
+     */
+    private void addMovement (double amount) {
         Movement m;
         
         m = new Movement();
         m.setAmount(amount);
         m.setInsertDate(new Date());
-        
+
         MovementsManager.addMovement(this, m);
+    }
+    
+    /**
+     * Move an image of the money like it was falling inside 
+     * the money box
+     * @param src Image of the money to fall
+     */
+    private void throwMoney (ImageView src) {
+        // Bitmap srcBmp;
+        // Bitmap dstBmp;
+        ImageView money;
+        Animation moneyFall;
         
-        Toast.makeText(this, name + " pa la hucha! Total: " + MovementsManager.getTotalAmount(this), Toast.LENGTH_SHORT).show();
+        // srcBmp = ((BitmapDrawable) ((ImageView) v).getDrawable()).getBitmap();
+        // dstBmp = srcBmp.copy(srcBmp.getConfig(), true);
 
-        ImageView spaceshipImage = (ImageView) findViewById(R.id.img1cent);
-
-        Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(this, R.anim.money_fall);
-        spaceshipImage.startAnimation(hyperspaceJumpAnimation);
+        money = (ImageView) findViewById(R.id.imgMoneyFall);
+        // dst.setImageBitmap(dstBmp);
+        
+        money.setImageDrawable(src.getDrawable());
+        
+        moneyFall = AnimationUtils.loadAnimation(this, R.anim.money_fall);
+        money.setVisibility(View.VISIBLE);
+        money.startAnimation(moneyFall);
+        money.setVisibility(View.INVISIBLE);
+    }
+    
+    /**
+     * Update all the totals
+     */
+    private void updateTotals () {
+    	// Global 
+    	TextView total;
+    	
+    	total = (TextView) findViewById(R.id.txtTotal);
+    	total.setText(String.format("%.2f", MovementsManager.getTotalAmount(this)));
     }
 }
+
+
