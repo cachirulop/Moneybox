@@ -2,5 +2,6 @@
 <resources>
     <string name="app_name">Hucha</string>
     <string name="txtTotalTitle">Total:</string>
-    <string name="break_moneybox">¡Se ha vaciado la hucha!</string>
+    <string name="break_moneybox">Hucha vacía</string>
+    <string name="break_moneybox_confirm">¿Seguro que quieres vaciar la hucha?</string>
 </resources>

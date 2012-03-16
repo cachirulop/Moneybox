@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
@@ -20,24 +20,24 @@
             <LinearLayout
                 android:id="@+id/moneyButtonsLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_gravity="center_vertical">
+                android:layout_height="wrap_content">
             </LinearLayout>
         </HorizontalScrollView>
-
+
         <RelativeLayout
             android:id="@+id/moneyBoxLayout"
             android:layout_width="match_parent"
-            android:layout_height="448dp" >
+            android:layout_height="420dp" >
 
-<!--             
+<!--              
             <ImageView
                 android:id="@+id/imgMoneyDrop"
                 android:layout_width="50dip"
                 android:layout_height="50dip"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_launcher_1cent" />
--->
+                android:src="@drawable/ic_euro_20cent" />
+ -->
 
         </RelativeLayout>            
  

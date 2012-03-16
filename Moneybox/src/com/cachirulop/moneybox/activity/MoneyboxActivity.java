@@ -1,14 +1,22 @@
 package com.cachirulop.moneybox.activity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,9 +29,12 @@ import com.cachirulop.moneybox.manager.CurrencyManager;
 import com.cachirulop.moneybox.manager.MovementsManager;
 import com.cachirulop.moneybox.manager.SoundsManager;
 
-public class MoneyboxActivity extends Activity {
+public class MoneyboxActivity 
+	extends Activity {
 	
 	private static Context _context;
+	
+	private ImageView _imgDragging = null;
 	
     /** Called when the activity is first created. */
     @Override
@@ -48,10 +59,41 @@ public class MoneyboxActivity extends Activity {
     }
     
     public void onHammerClicked(View v) {
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	
+    	builder.setMessage(R.string.break_moneybox_confirm);
+    	builder.setCancelable(true);
+    	
+    	builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+    	           public void onClick(DialogInterface dialog, int id) {
+    	                breakMoneybox();
+    	           }
+    	       });
+    	
+    	builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+    	           public void onClick(DialogInterface dialog, int id) {
+    	                dialog.cancel();
+    	           }
+    	       });
+    	
+    	AlertDialog alert;
+    	
+    	alert = builder.create();
+    	alert.show();
+    }
+    
+    protected void breakMoneybox ()
+    {
+    	RelativeLayout layout;
+    	
         SoundsManager.playBreakingMoneyboxSound();
     	MovementsManager.breakMoneybox();
+
+    	layout = (RelativeLayout) findViewById(R.id.moneyBoxLayout);
+        layout.clearDisappearingChildren();
+
         updateTotals ();
-    }    
+    }
     
     /**
      * Move an image of the money like it was droping inside 
@@ -60,7 +102,7 @@ public class MoneyboxActivity extends Activity {
      */
     private void throwMoney (View src, CurrencyValueDef c) {
         ImageView money;
-        Animation moneyDrop;
+        AnimationSet moneyDrop;
         RelativeLayout layout;
         RelativeLayout.LayoutParams lpParams;
         HorizontalScrollView scroll;
@@ -83,18 +125,19 @@ public class MoneyboxActivity extends Activity {
         layout.addView(money, lpParams);
 
         if (c.getType() == CurrencyValueDef.MoneyType.COIN) {
-        	moneyDrop = AnimationUtils.loadAnimation(this, R.anim.coin_drop);
+        	moneyDrop = (AnimationSet) AnimationUtils.loadAnimation(this, R.anim.coin_drop);
         }
         else {
-        	moneyDrop = AnimationUtils.loadAnimation(this, R.anim.bill_drop);
+        	moneyDrop = (AnimationSet) AnimationUtils.loadAnimation(this, R.anim.bill_drop);
         }
         
         money.setVisibility(View.VISIBLE);
+        
         SoundsManager.playCoinsSound();
         money.startAnimation(moneyDrop);
-        money.setVisibility(View.INVISIBLE);
     }
-    
+
+   
     /**
      * Update all the totals
      */
@@ -134,6 +177,7 @@ public class MoneyboxActivity extends Activity {
         	v = new ImageView (this);
         	v.setOnClickListener(listener);
         	v.setImageDrawable(c.getDrawable());
+        	v.setLongClickable(true);
         	v.setTag(c);
         	
         	buttons.addView(v);
@@ -149,6 +193,7 @@ public class MoneyboxActivity extends Activity {
     {
     	return _context;
     }
+
 }
 
 

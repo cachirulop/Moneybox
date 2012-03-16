@@ -22,7 +22,7 @@ public class SoundsManager {
         _soundsMap = new int [2];
         
         _soundsMap [SOUND_DROP_COIN] = _sounds.load(MoneyboxActivity.getContext(), R.raw.money_fall, 1);
-        _soundsMap [SOUND_BREAK_MONEYBOX] =_sounds.load(MoneyboxActivity.getContext(), R.raw.breaking_glass, 1); 
+        _soundsMap [SOUND_BREAK_MONEYBOX] =_sounds.load(MoneyboxActivity.getContext(), R.raw.moneybox, 1); 
 	}
 
 	public static void playCoinsSound () {

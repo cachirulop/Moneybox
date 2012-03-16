@@ -4,6 +4,7 @@
     <string name="app_name">Moneybox</string>
     <string name="txtTotalTitle">Total:</string>
     <string name="break_moneybox">Piggy bank is empty!</string>
+    <string name="break_moneybox_confirm">Are you sure?</string>
         
     <!--  SQL -->
     <string name="moneyboxDatabase_oncreate">
