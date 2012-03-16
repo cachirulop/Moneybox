@@ -9,18 +9,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cachirulop.moneybox.R;
+import com.cachirulop.moneybox.activity.MoneyboxActivity;
 import com.cachirulop.moneybox.data.MoneyboxDataHelper;
 import com.cachirulop.moneybox.entity.Movement;
 
 public class MovementsManager {
 
-	public static ArrayList<Movement> getMovements(Context ctx)
+	public static ArrayList<Movement> getMovements()
 	{
 		ArrayList<Movement> result;
 		Cursor c;
 		SQLiteDatabase db;
 		
-		db = new MoneyboxDataHelper(ctx).getReadableDatabase();
+		db = new MoneyboxDataHelper(MoneyboxActivity.getContext()).getReadableDatabase();
 		result = new ArrayList<Movement>();
 		
 		c = db.query("movements", null, null, null, null, null, "date(insert_date)");
@@ -41,10 +42,10 @@ public class MovementsManager {
 		return result;
 	}
 	
-	public static void addMovement (Context ctx, Movement m) {
+	public static void addMovement (Movement m) {
 		SQLiteDatabase db;
 		
-		db = new MoneyboxDataHelper(ctx).getWritableDatabase();
+		db = new MoneyboxDataHelper(MoneyboxActivity.getContext()).getWritableDatabase();
 		
 		ContentValues values;
 		
@@ -56,9 +57,33 @@ public class MovementsManager {
 		db.insert("movements", null, values);
 	}
 	
-	public static double getTotalAmount (Context ctx) {
+    /**
+     * Add a moneybox movement to the database
+     * @param amount Amount of money to add
+     */
+    public static void addMovement (double amount) {
+    	addMovement(amount, null);
+    }
+    
+    public static void addMovement (double amount, String description) {
+        Movement m;
+        
+        m = new Movement();
+        m.setAmount(amount);
+        m.setInsertDate(new Date());
+        if (description != null) {
+        	m.setDescription(description);
+        }
+
+        MovementsManager.addMovement(m);
+    }
+	
+	public static double getTotalAmount () {
 		SQLiteDatabase db;
 		Cursor c;
+		Context ctx;
+		
+		ctx = MoneyboxActivity.getContext();
 		
 		db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 		
@@ -67,4 +92,11 @@ public class MovementsManager {
 		
 		return c.getDouble(0);
 	}
+	
+	public static void breakMoneybox () {
+		// Negative total amount!
+		MovementsManager.addMovement(-MovementsManager.getTotalAmount(), 
+				MoneyboxActivity.getContext().getString(R.string.break_moneybox));
+	}
+	
 }

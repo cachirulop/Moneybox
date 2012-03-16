@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- I18n -->
     <string name="app_name">Moneybox</string>
     <string name="txtTotalTitle">Total:</string>
+    <string name="break_moneybox">Piggy bank is empty!</string>
+        
+    <!--  SQL -->
     <string name="moneyboxDatabase_oncreate">
         CREATE TABLE movements (id_movement INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                                 amount NUMERIC NOT NULL,
@@ -16,4 +20,6 @@
     <string name="moneyboxDatabase_SQL_movements_sumAmount">
         SELECT sum(amount) FROM movements;
     </string>
+    
+        
 </resources>

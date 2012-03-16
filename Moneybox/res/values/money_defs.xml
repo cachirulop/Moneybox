@@ -28,6 +28,7 @@
         <item>0.20</item>
         <item>0.50</item>
         <item>1</item>
+        <item>2</item>
         <item>5</item>
         <item>10</item>
         <item>20</item>
@@ -36,6 +37,27 @@
         <item>200</item>
         <item>500</item>
     </array>
+    
+    <array name="euro_money_types">
+        <item>coin</item>
+        <item>coin</item>
+        <item>coin</item>
+        <item>coin</item>
+        <item>coin</item>
+        <item>coin</item>
+        <item>coin</item>
+        <item>coin</item>
+        <item>bill</item>
+        <item>bill</item>
+        <item>bill</item>
+        <item>bill</item>
+        <item>bill</item>
+        <item>bill</item>
+        <item>bill</item>
+    </array>
+    
     <string name="currency_name">euro</string>
     
+    <string name="money_bill">bill</string>
+    <string name="money_coin">coin</string>
 </resources>

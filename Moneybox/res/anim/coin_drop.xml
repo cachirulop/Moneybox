@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<set xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:shareInterpolator="false">
+
+    <alpha
+        android:fromAlpha="0.0"
+        android:toAlpha="1.0"
+        android:duration="500" />
+    
+   	<translate android:interpolator="@android:anim/bounce_interpolator" 
+        android:factor="0.5"
+        android:fromXDelta="1.0"
+        android:fromYDelta="1.0"
+        android:toXDelta="1.0"
+        android:toYDelta="100%p"
+        android:startOffset="300"
+        android:duration="1500" />
+        
+    <alpha
+        android:fromAlpha="1.0"
+        android:toAlpha="0.0"
+        android:startOffset="1200"
+        android:duration="500" />
+</set>

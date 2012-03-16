@@ -11,81 +11,40 @@
         android:orientation="vertical" >
 
         <HorizontalScrollView
+            android:id="@+id/scrollButtonsView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:fillViewport="true" >
+            android:fillViewport="true" android:layout_gravity="top">
 
             <LinearLayout
                 android:id="@+id/moneyButtonsLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <ImageView
-                    android:id="@+id/btn1cent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:onClick="onMoneyClicked"
-                    android:soundEffectsEnabled="true"
-                    android:src="@drawable/ic_launcher_1cent" />
-
-                <ImageView
-                    android:id="@+id/btn2cent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:onClick="onMoneyClicked"
-                    android:src="@drawable/ic_launcher_2cent" />
-
-                <ImageView
-                    android:id="@+id/btn5cent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:onClick="onMoneyClicked"
-                    android:src="@drawable/ic_launcher_5cent" />
-
-                <ImageView
-                    android:id="@+id/btn10cent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:onClick="onMoneyClicked"
-                    android:src="@drawable/ic_launcher_10cent" />
-
-                <ImageView
-                    android:id="@+id/btn5euro"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:onClick="onMoneyClicked"
-                    android:src="@drawable/ic_launcher_5euro" />
+                android:layout_height="wrap_content" android:layout_gravity="center_vertical">
             </LinearLayout>
         </HorizontalScrollView>
-
+
         <RelativeLayout
             android:id="@+id/moneyBoxLayout"
             android:layout_width="match_parent"
-            android:layout_height="404dp"
-            android:gravity="fill" >
+            android:layout_height="448dp" >
 
+<!--             
             <ImageView
-                android:id="@+id/imgMoneyFall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/imgMoneyDrop"
+                android:layout_width="50dip"
+                android:layout_height="50dip"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="14dp"
-                android:src="@drawable/ic_launcher_1cent"
-                android:visibility="invisible" />
-        </RelativeLayout>
+                android:src="@drawable/ic_launcher_1cent" />
+-->
 
+        </RelativeLayout>            
+ 
         <LinearLayout
             android:id="@+id/moneyButtonsLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content" android:layout_gravity="bottom">
 
             <TextView
                 android:id="@+id/txtTotalTitle"
@@ -108,8 +67,9 @@
                 android:id="@+id/imageView1"
                 android:layout_width="31dp"
                 android:layout_height="31dp"
-                android:src="@drawable/ic_menu_hammer" />
-
+                android:src="@drawable/ic_menu_hammer"
+                android:onClick="onHammerClicked" />
+            
         </LinearLayout>
     </LinearLayout>
 
