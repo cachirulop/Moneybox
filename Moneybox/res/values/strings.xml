@@ -5,6 +5,10 @@
     <string name="txtTotalTitle">Total:</string>
     <string name="break_moneybox">Piggy bank is empty!</string>
     <string name="break_moneybox_confirm">Are you sure?</string>
+    
+    <!-- tabs -->
+    <string name="tab_title_moneybox">Moneybox</string>
+    <string name="tab_title_movements">Movements</string>
         
     <!--  SQL -->
     <string name="moneyboxDatabase_oncreate">

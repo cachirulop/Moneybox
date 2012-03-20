@@ -4,4 +4,8 @@
     <string name="txtTotalTitle">Total:</string>
     <string name="break_moneybox">Hucha vacía</string>
     <string name="break_moneybox_confirm">¿Seguro que quieres vaciar la hucha?</string>
+
+    <!-- tabs -->
+    <string name="tab_title_moneybox">Hucha</string>
+    <string name="tab_title_movements">Movimientos</string>
 </resources>

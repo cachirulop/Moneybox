@@ -19,42 +19,56 @@ public class MovementsManager {
 	{
 		ArrayList<Movement> result;
 		Cursor c;
-		SQLiteDatabase db;
+		SQLiteDatabase db = null;
 		
-		db = new MoneyboxDataHelper(MoneyboxActivity.getContext()).getReadableDatabase();
-		result = new ArrayList<Movement>();
-		
-		c = db.query("movements", null, null, null, null, null, "date(insert_date)");
-		if (c!= null) {
-			c.moveToFirst();
-			do {
-				Movement current;
-				
-				current = new Movement ();
-				current.setIdMovement(c.getInt(c.getColumnIndex("id_movement")));
-				current.setAmount(c.getDouble(c.getColumnIndex("amount")));
-				current.setDescription(c.getString(c.getColumnIndex("description")));
-				current.setInsertDate(new Date(c.getString(c.getColumnIndex("insert_date"))));
+		try {
+			db = new MoneyboxDataHelper(MoneyboxActivity.getContext()).getReadableDatabase();
+			result = new ArrayList<Movement>();
+			
+			c = db.query("movements", null, null, null, null, null, "date(insert_date)");
+			if (c!= null) {
+				c.moveToFirst();
+				do {
+					Movement current;
+					
+					current = new Movement ();
+					current.setIdMovement(c.getInt(c.getColumnIndex("id_movement")));
+					current.setAmount(c.getDouble(c.getColumnIndex("amount")));
+					current.setDescription(c.getString(c.getColumnIndex("description")));
+					current.setInsertDate(new Date(c.getString(c.getColumnIndex("insert_date"))));
+				}
+				while (c.moveToNext());
 			}
-			while (c.moveToNext());
+			
+			return result;
 		}
-		
-		return result;
+		finally {
+			if (db != null) {
+				db.close();
+			}
+		}
 	}
 	
 	public static void addMovement (Movement m) {
-		SQLiteDatabase db;
+		SQLiteDatabase db = null;
 		
-		db = new MoneyboxDataHelper(MoneyboxActivity.getContext()).getWritableDatabase();
-		
-		ContentValues values;
-		
-		values = new ContentValues();
-		values.put("amount", m.getAmount());
-		values.put("description", m.getDescription());
-		values.put("insert_date", m.getInsertDateDB());
-		
-		db.insert("movements", null, values);
+		try {
+			db = new MoneyboxDataHelper(MoneyboxActivity.getContext()).getWritableDatabase();
+			
+			ContentValues values;
+			
+			values = new ContentValues();
+			values.put("amount", m.getAmount());
+			values.put("description", m.getDescription());
+			values.put("insert_date", m.getInsertDateDB());
+			
+			db.insert("movements", null, values);
+		}
+		finally {
+			if (db != null) {
+				db.close();
+			}
+		}
 	}
 	
     /**
@@ -79,18 +93,24 @@ public class MovementsManager {
     }
 	
 	public static double getTotalAmount () {
-		SQLiteDatabase db;
+		SQLiteDatabase db = null;
 		Cursor c;
 		Context ctx;
 		
-		ctx = MoneyboxActivity.getContext();
-		
-		db = new MoneyboxDataHelper(ctx).getReadableDatabase();
-		
-		c = db.rawQuery(ctx.getString(R.string.moneyboxDatabase_SQL_movements_sumAmount), null);
-		c.moveToFirst();
-		
-		return c.getDouble(0);
+		try {
+			ctx = MoneyboxActivity.getContext();
+			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
+			
+			c = db.rawQuery(ctx.getString(R.string.moneyboxDatabase_SQL_movements_sumAmount), null);
+			c.moveToFirst();
+			
+			return c.getDouble(0);
+		}
+		finally {
+			if (db != null) {
+				db.close();
+			}
+		}
 	}
 	
 	public static void breakMoneybox () {
