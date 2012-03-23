@@ -1,13 +1,11 @@
 package com.cachirulop.moneybox.manager;
 
-import java.util.HashMap;
-
-import com.cachirulop.moneybox.R;
-import com.cachirulop.moneybox.activity.MoneyboxActivity;
-
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.Log;
+
+import com.cachirulop.moneybox.R;
+import com.cachirulop.moneybox.activity.MoneyboxActivity;
 
 public class SoundsManager {
 	

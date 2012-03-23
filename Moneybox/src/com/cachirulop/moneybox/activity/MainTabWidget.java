@@ -8,7 +8,9 @@ import android.widget.TabHost;
 
 import com.cachirulop.moneybox.R;
 
-public class MainTabWidget extends TabActivity {
+public class MainTabWidget 
+	extends TabActivity {
+	
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.main);
@@ -22,19 +24,20 @@ public class MainTabWidget extends TabActivity {
 	    // Initialize a TabSpec for each tab and add it to the TabHost
 
 	    // Moneybox tab
-	    intent = new Intent().setClass(this, MoneyboxActivity.class);
-	    spec = tabHost.newTabSpec("moneybox").setIndicator(res.getString(R.string.tab_title_moneybox),
-	                      res.getDrawable(R.drawable.ic_tab_moneybox))
-	                  .setContent(intent);
-	    tabHost.addTab(spec);
-
-	    // Movements tab
-	    intent = new Intent().setClass(this, MovementsActivity.class);
-	    spec = tabHost.newTabSpec("movements").setIndicator(res.getString(R.string.tab_title_movements),
-	                      res.getDrawable(R.drawable.ic_tab_movements))
-	                  .setContent(intent);
+	    intent = new Intent(this, MoneyboxActivity.class);
+	    spec = tabHost.newTabSpec("moneybox");
+	    spec.setIndicator(res.getString(R.string.tab_title_moneybox), 
+	    				  res.getDrawable(R.drawable.ic_tab_moneybox));
+	    spec.setContent(intent);
 	    tabHost.addTab(spec);
 	    
+	    // Movements tab
+	    intent = new Intent(this, MovementsActivity.class);
+	    spec = tabHost.newTabSpec("movements");
+	    spec.setIndicator(res.getString(R.string.tab_title_movements),
+	                      res.getDrawable(R.drawable.ic_tab_movements));
+	    spec.setContent(intent);
+	    tabHost.addTab(spec);
 	    
 	    // Select the default tab
 	    tabHost.setCurrentTab(0);

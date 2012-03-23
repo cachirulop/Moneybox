@@ -9,22 +9,4 @@
     <!-- tabs -->
     <string name="tab_title_moneybox">Moneybox</string>
     <string name="tab_title_movements">Movements</string>
-        
-    <!--  SQL -->
-    <string name="moneyboxDatabase_oncreate">
-        CREATE TABLE movements (id_movement INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                                amount NUMERIC NOT NULL,
-                                insert_date TIMESTAMP NOT NULL DEFAULT current_timestamp,
-                                description TEXT);
-        
-    </string>
-    <string name="moneyboxDatabase_onUpgrade">
-		DROP TABLE IF EXISTS movements;
-    </string>
-    
-    <string name="moneyboxDatabase_SQL_movements_sumAmount">
-        SELECT sum(amount) FROM movements;
-    </string>
-    
-        
 </resources>

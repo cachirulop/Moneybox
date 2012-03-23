@@ -9,6 +9,7 @@ public class Movement {
 	private double _amount;
 	private Date _insertDate;
 	private String _description;
+	private boolean _breakMoneybox;
 	
 	public int getIdMovement() {
 		return _idMovement;
@@ -38,6 +39,23 @@ public class Movement {
 	}
 	public void setDescription(String description) {
 		this._description = description;
+	}
+	public boolean isBreakMoneybox() {
+		return _breakMoneybox;
+	}
+	public int isBreakMoneyboxAsInt() {
+		if (!_breakMoneybox) {
+			return 0;
+		}
+		else {
+			return 1;
+		}
+	}
+	public void setBreakMoneybox(boolean breakMoneybox) {
+		this._breakMoneybox = breakMoneybox;
+	}
+	public void setBreakMoneyboxAsInt(int breakMoneybox) {
+		this._breakMoneybox = (breakMoneybox != 0);
 	}
 	
 	

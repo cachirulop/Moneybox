@@ -10,7 +10,7 @@ import android.util.Log;
 
 public class MoneyboxDataHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "moneybox";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 
 	private final Context _ctx;
 
@@ -41,7 +41,6 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-/*		
 		Log.w("Moneybox", "Upgrading database from version " + oldVersion
 				+ " to " + newVersion + ", which will destroy all old data");
 
@@ -62,7 +61,6 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 		// This is cheating. In the real world, you'll need to add columns, not
 		// rebuild from scratch.
 		onCreate(db);
-*/
 	}
 
 	/**

@@ -1,12 +1,12 @@
 package com.cachirulop.moneybox.activity;
 
-import com.cachirulop.moneybox.R;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class MovementsActivity 	extends Activity {
+public class MovementsActivity 	
+	extends Activity {
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -15,4 +15,5 @@ public class MovementsActivity 	extends Activity {
         textview.setText("Movements activity tab");
         setContentView(textview);
     }
+
 }

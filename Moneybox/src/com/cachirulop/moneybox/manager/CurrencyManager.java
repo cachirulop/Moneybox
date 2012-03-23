@@ -14,16 +14,20 @@ import com.cachirulop.moneybox.entity.CurrencyValueDef;
 import com.cachirulop.moneybox.entity.CurrencyValueDef.MoneyType;
 
 public class CurrencyManager {
+	private static ArrayList<CurrencyValueDef> _currencyDefList = null;
+	
+	public static ArrayList<CurrencyValueDef> getCurrencyDefList () {
+		return _currencyDefList;
+	}
 
-	public static ArrayList<CurrencyValueDef> getCurrencyDef (String name) {
-		ArrayList<CurrencyValueDef> result;
+	public static void initCurrencyDefList (String name) {
 		TypedArray icons;
 		TypedArray values;
 		TypedArray types;
 		Resources res;
 		String packageName;
 		
-		result = new ArrayList<CurrencyValueDef>();
+		_currencyDefList = new ArrayList<CurrencyValueDef>();
 
 		res = MoneyboxActivity.getContext().getResources();
 		packageName = MoneyboxActivity.getContext().getPackageName();
@@ -40,10 +44,23 @@ public class CurrencyManager {
 			c.setAmount(values.getFloat(i, 0));
 			c.setType(getType (types.getString (i), res));
 			
-			result.add(c);
+			_currencyDefList.add(c);
+		}
+	}
+	
+	/**
+	 * Returns the currency definition of the specified amount 
+	 * @param amount Value to obtain the currency definition
+	 * @return The currency definition of the specified amount
+	 */
+	public static CurrencyValueDef getCurrencyDef (double amount) {
+		for (CurrencyValueDef c : _currencyDefList) {
+			if (c.getAmount() == amount) {
+				return c;
+			}
 		}
 		
-		return result;
+		return null;
 	}
 	
 	private static CurrencyValueDef.MoneyType getType (String type, Resources res) {
