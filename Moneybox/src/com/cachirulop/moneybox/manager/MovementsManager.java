@@ -25,7 +25,7 @@ public class MovementsManager {
 
 			c = db.query("movements", null, null, null, null, null,
 					"insert_date ASC");
-			
+
 			return createMovementList(c);
 		} finally {
 			if (db != null) {
@@ -43,8 +43,8 @@ public class MovementsManager {
 			ctx = MoneyboxActivity.getContext();
 			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
-			c = db.rawQuery(
-					ctx.getString(R.string.moneyboxDatabase_SQL_active_movements),
+			c = db.rawQuery(ctx
+					.getString(R.string.moneyboxDatabase_SQL_active_movements),
 					null);
 
 			return createMovementList(c);
@@ -54,19 +54,20 @@ public class MovementsManager {
 			}
 		}
 	}
-	
-	private static ArrayList<Movement> createMovementList (Cursor c) {
+
+	private static ArrayList<Movement> createMovementList(Cursor c) {
 		ArrayList<Movement> result;
 
 		result = new ArrayList<Movement>();
 
 		if (c != null) {
-			c.moveToFirst();
-			do {
-				result.add(createMovement(c));
-			} while (c.moveToNext());
+			if (c.moveToFirst()) {
+				do {
+					result.add(createMovement(c));
+				} while (c.moveToNext());
+			}
 		}
-		
+
 		return result;
 	}
 
@@ -77,8 +78,8 @@ public class MovementsManager {
 		result.setIdMovement(c.getInt(c.getColumnIndex("id_movement")));
 		result.setAmount(c.getDouble(c.getColumnIndex("amount")));
 		result.setDescription(c.getString(c.getColumnIndex("description")));
-		result.setInsertDate(new Date(c.getLong(c
-				.getColumnIndex("insert_date"))));
+		result.setInsertDate(new Date(
+				c.getLong(c.getColumnIndex("insert_date"))));
 		result.setBreakMoneyboxAsInt(c.getInt(c
 				.getColumnIndex("break_moneybox")));
 
