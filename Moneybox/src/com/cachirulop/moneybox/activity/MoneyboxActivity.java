@@ -21,6 +21,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import com.cachirulop.moneybox.R;
@@ -40,19 +41,6 @@ public class MoneyboxActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.moneybox_tab);
 		
-		View v;
-		final ViewTreeObserver vto;
-		
-		v = findViewById(R.layout.moneybox_tab);
-		vto = v.getViewTreeObserver();
-		vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener () {
-			public void onGlobalLayout() {
-				fillMoneybox();
-				
-				vto.removeGlobalOnLayoutListener(this);
-			}
-		});
-
 		_context = this;
 
 		initActivity();
@@ -177,7 +165,7 @@ public class MoneyboxActivity extends Activity {
 	 */
 	private void updateTotal() {
 		TextView total;
-
+		
 		total = (TextView) findViewById(R.id.txtTotal);
 		total.setText(String.format("%.2f", MovementsManager.getTotalAmount()));
 	}
@@ -281,9 +269,20 @@ public class MoneyboxActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		fillMoneybox();
-		updateTotal();
+/*
+		View v;
+		final ViewTreeObserver vto;
+		
+		v = findViewById(R.id.moneyDropLayout);
+		vto = v.getViewTreeObserver();
+		vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener () {
+			public void onGlobalLayout() {
+				fillMoneybox();
+				
+				 vto.removeGlobalOnLayoutListener(this);
+			}
+		});
+*/
 	}
 }
 

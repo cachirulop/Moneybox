@@ -24,7 +24,7 @@ public class MovementsManager {
 					.getReadableDatabase();
 
 			c = db.query("movements", null, null, null, null, null,
-					"date(insert_date)");
+					"insert_date ASC");
 			
 			return createMovementList(c);
 		} finally {
@@ -77,7 +77,7 @@ public class MovementsManager {
 		result.setIdMovement(c.getInt(c.getColumnIndex("id_movement")));
 		result.setAmount(c.getDouble(c.getColumnIndex("amount")));
 		result.setDescription(c.getString(c.getColumnIndex("description")));
-		result.setInsertDate(new Date(c.getInt(c
+		result.setInsertDate(new Date(c.getLong(c
 				.getColumnIndex("insert_date"))));
 		result.setBreakMoneyboxAsInt(c.getInt(c
 				.getColumnIndex("break_moneybox")));

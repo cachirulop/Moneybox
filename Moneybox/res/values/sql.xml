@@ -21,6 +21,7 @@
                 SELECT max(insert_date) 
                 FROM movements WHERE break_moneybox &lt;> 0
               )
+        ORDER BY insert_date ASC;
     </string>
 
 </resources>

@@ -6,6 +6,17 @@
     <string name="break_moneybox">Piggy bank is empty!</string>
     <string name="break_moneybox_confirm">Are you sure?</string>
     
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="amount">Amount</string>
+    <string name="description">Description</string>
+        
+    <string name="change">Set</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="get_from_moneybox">Get it</string>
+    <string name="delete">Delete</string>
+    
     <!-- tabs -->
     <string name="tab_title_moneybox">Moneybox</string>
     <string name="tab_title_movements">Movements</string>
