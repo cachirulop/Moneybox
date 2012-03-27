@@ -22,7 +22,7 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		String[] sql = _ctx.getString(R.string.moneyboxDatabase_oncreate)
+		String[] sql = _ctx.getString(R.string.SQL_oncreate)
 				.split("\n");
 
 		db.beginTransaction();
@@ -44,7 +44,7 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 		Log.w("Moneybox", "Upgrading database from version " + oldVersion
 				+ " to " + newVersion + ", which will destroy all old data");
 
-		String[] sql = _ctx.getString(R.string.moneyboxDatabase_onUpgrade)
+		String[] sql = _ctx.getString(R.string.SQL_onUpgrade)
 				.split("\n");
 		
 		db.beginTransaction();

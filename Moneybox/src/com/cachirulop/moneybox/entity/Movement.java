@@ -28,7 +28,7 @@ public class Movement {
 	}
 	
 	public long getInsertDateDB() {
-		return _insertDate.getTime() / 1000;
+		return _insertDate.getTime();
 	}
 	
 	public void setInsertDate(Date insertDate) {

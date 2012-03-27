@@ -33,25 +33,13 @@ import com.cachirulop.moneybox.manager.SoundsManager;
 public class MoneyboxActivity extends Activity {
 
 	private static Context _context;
+	private boolean _filledMoneybox = false;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.moneybox_tab);
-		
-		View v;
-		final ViewTreeObserver vto;
-		
-		v = findViewById(R.layout.moneybox_tab);
-		vto = v.getViewTreeObserver();
-		vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener () {
-			public void onGlobalLayout() {
-				fillMoneybox();
-				
-				vto.removeGlobalOnLayoutListener(this);
-			}
-		});
 
 		_context = this;
 
@@ -262,17 +250,19 @@ public class MoneyboxActivity extends Activity {
 			int left;
 
 			curr = CurrencyManager.getCurrencyDef(m.getAmount());
-			r = curr.getDrawable().getBounds();
-
-			left = rnd.nextInt(maxWidth - r.width());
-			
-			total += curr.getAmount();
-
-			Timer t = new Timer ();
-			ThrowMoneyTimerTask task;
-			
-			task = new ThrowMoneyTimerTask(this, curr, left, r.width(), total);
-			t.schedule(task, 200 * i);
+			if (curr != null) {
+				r = curr.getDrawable().getBounds();
+		
+				left = rnd.nextInt(maxWidth - r.width());
+				
+				total += curr.getAmount();
+		
+				Timer t = new Timer ();
+				ThrowMoneyTimerTask task;
+				
+				task = new ThrowMoneyTimerTask(this, curr, left, r.width(), total);
+				t.schedule(task, 200 * i);
+			}
 			
 			i++;
 		}
@@ -281,9 +271,23 @@ public class MoneyboxActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		fillMoneybox();
-		updateTotal();
+		
+		View v;
+		final ViewTreeObserver vto;
+		
+		v = findViewById(R.id.moneyDropLayout);
+		vto = v.getViewTreeObserver();
+		vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener () {
+			public void onGlobalLayout() {
+				if (!_filledMoneybox) {
+					fillMoneybox();
+					_filledMoneybox = true;
+				}
+				
+				//vto.removeGlobalOnLayoutListener(this);
+			}
+		});
+		
 	}
 }
 
@@ -307,14 +311,14 @@ final class ThrowMoneyTimerTask extends TimerTask  implements Runnable {
 	}
 	
 	public void run () {	
-		Log.i("moneybox", "Running timer task");
+		// Log.i("moneybox", "Running timer task");
 		_parent.runOnUiThread(new Runnable () {
 			public void run() {
 				
 				_parent.throwMoney(_left, _width, _currency);
 				_parent.setTotal (_total);
 
-				Log.i("moneybox", "Running timer task in UiThread");
+				//Log.i("moneybox", "Running timer task in UiThread");
 			}
 		});
 	}
