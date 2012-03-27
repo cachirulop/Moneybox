@@ -61,7 +61,7 @@ public class MoneyboxActivity extends Activity {
 
 		value = (CurrencyValueDef) v.getTag();
 		if (value != null) {
-			MovementsManager.addMovement(value.getAmount());
+			MovementsManager.insertMovement(value.getAmount());
 			throwMoney(v, value);
 
 			updateTotal();

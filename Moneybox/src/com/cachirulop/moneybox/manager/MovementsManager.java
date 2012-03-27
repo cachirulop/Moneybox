@@ -86,7 +86,13 @@ public class MovementsManager {
 		return result;
 	}
 
-	public static void addMovement(Movement m) {
+	/**
+	 * Add a moneybox movement to the database
+	 * 
+	 * @param m
+	 *            Movement to be added
+	 */
+	public static void insertMovement(Movement m) {
 		SQLiteDatabase db = null;
 
 		try {
@@ -115,11 +121,21 @@ public class MovementsManager {
 	 * @param amount
 	 *            Amount of money to add
 	 */
-	public static void addMovement(double amount) {
-		addMovement(amount, null, false);
+	public static void insertMovement(double amount) {
+		insertMovement(amount, null, false);
 	}
 
-	public static void addMovement(double amount, String description,
+	/**
+	 * Add a moneybox movement to the database
+	 * 
+	 * @param amount
+	 *            Amount of money to add
+	 * @param description
+	 *            Description of the movement
+	 * @param isBreakMoneybox
+	 *            The movemento breaks the moneybox or not
+	 */
+	public static void insertMovement(double amount, String description,
 			boolean isBreakMoneybox) {
 		Movement m;
 
@@ -131,7 +147,59 @@ public class MovementsManager {
 			m.setDescription(description);
 		}
 
-		MovementsManager.addMovement(m);
+		MovementsManager.insertMovement(m);
+	}
+
+	/**
+	 * Saves the values of a movement in the database
+	 * 
+	 * @param m
+	 *            Movement to be saved
+	 */
+	public static void updateMovement(Movement m) {
+		SQLiteDatabase db = null;
+
+		try {
+			db = new MoneyboxDataHelper(MoneyboxActivity.getContext())
+					.getWritableDatabase();
+
+			ContentValues values;
+
+			values = new ContentValues();
+			values.put("amount", m.getAmount());
+			values.put("description", m.getDescription());
+			values.put("insert_date", m.getInsertDateDB());
+			values.put("break_moneybox", m.isBreakMoneyboxAsInt());
+
+			db.update("movements", values, "id_movement = ?",
+					new String[] { Integer.toString(m.getIdMovement()) });
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+	}
+
+	/**
+	 * Delete a movement from the database
+	 * 
+	 * @param m
+	 *            Movement to be deleted
+	 */
+	public static void deleteMovement(Movement m) {
+		SQLiteDatabase db = null;
+
+		try {
+			db = new MoneyboxDataHelper(MoneyboxActivity.getContext())
+					.getWritableDatabase();
+
+			db.delete("movements", "id_movement = ?",
+					new String[] { Integer.toString(m.getIdMovement()) });
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
 	}
 
 	public static double getTotalAmount() {
@@ -158,7 +226,7 @@ public class MovementsManager {
 
 	public static void breakMoneybox() {
 		// Negative total amount!
-		MovementsManager.addMovement(-MovementsManager.getTotalAmount(),
+		MovementsManager.insertMovement(-MovementsManager.getTotalAmount(),
 				MoneyboxActivity.getContext()
 						.getString(R.string.break_moneybox), true);
 	}

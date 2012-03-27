@@ -83,21 +83,20 @@
                 android:text="@string/time"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <EditText
-                android:id="@+id/txtAmount"
+            <Spinner
+                android:id="@+id/sAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/AmountDesc"
-                android:layout_toRightOf="@+id/AmountDesc"
-                android:inputType="numberSigned" />
+                android:layout_toRightOf="@+id/AmountDesc" />
 
             <TextView
                 android:id="@+id/txtDescriptionDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/txtAmount"
+                android:layout_below="@+id/sAmount"
                 android:text="@string/description"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -105,19 +104,22 @@
                 android:id="@+id/txtDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/txtAmount"
+                android:layout_alignLeft="@+id/sAmount"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/txtDescriptionDesc" >
+                android:layout_below="@+id/txtDescriptionDesc" 
+                android:maxLength="100">
 
                 <requestFocus />
             </EditText>
+
         </RelativeLayout>
     </ScrollView>
 
     <RelativeLayout
         android:id="@+id/rlButtons"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content" 
+        android:minHeight="90dip">
 
         <Button
             android:id="@+id/btnDelete"
@@ -125,6 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
+            android:onClick="onDeleteClick"
             android:text="@string/delete" />
 
         <Button
@@ -133,6 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
+            android:onClick="onSaveClick"
             android:text="@string/save" />
 
         <Button
@@ -142,6 +146,7 @@
             android:layout_alignBaseline="@+id/btnDelete"
             android:layout_alignBottom="@+id/btnDelete"
             android:layout_toLeftOf="@+id/btnDelete"
+            android:onClick="onGetClick"
             android:text="@string/get_from_moneybox" />
 
         <Button
@@ -151,6 +156,7 @@
             android:layout_alignBaseline="@+id/btnSave"
             android:layout_alignBottom="@+id/btnSave"
             android:layout_toRightOf="@+id/btnSave"
+            android:onClick="onCancelClick"
             android:text="@string/cancel" />
     </RelativeLayout>
 

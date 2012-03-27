@@ -2,21 +2,23 @@ package com.cachirulop.moneybox.activity;
 
 import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Date;
-
-import com.cachirulop.moneybox.R;
-import com.cachirulop.moneybox.entity.Movement;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
+
+import com.cachirulop.moneybox.R;
+import com.cachirulop.moneybox.adapter.CurrencySpinnerAdapter;
+import com.cachirulop.moneybox.entity.CurrencyValueDef;
+import com.cachirulop.moneybox.entity.Movement;
+import com.cachirulop.moneybox.manager.MovementsManager;
 
 public class MovementDetailActivity extends Activity implements
 		DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -30,6 +32,7 @@ public class MovementDetailActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.movement_detail);
 
+		loadSpinner();
 		initData();
 	}
 
@@ -54,17 +57,27 @@ public class MovementDetailActivity extends Activity implements
 		return null;
 	}
 
+	private void loadSpinner() {
+		Spinner spn;
+
+		spn = (Spinner) findViewById(R.id.sAmount);
+		spn.setAdapter(new CurrencySpinnerAdapter(this));
+	}
+
 	private void initData() {
 		TextView txt;
+		Spinner amount;
+		int pos;
 
 		_movement = (Movement) getIntent().getExtras().getSerializable(
 				"movement");
 
 		updateDateAndTime();
 
-		txt = (TextView) findViewById(R.id.txtAmount);
-		txt.setText(String.format("%.2f", _movement.getAmount()));
-
+		amount = (Spinner) findViewById(R.id.sAmount);
+		pos = ((CurrencySpinnerAdapter) amount.getAdapter()).getItemPositionByAmount(_movement.getAmount());
+		amount.setSelection(pos, true);
+		
 		txt = (TextView) findViewById(R.id.txtDescription);
 		txt.setText(_movement.getDescription());
 	}
@@ -119,4 +132,44 @@ public class MovementDetailActivity extends Activity implements
 		txt.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(
 				_movement.getInsertDate()));
 	}
+
+	// Button events
+	public void onSaveClick(View v) {
+		TextView txt;
+		Spinner amount;
+		CurrencyValueDef c;
+
+		txt = (TextView) findViewById(R.id.txtDescription);
+		amount = (Spinner) findViewById(R.id.sAmount);
+
+		c = (CurrencyValueDef) amount.getSelectedItem();
+		
+		_movement.setAmount(c.getAmount());
+		_movement.setDescription(txt.getText().toString());
+		
+		MovementsManager.updateMovement(_movement);
+
+		setResult(RESULT_OK);
+		finish();
+	}
+
+	public void onCancelClick(View v) {
+		setResult(RESULT_CANCELED);
+		finish();
+	}
+
+	public void onGetClick(View v) {
+		MovementsManager.insertMovement(-_movement.getAmount());
+
+		setResult(RESULT_OK);
+		finish();
+	}
+
+	public void onDeleteClick(View v) {
+		MovementsManager.deleteMovement(_movement);
+
+		setResult(RESULT_OK);
+		finish();
+	}
+
 }
