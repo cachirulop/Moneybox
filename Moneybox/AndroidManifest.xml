@@ -21,6 +21,7 @@
         </activity>
         <activity android:name=".activity.MoneyboxActivity"></activity>
         <activity android:name=".activity.MovementsActivity"></activity>
+        <activity android:name=".activity.MovementDetailActivity"></activity>
         </application>
 
 </manifest>

@@ -1,9 +1,13 @@
 
 package com.cachirulop.moneybox.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Movement {
+public class Movement 
+	implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private int _idMovement;
 	private double _amount;
@@ -57,6 +61,4 @@ public class Movement {
 	public void setBreakMoneyboxAsInt(int breakMoneybox) {
 		this._breakMoneybox = (breakMoneybox != 0);
 	}
-	
-	
 }

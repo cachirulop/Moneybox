@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llRoot"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <ScrollView
+        android:id="@+id/svMovementDetail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:id="@+id/rlMovementDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/btnChangeDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:onClick="onChangeDateClick"
+                android:text="@string/change" />
+
+            <Button
+                android:id="@+id/btnChangeTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/btnChangeDate"
+                android:onClick="onChangeTimeClick"
+                android:text="@string/change" />
+
+            <TextView
+                android:id="@+id/txtDateDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/btnChangeDate"
+                android:layout_alignBottom="@+id/btnChangeDate"
+                android:layout_alignParentLeft="true"
+                android:text="@string/date"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/txtDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/btnChangeDate"
+                android:layout_alignBottom="@+id/btnChangeDate"
+                android:layout_centerHorizontal="true"
+                android:text="01/01/2012"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/txtTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/btnChangeTime"
+                android:layout_alignBottom="@+id/btnChangeTime"
+                android:layout_alignRight="@+id/txtDate"
+                android:text="00:00"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/AmountDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/btnChangeTime"
+                android:text="@string/amount"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/txtTimeDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/txtTime"
+                android:layout_alignBottom="@+id/txtTime"
+                android:layout_alignParentLeft="true"
+                android:text="@string/time"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Spinner
+                android:id="@+id/sAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/AmountDesc"
+                android:layout_toRightOf="@+id/AmountDesc" />
+
+            <TextView
+                android:id="@+id/txtDescriptionDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/sAmount"
+                android:text="@string/description"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/txtDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/sAmount"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/txtDescriptionDesc" 
+                android:maxLength="100">
+
+                <requestFocus />
+            </EditText>
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/rlButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:minHeight="90dip">
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:onClick="onDeleteClick"
+            android:text="@string/delete" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:onClick="onSaveClick"
+            android:text="@string/save" />
+
+        <Button
+            android:id="@+id/btnGetFromMoneybox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/btnDelete"
+            android:layout_alignBottom="@+id/btnDelete"
+            android:layout_toLeftOf="@+id/btnDelete"
+            android:onClick="onGetClick"
+            android:text="@string/get_from_moneybox" />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/btnSave"
+            android:layout_alignBottom="@+id/btnSave"
+            android:layout_toRightOf="@+id/btnSave"
+            android:onClick="onCancelClick"
+            android:text="@string/cancel" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -21,6 +21,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import com.cachirulop.moneybox.R;
@@ -61,7 +62,7 @@ public class MoneyboxActivity extends Activity {
 
 		value = (CurrencyValueDef) v.getTag();
 		if (value != null) {
-			MovementsManager.addMovement(value.getAmount());
+			MovementsManager.insertMovement(value.getAmount());
 			throwMoney(v, value);
 
 			updateTotal();
@@ -165,7 +166,7 @@ public class MoneyboxActivity extends Activity {
 	 */
 	private void updateTotal() {
 		TextView total;
-
+		
 		total = (TextView) findViewById(R.id.txtTotal);
 		total.setText(String.format("%.2f", MovementsManager.getTotalAmount()));
 	}
@@ -287,7 +288,6 @@ public class MoneyboxActivity extends Activity {
 				//vto.removeGlobalOnLayoutListener(this);
 			}
 		});
-		
 	}
 }
 

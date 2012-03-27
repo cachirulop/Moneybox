@@ -5,6 +5,17 @@
     <string name="break_moneybox">Hucha vacía</string>
     <string name="break_moneybox_confirm">¿Seguro que quieres vaciar la hucha?</string>
 
+    <string name="date">Fecha</string>
+    <string name="time">Hora</string>
+    <string name="amount">Cantidad</string>
+    <string name="description">Descripción</string>
+        
+    <string name="change">Cambiar</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="get_from_moneybox">Coger</string>
+    <string name="delete">Borrar</string>
+
     <!-- tabs -->
     <string name="tab_title_moneybox">Hucha</string>
     <string name="tab_title_movements">Movimientos</string>

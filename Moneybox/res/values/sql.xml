@@ -11,6 +11,7 @@
     <string name="SQL_onUpgrade">
         DROP TABLE IF EXISTS movements;
     </string>
+    
     <string name="SQL_movements_sumAmount">
         SELECT sum(amount) FROM movements;
     </string>
@@ -23,6 +24,7 @@
                 FROM movements 
                 WHERE break_moneybox &lt;> 0
               )
+        ORDER BY insert_date ASC;
     </string>
     
     <string name="SQL_movements_by_date">
