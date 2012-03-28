@@ -40,6 +40,6 @@ public class MainTabWidget
 	    tabHost.addTab(spec);
 	    
 	    // Select the default tab
-	    tabHost.setCurrentTab(1);
+	    tabHost.setCurrentTab(0);
 	}
 }

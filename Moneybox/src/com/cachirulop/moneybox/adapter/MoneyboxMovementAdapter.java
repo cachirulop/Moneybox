@@ -75,10 +75,21 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 		txtDescription.setText(m.getDescription());
 
 		if (m.isBreakMoneybox()) {
-			convertView.setBackgroundColor(Color.GREEN);
+			// convertView.setBackgroundColor(Color.GREEN);
+			txtDate.setTextColor(Color.RED);
+			txtAmount.setTextColor(Color.RED);
+			txtDescription.setTextColor(Color.RED);
+		}
+		else if (m.getAmount() < 0) {
+			txtDate.setTextColor(Color.YELLOW);
+			txtAmount.setTextColor(Color.YELLOW);
+			txtDescription.setTextColor(Color.YELLOW);
 		}
 		else {
-			convertView.setBackgroundColor(Color.TRANSPARENT);
+			txtDate.setTextColor(Color.BLUE);
+			txtAmount.setTextColor(Color.BLUE);
+			txtDescription.setTextColor(Color.BLUE);
+			// convertView.setBackgroundColor(Color.TRANSPARENT);
 		}
 
 		return convertView;

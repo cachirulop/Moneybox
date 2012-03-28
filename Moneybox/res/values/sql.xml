@@ -1,27 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="moneyboxDatabase_oncreate">
+    <string name="SQL_oncreate">
         CREATE TABLE movements (id_movement INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                                 amount NUMERIC NOT NULL,
                                 insert_date TIMESTAMP NOT NULL DEFAULT current_timestamp,
                                 description TEXT, 
                                 break_moneybox INTEGER);
     </string>
-    <string name="moneyboxDatabase_onUpgrade">
+    <string name="SQL_onUpgrade">
         DROP TABLE IF EXISTS movements;
     </string>
-    <string name="moneyboxDatabase_SQL_movements_sumAmount">
+    
+    <string name="SQL_movements_sumAmount">
         SELECT sum(amount) FROM movements;
     </string>
-    <string name="moneyboxDatabase_SQL_active_movements">
+
+    <string name="SQL_last_break_movement">
         SELECT * 
         FROM movements 
-        WHERE insert_date > (
+        WHERE insert_date = (
                 SELECT max(insert_date) 
-                FROM movements WHERE break_moneybox &lt;> 0
+                FROM movements 
+                WHERE break_moneybox &lt;> 0
               )
         ORDER BY insert_date ASC;
     </string>
-
+    
+    <string name="SQL_movements_by_date">
+        SELECT * 
+        FROM movements 
+        WHERE insert_date > ?
+    </string>
+        
 </resources>

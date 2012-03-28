@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
 import com.cachirulop.moneybox.R;
@@ -44,6 +45,7 @@ public class CurrencyManager {
 			
 			c = new CurrencyValueDef();
 			c.setDrawable(icons.getDrawable(i));
+			c.getDrawable().setBounds(new Rect (0, 0, 90, 90));
 			c.setAmount(values.getFloat(i, 0));
 			c.setType(getType (types.getString (i), res));
 			

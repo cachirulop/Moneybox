@@ -35,6 +35,41 @@ public class MovementsManager {
 	}
 
 	public static ArrayList<Movement> getActiveMovements() {
+		Movement lastBreak;
+
+		lastBreak = getLastBreakmoneybox();
+		if (lastBreak != null) {
+			SQLiteDatabase db = null;
+
+			try {
+				Cursor c;
+				Context ctx;
+
+				ctx = MoneyboxActivity.getContext();
+				db = new MoneyboxDataHelper(ctx).getReadableDatabase();
+
+				c = db.rawQuery(ctx.getString(R.string.SQL_movements_by_date),
+						new String[] { Long.toString(lastBreak
+								.getInsertDateDB()) });
+
+				return createMovementList(c);
+			} finally {
+				if (db != null) {
+					db.close();
+				}
+			}
+		} else {
+			return getAllMovements();
+		}
+	}
+
+	/**
+	 * Return the last time when the moneybox was broken or null if the moneybox
+	 * is never broken.
+	 * 
+	 * @return The last movement when the moneybox was broken.
+	 */
+	public static Movement getLastBreakmoneybox() {
 		Cursor c;
 		SQLiteDatabase db = null;
 		Context ctx;
@@ -43,11 +78,14 @@ public class MovementsManager {
 			ctx = MoneyboxActivity.getContext();
 			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
-			c = db.rawQuery(ctx
-					.getString(R.string.moneyboxDatabase_SQL_active_movements),
+			c = db.rawQuery(ctx.getString(R.string.SQL_last_break_movement),
 					null);
 
-			return createMovementList(c);
+			if (c.moveToFirst()) {
+				return createMovement(c);
+			} else {
+				return null;
+			}
 		} finally {
 			if (db != null) {
 				db.close();
@@ -78,8 +116,7 @@ public class MovementsManager {
 		result.setIdMovement(c.getInt(c.getColumnIndex("id_movement")));
 		result.setAmount(c.getDouble(c.getColumnIndex("amount")));
 		result.setDescription(c.getString(c.getColumnIndex("description")));
-		result.setInsertDate(new Date(
-				c.getLong(c.getColumnIndex("insert_date"))));
+		result.setInsertDate(new Date(c.getLong(c.getColumnIndex("insert_date"))));
 		result.setBreakMoneyboxAsInt(c.getInt(c
 				.getColumnIndex("break_moneybox")));
 
@@ -211,8 +248,7 @@ public class MovementsManager {
 			ctx = MoneyboxActivity.getContext();
 			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
-			c = db.rawQuery(
-					ctx.getString(R.string.moneyboxDatabase_SQL_movements_sumAmount),
+			c = db.rawQuery(ctx.getString(R.string.SQL_movements_sumAmount),
 					null);
 			c.moveToFirst();
 
