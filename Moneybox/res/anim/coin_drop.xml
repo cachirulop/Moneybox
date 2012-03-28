@@ -14,7 +14,7 @@
         android:fromXDelta="1.0"
         android:fromYDelta="1.0"
         android:toXDelta="1.0"
-        android:toYDelta="85%p"
+        android:toYDelta="75%p"
         android:startOffset="300"
         android:duration="1500" />
 

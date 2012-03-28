@@ -3,21 +3,21 @@
 <resources>
 
     <array name="euro_money_icons">
-        <item>@drawable/ic_euro_1cent</item>
-        <item>@drawable/ic_euro_2cent</item>
-        <item>@drawable/ic_euro_5cent</item>
-        <item>@drawable/ic_euro_10cent</item>
-        <item>@drawable/ic_euro_20cent</item>
+        <item>@drawable/euro_001</item>
+        <item>@drawable/euro_002</item>
+        <item>@drawable/euro_005</item>
+        <item>@drawable/euro_010</item>
+        <item>@drawable/euro_020</item>
         <item>@drawable/euro_050</item>
-        <item>@drawable/ic_euro_1euro</item>
-        <item>@drawable/ic_euro_2euro</item>
-        <item>@drawable/ic_euro_5euro</item>
-        <item>@drawable/ic_euro_10euro</item>
-        <item>@drawable/ic_euro_20euro</item>
-        <item>@drawable/ic_euro_50euro</item>
-        <item>@drawable/ic_euro_100euro</item>
-        <item>@drawable/ic_euro_200euro</item>
-        <item>@drawable/ic_euro_500euro</item>
+        <item>@drawable/euro_1</item>
+        <item>@drawable/euro_2</item>
+        <item>@drawable/euro_5</item>
+        <item>@drawable/euro_10</item>
+        <item>@drawable/euro_20</item>
+        <item>@drawable/euro_50</item>
+        <item>@drawable/euro_100</item>
+        <item>@drawable/euro_200</item>
+        <item>@drawable/euro_500</item>
     </array>
     
     <array name="euro_money_values">

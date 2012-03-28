@@ -34,7 +34,6 @@ import com.cachirulop.moneybox.manager.SoundsManager;
 public class MoneyboxActivity extends Activity {
 
 	private static Context _context;
-	private boolean _filledMoneybox = false;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -45,17 +44,31 @@ public class MoneyboxActivity extends Activity {
 		_context = this;
 
 		initActivity();
+		
+		final View v;
+		final ViewTreeObserver vto;
+
+		v = findViewById(R.id.moneyDropLayout);
+		vto = v.getViewTreeObserver();
+		if (vto.isAlive()) {
+			vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+				public void onGlobalLayout() {
+					initMoneybox();
+
+					v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+				}
+			});
+		}
 	}
-	
-	private void initActivity ()
-	{
+
+	private void initActivity() {
 		String currencyName;
 
 		currencyName = getResources().getString(R.string.currency_name);
-		
+
 		CurrencyManager.initCurrencyDefList(currencyName);
 		addButtons();
-}
+	}
 
 	protected void onMoneyClicked(View v) {
 		CurrencyValueDef value;
@@ -118,10 +131,8 @@ public class MoneyboxActivity extends Activity {
 
 		scroll = (HorizontalScrollView) findViewById(R.id.scrollButtonsView);
 
-		throwMoney (src.getLeft() - scroll.getScrollX(), 
-					// scroll.getWidth() - src.getRight(),
-					src.getRight(), 
-					c);
+		throwMoney(src.getLeft() - scroll.getScrollX(),
+				src.getRight(), c);
 	}
 
 	protected void throwMoney(int leftMargin, int width, CurrencyValueDef c) {
@@ -154,10 +165,10 @@ public class MoneyboxActivity extends Activity {
 
 		money.setVisibility(View.VISIBLE);
 
-		SoundsManager.playCoinsSound();
+		SoundsManager.playMoneySound(c.getType());
 
 		money.startAnimation(moneyDrop);
-		
+
 		layout.invalidate();
 	}
 
@@ -166,11 +177,11 @@ public class MoneyboxActivity extends Activity {
 	 */
 	private void updateTotal() {
 		TextView total;
-		
+
 		total = (TextView) findViewById(R.id.txtTotal);
 		total.setText(String.format("%.2f", MovementsManager.getTotalAmount()));
 	}
-	
+
 	/**
 	 * Set a value to the total field
 	 */
@@ -239,10 +250,10 @@ public class MoneyboxActivity extends Activity {
 			// The layout is not initialized
 			return;
 		}
-		
+
 		total = 0.0;
 		i = 0;
-		
+
 		rnd = new Random();
 		lstMoney = MovementsManager.getActiveMovements();
 		for (Movement m : lstMoney) {
@@ -253,18 +264,19 @@ public class MoneyboxActivity extends Activity {
 			curr = CurrencyManager.getCurrencyDef(m.getAmount());
 			if (curr != null) {
 				r = curr.getDrawable().getBounds();
-		
+
 				left = rnd.nextInt(maxWidth - r.width());
-				
+
 				total += curr.getAmount();
-		
-				Timer t = new Timer ();
+
+				Timer t = new Timer();
 				ThrowMoneyTimerTask task;
-				
-				task = new ThrowMoneyTimerTask(this, curr, left, r.width(), total);
-				t.schedule(task, 200 * i);
+
+				task = new ThrowMoneyTimerTask(this, curr, left, r.width(),
+						total);
+				t.schedule(task, 400 * i);
 			}
-			
+
 			i++;
 		}
 	}
@@ -272,59 +284,51 @@ public class MoneyboxActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+	}
+
+	public void initMoneybox() {
+		fillMoneybox();
+
+		HorizontalScrollView scroll;
+		int offsetX;
+		List<CurrencyValueDef> currList;
+		int elemWidth;
 		
-		View v;
-		final ViewTreeObserver vto;
-		
-		v = findViewById(R.id.moneyDropLayout);
-		vto = v.getViewTreeObserver();
-		vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener () {
-			public void onGlobalLayout() {
-				if (!_filledMoneybox) {
-					fillMoneybox();
-					_filledMoneybox = true;
-				}
-				
-				//vto.removeGlobalOnLayoutListener(this);
-			}
-		});
+		currList = CurrencyManager.getCurrencyDefList();
+		scroll = (HorizontalScrollView) findViewById(R.id.scrollButtonsView);
+
+		elemWidth = currList.get(0).getDrawable().getBounds().right;
+		offsetX = ((currList.size() * elemWidth) / 2) - (elemWidth / 2);
+		scroll.scrollTo(offsetX, 0);
 	}
 }
 
-
-final class ThrowMoneyTimerTask extends TimerTask  implements Runnable {
+final class ThrowMoneyTimerTask extends TimerTask implements Runnable {
 	MoneyboxActivity _parent;
 	CurrencyValueDef _currency;
 	int _left;
 	int _width;
 	double _total;
-	public ThrowMoneyTimerTask (MoneyboxActivity parent, 
-			CurrencyValueDef currency, 
-			int left, 
-			int width,
-			double total) {
+
+	public ThrowMoneyTimerTask(MoneyboxActivity parent,
+			CurrencyValueDef currency, int left, int width, double total) {
 		_parent = parent;
 		_currency = currency;
 		_left = left;
 		_width = width;
 		_total = total;
 	}
-	
-	public void run () {	
-		// Log.i("moneybox", "Running timer task");
-		_parent.runOnUiThread(new Runnable () {
-			public void run() {
-				
-				_parent.throwMoney(_left, _width, _currency);
-				_parent.setTotal (_total);
 
-				//Log.i("moneybox", "Running timer task in UiThread");
+	public void run() {
+		// Log.i("moneybox", "Running timer task");
+		_parent.runOnUiThread(new Runnable() {
+			public void run() {
+
+				_parent.throwMoney(_left, _width, _currency);
+				_parent.setTotal(_total);
+
+				// Log.i("moneybox", "Running timer task in UiThread");
 			}
 		});
 	}
 }
-
-
-
-
-
