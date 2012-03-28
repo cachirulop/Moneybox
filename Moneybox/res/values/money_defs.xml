@@ -56,6 +56,8 @@
         <item>bill</item>
     </array>
     
+    <string name="euro_sign">€</string>
+    
     <string name="currency_name">euro</string>
     
     <string name="money_bill">bill</string>

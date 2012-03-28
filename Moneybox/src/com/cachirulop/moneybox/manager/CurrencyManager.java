@@ -15,6 +15,7 @@ import com.cachirulop.moneybox.entity.CurrencyValueDef.MoneyType;
 
 public class CurrencyManager {
 	private static ArrayList<CurrencyValueDef> _currencyDefList = null;
+	private static String _currencySign;
 	
 	public static ArrayList<CurrencyValueDef> getCurrencyDefList () {
 		return _currencyDefList;
@@ -35,6 +36,8 @@ public class CurrencyManager {
 		icons = res.obtainTypedArray(res.getIdentifier(name + "_money_icons", "array", packageName));
 		values = res.obtainTypedArray(res.getIdentifier(name + "_money_values", "array", packageName));
 		types = res.obtainTypedArray(res.getIdentifier(name + "_money_types", "array", packageName));
+		
+		_currencySign = res.getString(res.getIdentifier(name + "_sign", "string", packageName)); 
 		
 		for (int i = 0; i < icons.length(); i++) {
 			CurrencyValueDef c;
@@ -73,5 +76,9 @@ public class CurrencyManager {
 		else {
 			return null;
 		}
+	}
+	
+	public static String formatAmount (double value) {
+		return String.format ("%.2f%s", value, _currencySign);
 	}
 }
