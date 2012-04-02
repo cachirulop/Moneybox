@@ -25,7 +25,7 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 
 	public MoneyboxMovementAdapter(Context context) {
 		_parent = (MovementsActivity) context;
-		_inflater = LayoutInflater.from(context);
+		_inflater = LayoutInflater.from(_parent);
 	}
 
 	public int getCount() {

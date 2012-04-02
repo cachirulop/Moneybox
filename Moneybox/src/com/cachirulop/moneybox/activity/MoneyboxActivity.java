@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AnimationSet;
@@ -21,7 +20,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import com.cachirulop.moneybox.R;

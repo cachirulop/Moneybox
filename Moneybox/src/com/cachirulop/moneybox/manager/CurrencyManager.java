@@ -2,12 +2,9 @@ package com.cachirulop.moneybox.manager;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 
 import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.activity.MoneyboxActivity;
