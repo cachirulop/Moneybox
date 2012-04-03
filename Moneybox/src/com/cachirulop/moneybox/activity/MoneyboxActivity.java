@@ -14,6 +14,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.widget.HorizontalScrollView;
@@ -42,7 +43,7 @@ public class MoneyboxActivity extends Activity {
 		_context = this;
 
 		initActivity();
-		
+
 		final View v;
 		final ViewTreeObserver vto;
 
@@ -74,12 +75,21 @@ public class MoneyboxActivity extends Activity {
 		value = (CurrencyValueDef) v.getTag();
 		if (value != null) {
 			MovementsManager.insertMovement(value.getAmount());
-			throwMoney(v, value);
+			dropMoney(v, value);
 
 			updateTotal();
 		}
 	}
 
+	/**
+	 * Hammer is clicked, so the moneybox should be empty.
+	 * 
+	 * Shows a confirmation message with the buttons associated to the methods
+	 * that break the moneybox (breakMoneybox) on cancel the dialog.
+	 * 
+	 * @param v
+	 *            View that launch the event.
+	 */
 	public void onHammerClicked(View v) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -106,6 +116,9 @@ public class MoneyboxActivity extends Activity {
 		alert.show();
 	}
 
+	/**
+	 * Empty the moneybox.
+	 */
 	protected void breakMoneybox() {
 		SoundsManager.playBreakingMoneyboxSound();
 		MovementsManager.breakMoneybox();
@@ -124,16 +137,26 @@ public class MoneyboxActivity extends Activity {
 	 * @param src
 	 *            Image of the money to drop
 	 */
-	private void throwMoney(View src, CurrencyValueDef c) {
+	private void dropMoney(View src, CurrencyValueDef c) {
 		HorizontalScrollView scroll;
 
 		scroll = (HorizontalScrollView) findViewById(R.id.scrollButtonsView);
 
-		throwMoney(src.getLeft() - scroll.getScrollX(),
-				src.getRight(), c);
+		dropMoney(src.getLeft() - scroll.getScrollX(), src.getRight(), c);
 	}
 
-	protected void throwMoney(int leftMargin, int width, CurrencyValueDef c) {
+	/**
+	 * Drop money from the top of the layout to the bottom simulating that a
+	 * coin or bill is inserted in the moneybox.
+	 * 
+	 * @param leftMargin
+	 *            Left side of the coin/bill
+	 * @param width
+	 *            Width of the image to slide down
+	 * @param c
+	 *            Value of the money to drop
+	 */
+	protected void dropMoney(int leftMargin, int width, CurrencyValueDef c) {
 		ImageView money;
 		AnimationSet moneyDrop;
 		RelativeLayout layout;
@@ -141,9 +164,11 @@ public class MoneyboxActivity extends Activity {
 		Rect r;
 
 		money = new ImageView(this);
+		money.setVisibility(View.INVISIBLE);
 		r = c.getDrawable().getBounds();
 
-		money.setImageDrawable(c.getDrawable());
+		money.setImageDrawable(c.getDrawable().getConstantState().newDrawable());
+		money.setTag(c);
 
 		layout = (RelativeLayout) findViewById(R.id.moneyDropLayout);
 
@@ -167,7 +192,49 @@ public class MoneyboxActivity extends Activity {
 
 		money.startAnimation(moneyDrop);
 
-		layout.invalidate();
+		// layout.invalidate();
+	}
+
+	/**
+	 * Take money of the moneybox removing the image from the view.
+	 * 
+	 * @param c
+	 *            Value to be removed.
+	 */
+	protected void takeMoney(CurrencyValueDef c) {
+		//RelativeLayout layout;
+		Animation takeMoney;
+		ImageView money;
+
+		money = findMoneyImage(c);
+		if (money != null) {
+			// layout = (RelativeLayout) findViewById(R.id.moneyDropLayout);
+			takeMoney = AnimationUtils.loadAnimation(this, R.anim.money_take);
+
+			money.startAnimation(takeMoney);
+			// layout.invalidate();
+		}
+	}
+
+	private ImageView findMoneyImage(CurrencyValueDef c) {
+		RelativeLayout layout;
+
+		layout = (RelativeLayout) findViewById(R.id.moneyDropLayout);
+		for (int i = 0; i < layout.getChildCount(); i++) {
+			View money;
+			CurrencyValueDef current;
+
+			money = layout.getChildAt(i);
+			if (money.getClass() == ImageView.class && money.getTag() != null) {
+				current = (CurrencyValueDef) money.getTag();
+
+				if (current.getAmount() == c.getAmount()) {
+					return (ImageView) money;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -177,7 +244,7 @@ public class MoneyboxActivity extends Activity {
 		TextView total;
 
 		total = (TextView) findViewById(R.id.txtTotal);
-		total.setText(CurrencyManager.formatAmount(MovementsManager.getTotalAmount()));
+		total.setText(String.format("%.2f", MovementsManager.getTotalAmount()));
 	}
 
 	/**
@@ -187,7 +254,7 @@ public class MoneyboxActivity extends Activity {
 		TextView total;
 
 		total = (TextView) findViewById(R.id.txtTotal);
-		total.setText(CurrencyManager.formatAmount(val));
+		total.setText(String.format("%.2f", val));
 	}
 
 	/**
@@ -259,7 +326,7 @@ public class MoneyboxActivity extends Activity {
 			CurrencyValueDef curr;
 			int left;
 
-			curr = CurrencyManager.getCurrencyDef(m.getAmount());
+			curr = CurrencyManager.getCurrencyDef(Math.abs(m.getAmount()));
 			if (curr != null) {
 				r = curr.getDrawable().getBounds();
 
@@ -267,12 +334,12 @@ public class MoneyboxActivity extends Activity {
 
 				total += curr.getAmount();
 
-				Timer t = new Timer();
-				ThrowMoneyTimerTask task;
+				MoneyTimerTask task;
 
-				task = new ThrowMoneyTimerTask(this, curr, left, r.width(),
-						total);
-				t.schedule(task, 400 * i);
+				task = new MoneyTimerTask(this, curr, left, r.width(),
+						m.getAmount(), total);
+				
+				layout.postDelayed(task, 400 * i);
 			}
 
 			i++;
@@ -291,7 +358,7 @@ public class MoneyboxActivity extends Activity {
 		int offsetX;
 		List<CurrencyValueDef> currList;
 		int elemWidth;
-		
+
 		currList = CurrencyManager.getCurrencyDefList();
 		scroll = (HorizontalScrollView) findViewById(R.id.scrollButtonsView);
 
@@ -301,19 +368,21 @@ public class MoneyboxActivity extends Activity {
 	}
 }
 
-final class ThrowMoneyTimerTask extends TimerTask implements Runnable {
+final class MoneyTimerTask implements Runnable {
 	MoneyboxActivity _parent;
 	CurrencyValueDef _currency;
 	int _left;
 	int _width;
 	double _total;
+	double _amount;
 
-	public ThrowMoneyTimerTask(MoneyboxActivity parent,
-			CurrencyValueDef currency, int left, int width, double total) {
+	public MoneyTimerTask(MoneyboxActivity parent, CurrencyValueDef currency,
+			int left, int width, double amount, double total) {
 		_parent = parent;
 		_currency = currency;
 		_left = left;
 		_width = width;
+		_amount = amount;
 		_total = total;
 	}
 
@@ -322,7 +391,11 @@ final class ThrowMoneyTimerTask extends TimerTask implements Runnable {
 		_parent.runOnUiThread(new Runnable() {
 			public void run() {
 
-				_parent.throwMoney(_left, _width, _currency);
+				if (_amount > 0) {
+					_parent.dropMoney(_left, _width, _currency);
+				} else {
+					_parent.takeMoney(_currency);
+				}
 				_parent.setTotal(_total);
 
 				// Log.i("moneybox", "Running timer task in UiThread");

@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.activity.MovementsActivity;
 import com.cachirulop.moneybox.entity.Movement;
-import com.cachirulop.moneybox.manager.CurrencyManager;
 import com.cachirulop.moneybox.manager.MovementsManager;
 
 public class MoneyboxMovementAdapter extends BaseAdapter {
@@ -71,7 +70,7 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 				.findViewById(R.id.txtRowMovementAmount);
 
 		txtDate.setText(formatDate(m.getInsertDate()));
-		txtAmount.setText(CurrencyManager.formatAmount(m.getAmount()));
+		txtAmount.setText(String.format("%.2f", m.getAmount()));
 		txtDescription.setText(m.getDescription());
 
 		if (m.isBreakMoneybox()) {
@@ -99,13 +98,10 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 		return DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
 				DateFormat.SHORT).format(d);
 	}
-
-	/*
-	 * static class ViewHolder { TextView text1; TextView text2; TextView
-	 * text3; }
-	 */
+	
 	public void refreshMovements() {
 		_lstMovements = MovementsManager.getAllMovements();
+		notifyDataSetChanged();
 	}
 
 }

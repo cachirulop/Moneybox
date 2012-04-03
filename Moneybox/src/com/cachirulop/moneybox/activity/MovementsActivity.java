@@ -27,7 +27,8 @@ public class MovementsActivity extends Activity {
 			public void onItemClick(AdapterView<?> a, View v, int position, long id) {
 				onMovementClick(a, v, position, id);
 			}
-		});		
+		});
+
 	}
 
 	@Override
