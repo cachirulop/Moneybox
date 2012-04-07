@@ -69,7 +69,7 @@ public class CurrencySpinnerAdapter extends BaseAdapter implements
 
 		currentEntry = _content.get(position);
 		
-		amount.setText(String.format ("%.2f", currentEntry.getAmount()));
+		amount.setText(CurrencyManager.formatAmount(currentEntry.getAmount()));
 		currencyImage.setImageDrawable(currentEntry.getDrawable());
 		
 		return spinnerEntry;

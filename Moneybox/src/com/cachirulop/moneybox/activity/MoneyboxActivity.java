@@ -241,9 +241,9 @@ public class MoneyboxActivity extends Activity {
 	 */
 	private void updateTotal() {
 		TextView total;
-
+		
 		total = (TextView) findViewById(R.id.txtTotal);
-		total.setText(String.format("%.2f", MovementsManager.getTotalAmount()));
+		total.setText(CurrencyManager.formatAmount(MovementsManager.getTotalAmount()));
 	}
 
 	/**
@@ -253,7 +253,7 @@ public class MoneyboxActivity extends Activity {
 		TextView total;
 
 		total = (TextView) findViewById(R.id.txtTotal);
-		total.setText(String.format("%.2f", val));
+		total.setText(CurrencyManager.formatAmount(val));
 	}
 
 	/**
