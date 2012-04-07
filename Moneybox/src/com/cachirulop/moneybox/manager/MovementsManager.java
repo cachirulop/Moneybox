@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cachirulop.moneybox.R;
-import com.cachirulop.moneybox.activity.MoneyboxActivity;
 import com.cachirulop.moneybox.data.MoneyboxDataHelper;
 import com.cachirulop.moneybox.entity.Movement;
 
@@ -20,7 +19,7 @@ public class MovementsManager {
 		SQLiteDatabase db = null;
 
 		try {
-			db = new MoneyboxDataHelper(MoneyboxActivity.getContext())
+			db = new MoneyboxDataHelper(ContextManager.getContext())
 					.getReadableDatabase();
 
 			c = db.query("movements", null, null, null, null, null,
@@ -45,7 +44,7 @@ public class MovementsManager {
 				Cursor c;
 				Context ctx;
 
-				ctx = MoneyboxActivity.getContext();
+				ctx = ContextManager.getContext();
 				db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
 				c = db.rawQuery(ctx.getString(R.string.SQL_movements_by_date),
@@ -75,7 +74,7 @@ public class MovementsManager {
 		Context ctx;
 
 		try {
-			ctx = MoneyboxActivity.getContext();
+			ctx = ContextManager.getContext();
 			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
 			c = db.rawQuery(ctx.getString(R.string.SQL_last_break_movement),
@@ -133,7 +132,7 @@ public class MovementsManager {
 		SQLiteDatabase db = null;
 
 		try {
-			db = new MoneyboxDataHelper(MoneyboxActivity.getContext())
+			db = new MoneyboxDataHelper(ContextManager.getContext())
 					.getWritableDatabase();
 
 			ContentValues values;
@@ -197,7 +196,7 @@ public class MovementsManager {
 		SQLiteDatabase db = null;
 
 		try {
-			db = new MoneyboxDataHelper(MoneyboxActivity.getContext())
+			db = new MoneyboxDataHelper(ContextManager.getContext())
 					.getWritableDatabase();
 
 			ContentValues values;
@@ -227,7 +226,7 @@ public class MovementsManager {
 		SQLiteDatabase db = null;
 
 		try {
-			db = new MoneyboxDataHelper(MoneyboxActivity.getContext())
+			db = new MoneyboxDataHelper(ContextManager.getContext())
 					.getWritableDatabase();
 
 			db.delete("movements", "id_movement = ?",
@@ -245,7 +244,7 @@ public class MovementsManager {
 		Context ctx;
 
 		try {
-			ctx = MoneyboxActivity.getContext();
+			ctx = ContextManager.getContext();
 			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
 			c = db.rawQuery(ctx.getString(R.string.SQL_movements_sumAmount),
@@ -263,7 +262,7 @@ public class MovementsManager {
 	public static void breakMoneybox() {
 		// Negative total amount!
 		MovementsManager.insertMovement(-MovementsManager.getTotalAmount(),
-				MoneyboxActivity.getContext()
+				ContextManager.getContext()
 						.getString(R.string.break_moneybox), true);
 	}
 

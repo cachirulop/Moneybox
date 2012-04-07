@@ -5,7 +5,6 @@ import android.media.SoundPool;
 import android.util.Log;
 
 import com.cachirulop.moneybox.R;
-import com.cachirulop.moneybox.activity.MoneyboxActivity;
 import com.cachirulop.moneybox.entity.CurrencyValueDef;
 
 public class SoundsManager {
@@ -22,11 +21,11 @@ public class SoundsManager {
 		_soundsMap = new int[3];
 
 		_soundsMap[SOUND_DROP_COIN] = _sounds.load(
-				MoneyboxActivity.getContext(), R.raw.coin_dropping, 1);
+				ContextManager.getContext(), R.raw.coin_dropping, 1);
 		_soundsMap[SOUND_DROP_BILL] = _sounds.load(
-				MoneyboxActivity.getContext(), R.raw.paper_dropping, 1);
+				ContextManager.getContext(), R.raw.paper_dropping, 1);
 		_soundsMap[SOUND_BREAK_MONEYBOX] = _sounds.load(
-				MoneyboxActivity.getContext(), R.raw.breaking_glass, 1);
+				ContextManager.getContext(), R.raw.breaking_glass, 1);
 	}
 	
 	public static void playMoneySound (CurrencyValueDef.MoneyType type) {

@@ -7,7 +7,6 @@ import android.content.res.TypedArray;
 import android.graphics.Rect;
 
 import com.cachirulop.moneybox.R;
-import com.cachirulop.moneybox.activity.MoneyboxActivity;
 import com.cachirulop.moneybox.entity.CurrencyValueDef;
 import com.cachirulop.moneybox.entity.CurrencyValueDef.MoneyType;
 
@@ -27,8 +26,8 @@ public class CurrencyManager {
 		
 		_currencyDefList = new ArrayList<CurrencyValueDef>();
 
-		res = MoneyboxActivity.getContext().getResources();
-		packageName = MoneyboxActivity.getContext().getPackageName();
+		res = ContextManager.getContext().getResources();
+		packageName = ContextManager.getContext().getPackageName();
 		
 		icons = res.obtainTypedArray(res.getIdentifier(name + "_money_icons", "array", packageName));
 		values = res.obtainTypedArray(res.getIdentifier(name + "_money_values", "array", packageName));

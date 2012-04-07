@@ -6,7 +6,6 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -24,13 +23,13 @@ import android.widget.TextView;
 import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.entity.CurrencyValueDef;
 import com.cachirulop.moneybox.entity.Movement;
+import com.cachirulop.moneybox.manager.ContextManager;
 import com.cachirulop.moneybox.manager.CurrencyManager;
 import com.cachirulop.moneybox.manager.MovementsManager;
 import com.cachirulop.moneybox.manager.SoundsManager;
+import com.cachirulop.moneybox.manager.VibratorManager;
 
 public class MoneyboxActivity extends Activity {
-
-	private static Context _context;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -38,7 +37,7 @@ public class MoneyboxActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.moneybox_tab);
 
-		_context = this;
+		ContextManager.initContext(this);
 
 		initActivity();
 
@@ -187,6 +186,8 @@ public class MoneyboxActivity extends Activity {
 		money.setVisibility(View.VISIBLE);
 
 		SoundsManager.playMoneySound(c.getType());
+		VibratorManager.vibrateMoneyDrop (c.getType());
+		
 
 		money.startAnimation(moneyDrop);
 
@@ -285,15 +286,6 @@ public class MoneyboxActivity extends Activity {
 
 			buttons.addView(v);
 		}
-	}
-
-	/**
-	 * Global context to access from other classes
-	 * 
-	 * @return A reference to the default Activity
-	 */
-	public static Context getContext() {
-		return _context;
 	}
 
 	/**
