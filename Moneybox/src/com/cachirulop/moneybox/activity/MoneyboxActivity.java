@@ -9,13 +9,19 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,6 +29,7 @@ import android.widget.TextView;
 import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.entity.CurrencyValueDef;
 import com.cachirulop.moneybox.entity.Movement;
+import com.cachirulop.moneybox.listener.TranslateAnimationListener;
 import com.cachirulop.moneybox.manager.ContextManager;
 import com.cachirulop.moneybox.manager.CurrencyManager;
 import com.cachirulop.moneybox.manager.MovementsManager;
@@ -172,9 +179,11 @@ public class MoneyboxActivity extends Activity {
 		lpParams = new RelativeLayout.LayoutParams(r.width(), r.height());
 		lpParams.leftMargin = leftMargin;
 		lpParams.rightMargin = layout.getWidth() - (leftMargin + width);
+		lpParams.topMargin = 0;
+		lpParams.bottomMargin = r.height();
 
 		layout.addView(money, lpParams);
-
+/*
 		if (c.getType() == CurrencyValueDef.MoneyType.COIN) {
 			moneyDrop = (AnimationSet) AnimationUtils.loadAnimation(this,
 					R.anim.coin_drop);
@@ -182,16 +191,48 @@ public class MoneyboxActivity extends Activity {
 			moneyDrop = (AnimationSet) AnimationUtils.loadAnimation(this,
 					R.anim.bill_drop);
 		}
-
+*/
+		moneyDrop = createDropAnimation(money, layout, c);
 		money.setVisibility(View.VISIBLE);
 
 		SoundsManager.playMoneySound(c.getType());
 		VibratorManager.vibrateMoneyDrop (c.getType());
-		
 
+		moneyDrop.setAnimationListener(new TranslateAnimationListener(money, (View) layout));
 		money.startAnimation(moneyDrop);
-
-		// layout.invalidate();
+	}
+	
+	private AnimationSet createDropAnimation (ImageView img, View layout, CurrencyValueDef curr) {
+		AnimationSet result;
+		
+		result = new AnimationSet (false);
+		result.setFillAfter(false);
+		
+		// Fade in
+		AlphaAnimation fadeIn;
+		
+		fadeIn = new AlphaAnimation(0.0f, 1.0f);
+		fadeIn.setDuration(300);
+		result.addAnimation(fadeIn);
+		
+		// drop
+		TranslateAnimation drop;
+		int bottom;
+		
+		bottom = Math.abs(layout.getHeight() - img.getLayoutParams().height);
+		drop = new TranslateAnimation (1.0f, 1.0f, 1.0f, bottom);
+		drop.setStartOffset(300);
+		drop.setDuration(1500);
+		
+		if (curr.getType() == CurrencyValueDef.MoneyType.COIN) {
+			drop.setInterpolator(new BounceInterpolator());
+		} else {
+			drop.setInterpolator(new DecelerateInterpolator(0.7f));
+		}
+		
+		result.addAnimation(drop);
+		
+		return result;
 	}
 
 	/**

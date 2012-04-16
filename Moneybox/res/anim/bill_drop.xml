@@ -7,16 +7,15 @@
     <alpha
         android:fromAlpha="0.0"
         android:toAlpha="1.0"
-        android:duration="500" />
+        android:duration="300" />
     
     <translate android:interpolator="@anim/bill_interpolator" 
         android:factor="0.5"
         android:fromXDelta="1.0"
         android:fromYDelta="1.0"
         android:toXDelta="1.0"
-        android:toYDelta="75%p"
-        android:startOffset="500"
-        android:duration="1500"
-        android:fillAfter="true" />
+        android:toYDelta="80%p"
+        android:startOffset="300"
+        android:duration="1500" />
 </set>    
 
