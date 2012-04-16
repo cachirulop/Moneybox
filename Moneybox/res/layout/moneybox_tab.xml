@@ -18,38 +18,6 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <LinearLayout
-        android:id="@+id/totalLayout"
-        android:layout_width="match_parent"
-        android:layout_height="60px"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" >
-
-        <TextView
-            android:id="@+id/txtTotalTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="bottom"
-            android:text="@string/txtTotalTitle"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/txtTotal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="bottom"
-            android:text="Large Text"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="31dp"
-            android:layout_height="31dp"
-            android:onClick="onHammerClicked"
-            android:src="@drawable/ic_menu_hammer" />
-    </LinearLayout>
-        
     <RelativeLayout
         android:id="@+id/moneyDropLayout"
         android:layout_width="fill_parent"

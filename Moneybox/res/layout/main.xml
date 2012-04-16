@@ -4,25 +4,61 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_weight="0.58" >
-
-    <LinearLayout
-        android:id="@+id/linearLayout1"
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/moneyBoxLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:layout_height="fill_parent" >
 
         <TabWidget
             android:id="@android:id/tabs"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
         </TabWidget>
-
+
         <FrameLayout
             android:id="@android:id/tabcontent"
             android:layout_width="fill_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/totalLayout"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@android:id/tabs"
             android:padding="5dp" >
+
         </FrameLayout>
-    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/totalLayout"
+            android:layout_width="match_parent"
+            android:layout_height="60px"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true" >
+
+            <TextView
+                android:id="@+id/txtTotalTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:text="@string/txtTotalTitle"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/txtTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:text="0.0"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:onClick="onHammerClicked"
+                android:src="@drawable/ic_menu_hammer" />
+        </LinearLayout>
+    </RelativeLayout>
 
 </TabHost>

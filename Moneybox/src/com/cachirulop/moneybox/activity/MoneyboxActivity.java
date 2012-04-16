@@ -5,11 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
@@ -21,14 +18,13 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.entity.CurrencyValueDef;
 import com.cachirulop.moneybox.entity.Movement;
+import com.cachirulop.moneybox.listener.IMoneyboxListener;
 import com.cachirulop.moneybox.listener.TranslateAnimationListener;
 import com.cachirulop.moneybox.manager.ContextManager;
 import com.cachirulop.moneybox.manager.CurrencyManager;
@@ -36,7 +32,7 @@ import com.cachirulop.moneybox.manager.MovementsManager;
 import com.cachirulop.moneybox.manager.SoundsManager;
 import com.cachirulop.moneybox.manager.VibratorManager;
 
-public class MoneyboxActivity extends Activity {
+public class MoneyboxActivity extends Activity implements IMoneyboxListener {
 
 	/** Called when the activity is first created. */
 	@Override
@@ -47,7 +43,18 @@ public class MoneyboxActivity extends Activity {
 		ContextManager.initContext(this);
 
 		initActivity();
+		updateTotal();
+		
+		((MainTabWidget) getParent()).addListener(this);
 
+		registerLayoutListener();
+	}
+
+	/**
+	 * Register the event OnGlobalLayoutListener to fill the moneybox when
+	 * the layout is created.
+	 */
+	private void registerLayoutListener() {
 		final View v;
 		final ViewTreeObserver vto;
 
@@ -83,56 +90,6 @@ public class MoneyboxActivity extends Activity {
 
 			updateTotal();
 		}
-	}
-
-	/**
-	 * Hammer is clicked, so the moneybox should be empty.
-	 * 
-	 * Shows a confirmation message with the buttons associated to the methods
-	 * that break the moneybox (breakMoneybox) on cancel the dialog.
-	 * 
-	 * @param v
-	 *            View that launch the event.
-	 */
-	public void onHammerClicked(View v) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-		builder.setMessage(R.string.break_moneybox_confirm);
-		builder.setCancelable(true);
-
-		builder.setPositiveButton(android.R.string.yes,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						breakMoneybox();
-					}
-				});
-
-		builder.setNegativeButton(android.R.string.no,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
-					}
-				});
-
-		AlertDialog alert;
-
-		alert = builder.create();
-		alert.show();
-	}
-
-	/**
-	 * Empty the moneybox.
-	 */
-	protected void breakMoneybox() {
-		SoundsManager.playBreakingMoneyboxSound();
-		MovementsManager.breakMoneybox();
-
-		RelativeLayout layout;
-
-		layout = (RelativeLayout) findViewById(R.id.moneyDropLayout);
-		layout.removeAllViews();
-
-		updateTotal();
 	}
 
 	/**
@@ -183,55 +140,54 @@ public class MoneyboxActivity extends Activity {
 		lpParams.bottomMargin = r.height();
 
 		layout.addView(money, lpParams);
-/*
-		if (c.getType() == CurrencyValueDef.MoneyType.COIN) {
-			moneyDrop = (AnimationSet) AnimationUtils.loadAnimation(this,
-					R.anim.coin_drop);
-		} else {
-			moneyDrop = (AnimationSet) AnimationUtils.loadAnimation(this,
-					R.anim.bill_drop);
-		}
-*/
+		/*
+		 * if (c.getType() == CurrencyValueDef.MoneyType.COIN) { moneyDrop =
+		 * (AnimationSet) AnimationUtils.loadAnimation(this, R.anim.coin_drop);
+		 * } else { moneyDrop = (AnimationSet)
+		 * AnimationUtils.loadAnimation(this, R.anim.bill_drop); }
+		 */
 		moneyDrop = createDropAnimation(money, layout, c);
 		money.setVisibility(View.VISIBLE);
 
 		SoundsManager.playMoneySound(c.getType());
-		VibratorManager.vibrateMoneyDrop (c.getType());
+		VibratorManager.vibrateMoneyDrop(c.getType());
 
-		moneyDrop.setAnimationListener(new TranslateAnimationListener(money, (View) layout));
+		moneyDrop.setAnimationListener(new TranslateAnimationListener(money,
+				(View) layout));
 		money.startAnimation(moneyDrop);
 	}
-	
-	private AnimationSet createDropAnimation (ImageView img, View layout, CurrencyValueDef curr) {
+
+	private AnimationSet createDropAnimation(ImageView img, View layout,
+			CurrencyValueDef curr) {
 		AnimationSet result;
-		
-		result = new AnimationSet (false);
+
+		result = new AnimationSet(false);
 		result.setFillAfter(false);
-		
+
 		// Fade in
 		AlphaAnimation fadeIn;
-		
+
 		fadeIn = new AlphaAnimation(0.0f, 1.0f);
 		fadeIn.setDuration(300);
 		result.addAnimation(fadeIn);
-		
+
 		// drop
 		TranslateAnimation drop;
 		int bottom;
-		
+
 		bottom = Math.abs(layout.getHeight() - img.getLayoutParams().height);
-		drop = new TranslateAnimation (1.0f, 1.0f, 1.0f, bottom);
+		drop = new TranslateAnimation(1.0f, 1.0f, 1.0f, bottom);
 		drop.setStartOffset(300);
 		drop.setDuration(1500);
-		
+
 		if (curr.getType() == CurrencyValueDef.MoneyType.COIN) {
 			drop.setInterpolator(new BounceInterpolator());
 		} else {
 			drop.setInterpolator(new DecelerateInterpolator(0.7f));
 		}
-		
+
 		result.addAnimation(drop);
-		
+
 		return result;
 	}
 
@@ -242,7 +198,7 @@ public class MoneyboxActivity extends Activity {
 	 *            Value to be removed.
 	 */
 	protected void takeMoney(CurrencyValueDef c) {
-		//RelativeLayout layout;
+		// RelativeLayout layout;
 		Animation takeMoney;
 		ImageView money;
 
@@ -278,23 +234,17 @@ public class MoneyboxActivity extends Activity {
 	}
 
 	/**
-	 * Update all the totals
+	 * Update the total amount
 	 */
 	private void updateTotal() {
-		TextView total;
-		
-		total = (TextView) findViewById(R.id.txtTotal);
-		total.setText(CurrencyManager.formatAmount(MovementsManager.getTotalAmount()));
+		((MainTabWidget) getParent()).updateTotal();
 	}
 
 	/**
 	 * Set a value to the total field
 	 */
 	protected void setTotal(double val) {
-		TextView total;
-
-		total = (TextView) findViewById(R.id.txtTotal);
-		total.setText(CurrencyManager.formatAmount(val));
+		((MainTabWidget) getParent()).setTotal(val);
 	}
 
 	/**
@@ -363,13 +313,13 @@ public class MoneyboxActivity extends Activity {
 
 				left = rnd.nextInt(maxWidth - r.width());
 
-				total += curr.getAmount();
+				total += m.getAmount();
 
 				MoneyTimerTask task;
 
 				task = new MoneyTimerTask(this, curr, left, r.width(),
 						m.getAmount(), total);
-				
+
 				layout.postDelayed(task, 400 * i);
 			}
 
@@ -396,6 +346,15 @@ public class MoneyboxActivity extends Activity {
 		elemWidth = currList.get(0).getDrawable().getBounds().right;
 		offsetX = ((currList.size() * elemWidth) / 2) - (elemWidth / 2);
 		scroll.scrollTo(offsetX, 0);
+	}
+
+	public void refresh() {
+		RelativeLayout layout;
+
+		layout = (RelativeLayout) findViewById(R.id.moneyDropLayout);
+		layout.removeAllViews();
+		
+		fillMoneybox();
 	}
 }
 

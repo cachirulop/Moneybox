@@ -14,9 +14,10 @@ import android.widget.ListView;
 import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.adapter.MoneyboxMovementAdapter;
 import com.cachirulop.moneybox.entity.Movement;
+import com.cachirulop.moneybox.listener.IMoneyboxListener;
 import com.cachirulop.moneybox.manager.MovementsManager;
 
-public class MovementsActivity extends Activity {
+public class MovementsActivity extends Activity implements IMoneyboxListener {
 	static final int EDIT_MOVEMENT_REQUEST = 0;
 	static final int MENU_DELETE_ALL = 0;
 
@@ -36,6 +37,7 @@ public class MovementsActivity extends Activity {
 			}
 		});
 
+		((MainTabWidget) getParent()).addListener(this);
 	}
 
 	@Override
@@ -45,6 +47,7 @@ public class MovementsActivity extends Activity {
 		switch (requestCode) {
 		case EDIT_MOVEMENT_REQUEST:
 			if (resultCode == RESULT_OK) {
+				updateTotal ();
 				refreshMovements();
 			}
 			break;
@@ -130,6 +133,17 @@ public class MovementsActivity extends Activity {
 	private void onDeleteAll() {
 		MovementsManager.deleteAllMovements ();
 		refreshMovements();
+	}
+
+	public void refresh() {
+		refreshMovements();
+	}
+
+	/**
+	 * Update the total amount
+	 */
+	private void updateTotal() {
+		((MainTabWidget) getParent()).updateTotal();
 	}
 
 }
