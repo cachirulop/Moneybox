@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/llRoot"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlRoot"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:padding="10dp" >
-
+
     <ScrollView
         android:id="@+id/svMovementDetail"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rlButtons"
+        android:layout_alignParentTop="true" >
+
         <RelativeLayout
             android:id="@+id/rlMovementDetail"
             android:layout_width="match_parent"
@@ -106,20 +108,22 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/sAmount"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/txtDescriptionDesc" 
-                android:maxLength="100">
+                android:layout_below="@+id/txtDescriptionDesc"
+                android:maxLength="100" >
 
                 <requestFocus />
             </EditText>
-
         </RelativeLayout>
-    </ScrollView>
 
+    </ScrollView>
+
     <RelativeLayout
         android:id="@+id/rlButtons"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:minHeight="90dip">
+        android:layout_height="49dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:minHeight="90dip" >
 
         <Button
             android:id="@+id/btnDelete"
@@ -160,4 +164,4 @@
             android:text="@string/cancel" />
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>
