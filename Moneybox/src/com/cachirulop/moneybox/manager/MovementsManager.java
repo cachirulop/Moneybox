@@ -32,6 +32,21 @@ public class MovementsManager {
 			}
 		}
 	}
+	
+	public static void deleteAllMovements () {
+		SQLiteDatabase db = null;
+
+		try {
+			db = new MoneyboxDataHelper(ContextManager.getContext())
+					.getWritableDatabase();
+
+			db.delete("movements", "", null);
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+	}
 
 	public static ArrayList<Movement> getActiveMovements() {
 		Movement lastBreak;

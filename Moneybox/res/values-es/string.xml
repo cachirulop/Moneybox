@@ -4,6 +4,7 @@
     <string name="txtTotalTitle">Total:</string>
     <string name="break_moneybox">Hucha vacía</string>
     <string name="break_moneybox_confirm">¿Seguro que quieres vaciar la hucha?</string>
+    <string name="delete_all_confirm">¿Seguro que quieres borrar todo?</string>
 
     <string name="date">Fecha</string>
     <string name="time">Hora</string>
@@ -19,4 +20,8 @@
     <!-- tabs -->
     <string name="tab_title_moneybox">Hucha</string>
     <string name="tab_title_movements">Movimientos</string>
+    
+    <!-- Menu -->
+    <string name="menu_delete_all">Borrar todo</string>
+    
 </resources>

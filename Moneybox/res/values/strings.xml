@@ -5,6 +5,8 @@
     <string name="txtTotalTitle">Total:</string>
     <string name="break_moneybox">Piggy bank is empty!</string>
     <string name="break_moneybox_confirm">Are you sure?</string>
+    <string name="delete_all_confirm">Are you sure?</string>
+        
     
     <string name="date">Date</string>
     <string name="time">Time</string>
@@ -20,4 +22,7 @@
     <!-- tabs -->
     <string name="tab_title_moneybox">Moneybox</string>
     <string name="tab_title_movements">Movements</string>
+    
+    <!-- Menu -->
+    <string name="menu_delete_all">Delete all</string>
 </resources>
