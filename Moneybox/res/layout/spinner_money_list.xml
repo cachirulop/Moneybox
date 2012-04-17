@@ -20,7 +20,9 @@
             android:layout_height="fill_parent"
             android:paddingLeft="5sp"
             android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:text="0.01€"
+            android:textColor="@android:color/black" />
     </TableRow>
 
 </TableLayout>
