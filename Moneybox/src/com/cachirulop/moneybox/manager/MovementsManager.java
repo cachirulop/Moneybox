@@ -131,6 +131,7 @@ public class MovementsManager {
 		result.setAmount(c.getDouble(c.getColumnIndex("amount")));
 		result.setDescription(c.getString(c.getColumnIndex("description")));
 		result.setInsertDate(new Date(c.getLong(c.getColumnIndex("insert_date"))));
+		result.setGetDate(new Date(c.getLong(c.getColumnIndex("get_date"))));
 		result.setBreakMoneyboxAsInt(c.getInt(c
 				.getColumnIndex("break_moneybox")));
 
@@ -156,6 +157,7 @@ public class MovementsManager {
 			values.put("amount", m.getAmount());
 			values.put("description", m.getDescription());
 			values.put("insert_date", m.getInsertDateDB());
+			values.put("get_date", m.getGetDateDB());
 			values.put("break_moneybox", m.isBreakMoneyboxAsInt());
 
 			db.insert("movements", null, values);
@@ -193,6 +195,7 @@ public class MovementsManager {
 		m = new Movement();
 		m.setAmount(amount);
 		m.setInsertDate(new Date());
+		m.setGetDate(null);
 		m.setBreakMoneybox(isBreakMoneybox);
 		if (description != null) {
 			m.setDescription(description);
@@ -220,6 +223,7 @@ public class MovementsManager {
 			values.put("amount", m.getAmount());
 			values.put("description", m.getDescription());
 			values.put("insert_date", m.getInsertDateDB());
+			values.put("get_date", m.getGetDateDB());
 			values.put("break_moneybox", m.isBreakMoneyboxAsInt());
 
 			db.update("movements", values, "id_movement = ?",

@@ -10,6 +10,8 @@
     
     <string name="date">Date</string>
     <string name="time">Time</string>
+    <string name="get_date">Get date</string>
+    <string name="get_time">Get time</string>
     <string name="amount">Amount</string>
     <string name="description">Description</string>
         

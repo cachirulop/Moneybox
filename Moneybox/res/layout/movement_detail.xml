@@ -5,14 +5,14 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:padding="10dp" >
-
+
     <ScrollView
         android:id="@+id/svMovementDetail"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/rlButtons"
         android:layout_alignParentTop="true" >
-
+
         <RelativeLayout
             android:id="@+id/rlMovementDetail"
             android:layout_width="match_parent"
@@ -66,12 +66,70 @@
                 android:text="00:00"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
+            <Button
+                android:id="@+id/btnChangeGetDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/btnChangeTime"
+                android:onClick="onChangeGetDateClick"
+                android:text="@string/change" />
+
+            <Button
+                android:id="@+id/btnChangeGetTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/btnChangeGetDate"
+                android:onClick="onChangeGetTimeClick"
+                android:text="@string/change" />
+
+            <TextView
+                android:id="@+id/txtGetDateDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/btnChangeGetDate"
+                android:layout_alignBottom="@+id/btnChangeGetDate"
+                android:layout_alignParentLeft="true"
+                android:text="@string/get_date"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/txtGetDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/btnChangeGetDate"
+                android:layout_alignBottom="@+id/btnChangeGetDate"
+                android:layout_centerHorizontal="true"
+                android:text="01/01/2012"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/txtGetTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/btnChangeGetTime"
+                android:layout_alignBottom="@+id/btnChangeGetTime"
+                android:layout_alignRight="@+id/txtGetDate"
+                android:text="00:00"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/txtGetTimeDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/txtGetTime"
+                android:layout_alignBottom="@+id/txtGetTime"
+                android:layout_alignParentLeft="true"
+                android:text="@string/get_time"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
             <TextView
                 android:id="@+id/AmountDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/btnChangeTime"
+                android:layout_below="@+id/btnChangeGetTime"
                 android:text="@string/amount"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -114,9 +172,8 @@
                 <requestFocus />
             </EditText>
         </RelativeLayout>
-
     </ScrollView>
-
+
     <RelativeLayout
         android:id="@+id/rlButtons"
         android:layout_width="match_parent"

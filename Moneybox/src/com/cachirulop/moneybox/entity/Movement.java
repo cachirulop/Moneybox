@@ -12,6 +12,7 @@ public class Movement
 	private int _idMovement;
 	private double _amount;
 	private Date _insertDate;
+	private Date _getDate;
 	private String _description;
 	private boolean _breakMoneybox;
 	
@@ -27,17 +28,26 @@ public class Movement
 	public void setAmount(double amount) {
 		this._amount = amount;
 	}
+	
 	public Date getInsertDate() {
 		return _insertDate;
 	}
-	
 	public long getInsertDateDB() {
 		return _insertDate.getTime();
 	}
-	
 	public void setInsertDate(Date insertDate) {
 		this._insertDate = insertDate;
 	}
+	public Date getGetDate() {
+		return _getDate;
+	}
+	public long getGetDateDB() {
+		return _getDate.getTime();
+	}
+	public void setGetDate(Date getDate) {
+		this._getDate = getDate;
+	}
+
 	public String getDescription() {
 		return _description;
 	}

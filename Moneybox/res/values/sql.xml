@@ -5,6 +5,7 @@
         CREATE TABLE movements (id_movement INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                                 amount NUMERIC NOT NULL,
                                 insert_date TIMESTAMP NOT NULL DEFAULT current_timestamp,
+                                get_date TIMESTAMP,
                                 description TEXT, 
                                 break_moneybox INTEGER);
     </string>
