@@ -8,6 +8,8 @@
 
     <string name="date">Fecha</string>
     <string name="time">Hora</string>
+    <string name="get_date">Cogido (fecha)</string>
+    <string name="get_time">Cogido (hora)</string>
     <string name="amount">Cantidad</string>
     <string name="description">Descripción</string>
         

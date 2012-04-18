@@ -152,8 +152,6 @@ public class MoneyboxActivity extends Activity implements IMoneyboxListener {
 		SoundsManager.playMoneySound(c.getType());
 		VibratorManager.vibrateMoneyDrop(c.getType());
 
-		moneyDrop.setAnimationListener(new TranslateAnimationListener(money,
-				(View) layout));
 		money.startAnimation(moneyDrop);
 	}
 
@@ -162,7 +160,7 @@ public class MoneyboxActivity extends Activity implements IMoneyboxListener {
 		AnimationSet result;
 
 		result = new AnimationSet(false);
-		result.setFillAfter(false);
+		result.setFillAfter(true);
 
 		// Fade in
 		AlphaAnimation fadeIn;

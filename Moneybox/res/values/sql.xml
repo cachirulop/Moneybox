@@ -5,6 +5,7 @@
         CREATE TABLE movements (id_movement INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                                 amount NUMERIC NOT NULL,
                                 insert_date TIMESTAMP NOT NULL DEFAULT current_timestamp,
+                                get_date TIMESTAMP,
                                 description TEXT, 
                                 break_moneybox INTEGER);
     </string>
@@ -13,7 +14,7 @@
     </string>
     
     <string name="SQL_movements_sumAmount">
-        SELECT sum(amount) FROM movements;
+        SELECT sum(amount) FROM movements WHERE get_date IS NULL;
     </string>
 
     <string name="SQL_last_break_movement">
@@ -27,10 +28,16 @@
         ORDER BY insert_date ASC;
     </string>
     
-    <string name="SQL_movements_by_date">
+    <string name="SQL_active_movements">
         SELECT * 
         FROM movements 
-        WHERE insert_date > ?
+        WHERE get_date IS NULL
+    </string>
+        
+    <string name="SQL_active_movements_by_date">
+        SELECT * 
+        FROM movements 
+        WHERE insert_date > ? AND get_date IS NULL
     </string>
         
 </resources>

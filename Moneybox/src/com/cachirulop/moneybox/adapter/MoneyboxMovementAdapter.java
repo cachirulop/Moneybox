@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,18 +60,32 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 
 		Movement m;
 		TextView txtDate;
+		TextView txtGetDate;
 		TextView txtDescription;
 		TextView txtAmount;
 
 		m = _lstMovements.get(position);
 		txtDate = (TextView) convertView
 				.findViewById(R.id.txtRowMovementDate);
+		txtGetDate = (TextView) convertView
+				.findViewById(R.id.txtRowMovementGetDate);
 		txtDescription = (TextView) convertView
 				.findViewById(R.id.txtRowMovementDescription);
 		txtAmount = (TextView) convertView
 				.findViewById(R.id.txtRowMovementAmount);
 
 		txtDate.setText(formatDate(m.getInsertDate()));
+		if (m.getGetDate() != null) {
+			txtAmount.setPaintFlags(txtAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+			txtGetDate.setVisibility(View.VISIBLE);
+			txtGetDate.setText(formatDate (m.getGetDate()));
+		}
+		else {
+			txtAmount.setPaintFlags(txtAmount.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+			txtGetDate.setVisibility(View.INVISIBLE);
+			txtGetDate.setText("");
+		}
+		
 		txtAmount.setText(CurrencyManager.formatAmount(m.getAmount()));
 		txtDescription.setText(m.getDescription());
 
@@ -78,11 +93,6 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 			txtDate.setTextColor(Color.RED);
 			txtAmount.setTextColor(Color.RED);
 			txtDescription.setTextColor(Color.RED);
-		}
-		else if (m.getAmount() < 0) {
-			txtDate.setTextColor(Color.YELLOW);
-			txtAmount.setTextColor(Color.YELLOW);
-			txtDescription.setTextColor(Color.YELLOW);
 		}
 		else {
 			int blue;
@@ -92,6 +102,10 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 			txtDate.setTextColor(blue);
 			txtAmount.setTextColor(blue);
 			txtDescription.setTextColor(blue);
+
+			if (m.getGetDate() != null) {
+				txtGetDate.setTextColor(Color.YELLOW);
+			}			
 		}
 
 		return convertView;
