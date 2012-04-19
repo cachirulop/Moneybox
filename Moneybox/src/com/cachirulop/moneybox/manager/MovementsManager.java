@@ -32,8 +32,8 @@ public class MovementsManager {
 			}
 		}
 	}
-	
-	public static void deleteAllMovements () {
+
+	public static void deleteAllMovements() {
 		SQLiteDatabase db = null;
 
 		try {
@@ -50,30 +50,31 @@ public class MovementsManager {
 
 	public static ArrayList<Movement> getActiveMovements() {
 		Movement lastBreak;
+		Cursor c;
+		Context ctx;
+		SQLiteDatabase db = null;
 
-		lastBreak = getLastBreakmoneybox();
-		if (lastBreak != null) {
-			SQLiteDatabase db = null;
+		try {
+			ctx = ContextManager.getContext();
+			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
-			try {
-				Cursor c;
-				Context ctx;
-
-				ctx = ContextManager.getContext();
-				db = new MoneyboxDataHelper(ctx).getReadableDatabase();
-
-				c = db.rawQuery(ctx.getString(R.string.SQL_movements_by_date),
+			lastBreak = getLastBreakmoneybox();
+			if (lastBreak != null) {
+				c = db.rawQuery(ctx
+						.getString(R.string.SQL_active_movements_by_date),
 						new String[] { Long.toString(lastBreak
 								.getInsertDateDB()) });
 
-				return createMovementList(c);
-			} finally {
-				if (db != null) {
-					db.close();
-				}
+			} else {
+				c = db.rawQuery(ctx.getString(R.string.SQL_active_movements),
+						null);
 			}
-		} else {
-			return getAllMovements();
+
+			return createMovementList(c);
+		} finally {
+			if (db != null) {
+				db.close();
+			}
 		}
 	}
 
@@ -130,8 +131,15 @@ public class MovementsManager {
 		result.setIdMovement(c.getInt(c.getColumnIndex("id_movement")));
 		result.setAmount(c.getDouble(c.getColumnIndex("amount")));
 		result.setDescription(c.getString(c.getColumnIndex("description")));
-		result.setInsertDate(new Date(c.getLong(c.getColumnIndex("insert_date"))));
-		result.setGetDate(new Date(c.getLong(c.getColumnIndex("get_date"))));
+
+		result.setInsertDate(new Date(
+				c.getLong(c.getColumnIndex("insert_date"))));
+		if (!c.isNull(c.getColumnIndex("get_date"))) {
+			result.setGetDate(new Date(c.getLong(c.getColumnIndex("get_date"))));
+		} else {
+			result.setGetDate(null);
+		}
+
 		result.setBreakMoneyboxAsInt(c.getInt(c
 				.getColumnIndex("break_moneybox")));
 
@@ -281,8 +289,8 @@ public class MovementsManager {
 	public static void breakMoneybox() {
 		// Negative total amount!
 		MovementsManager.insertMovement(-MovementsManager.getTotalAmount(),
-				ContextManager.getContext()
-						.getString(R.string.break_moneybox), true);
+				ContextManager.getContext().getString(R.string.break_moneybox),
+				true);
 	}
 
 }

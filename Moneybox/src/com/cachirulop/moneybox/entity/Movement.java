@@ -41,8 +41,14 @@ public class Movement
 	public Date getGetDate() {
 		return _getDate;
 	}
-	public long getGetDateDB() {
-		return _getDate.getTime();
+
+	public Long getGetDateDB() {
+		if (_getDate != null) {
+			return _getDate.getTime();
+		}
+		else {
+			return null;
+		}
 	}
 	public void setGetDate(Date getDate) {
 		this._getDate = getDate;

@@ -212,16 +212,26 @@ public class MovementDetailActivity extends Activity {
 		TextView txt;
 
 		txt = (TextView) findViewById(R.id.txtGetDate);
-		txt.setText(DateFormat.getDateInstance(DateFormat.MEDIUM).format(
-				_movement.getGetDate()));
+		if (_movement.getGetDate() != null) {
+			txt.setText(DateFormat.getDateInstance(DateFormat.MEDIUM).format(
+					_movement.getGetDate()));
+		}
+		else {
+			txt.setText("");
+		}
 	}
 	
 	private void updateGetTime() {
 		TextView txt;
 		
 		txt = (TextView) findViewById(R.id.txtGetTime);
-		txt.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(
-				_movement.getGetDate()));
+		if (_movement.getGetDate() != null) {
+			txt.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(
+					_movement.getGetDate()));
+		}
+		else {
+			txt.setText("");
+		}
 	}
 	
 	private void updateInsertDate () {
