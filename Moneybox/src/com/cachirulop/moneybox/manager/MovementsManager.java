@@ -131,7 +131,6 @@ public class MovementsManager {
 		result.setIdMovement(c.getInt(c.getColumnIndex("id_movement")));
 		result.setAmount(c.getDouble(c.getColumnIndex("amount")));
 		result.setDescription(c.getString(c.getColumnIndex("description")));
-
 		result.setInsertDate(new Date(
 				c.getLong(c.getColumnIndex("insert_date"))));
 		if (!c.isNull(c.getColumnIndex("get_date"))) {
