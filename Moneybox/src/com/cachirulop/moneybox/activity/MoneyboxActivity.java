@@ -13,6 +13,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
@@ -25,7 +26,6 @@ import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.entity.CurrencyValueDef;
 import com.cachirulop.moneybox.entity.Movement;
 import com.cachirulop.moneybox.listener.IMoneyboxListener;
-import com.cachirulop.moneybox.listener.TranslateAnimationListener;
 import com.cachirulop.moneybox.manager.ContextManager;
 import com.cachirulop.moneybox.manager.CurrencyManager;
 import com.cachirulop.moneybox.manager.MovementsManager;
@@ -181,7 +181,8 @@ public class MoneyboxActivity extends Activity implements IMoneyboxListener {
 		if (curr.getType() == CurrencyValueDef.MoneyType.COIN) {
 			drop.setInterpolator(new BounceInterpolator());
 		} else {
-			drop.setInterpolator(new DecelerateInterpolator(0.7f));
+			// drop.setInterpolator(new DecelerateInterpolator(0.7f));
+			drop.setInterpolator(new AnticipateOvershootInterpolator());
 		}
 
 		result.addAnimation(drop);
