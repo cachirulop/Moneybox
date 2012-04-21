@@ -18,12 +18,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
+            <TextView
+                android:id="@+id/txtDateTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="@string/insert_date"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <View
+                android:id="@+id/vDateTitleLine"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/txtDateTitle"
+                android:background="@drawable/form_title_box" />
+
             <Button
                 android:id="@+id/btnChangeDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
+                android:layout_below="@+id/vDateTitleLine"
                 android:onClick="onChangeDateClick"
                 android:text="@string/change" />
 
@@ -66,12 +83,29 @@
                 android:text="00:00"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
+            <TextView
+                android:id="@+id/txtGetDateTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/btnChangeTime"
+                android:text="@string/get_date"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <View
+                android:id="@+id/vGetDateTitleLine"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/txtGetDateTitle"
+                android:background="@drawable/form_title_box" />
+            
             <Button
                 android:id="@+id/btnChangeGetDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/btnChangeTime"
+                android:layout_below="@+id/vGetDateTitleLine"
                 android:onClick="onChangeGetDateClick"
                 android:text="@string/change" />
 
@@ -91,7 +125,7 @@
                 android:layout_alignBaseline="@+id/btnChangeGetDate"
                 android:layout_alignBottom="@+id/btnChangeGetDate"
                 android:layout_alignParentLeft="true"
-                android:text="@string/get_date"
+                android:text="@string/date"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -121,15 +155,23 @@
                 android:layout_alignBaseline="@+id/txtGetTime"
                 android:layout_alignBottom="@+id/txtGetTime"
                 android:layout_alignParentLeft="true"
-                android:text="@string/get_time"
+                android:text="@string/time"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
+            <View
+                android:id="@+id/vGetDateTitleEndLine"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/txtGetTimeDesc"
+                android:background="@drawable/form_title_box" />
+            
             <TextView
                 android:id="@+id/AmountDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/btnChangeGetTime"
+                android:layout_below="@+id/vGetDateTitleEndLine"
                 android:text="@string/amount"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
