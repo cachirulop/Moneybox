@@ -23,13 +23,30 @@ import com.cachirulop.moneybox.manager.MovementsManager;
 
 public class MovementDetailActivity extends Activity {
 
+	// Constants to identify the dialogs
+	////////////////////////////////////////////////////////
+	
+	/** Dialog to set the insert date */
 	static final int INSERT_DATE_DIALOG_ID = 0;
+	
+	/** Dialog to set the insert time */
 	static final int INSERT_TIME_DIALOG_ID = 1;
+	
+	/** Dialog to set the get date */
 	static final int GET_DATE_DIALOG_ID = 2;
+	
+	/** Dialog to set the get time */
 	static final int GET_TIME_DIALOG_ID = 3;
 
+	/** Movement loaded in the window */
 	private Movement _movement;
 
+	/**
+	 * Creates the activity.
+	 * Load the data of the spinner with the available money and load the data
+	 * of the movement in the controls. Also initialize the status of the buttons
+	 * depending on the type of the movement.
+	 */
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.movement_detail);
@@ -38,6 +55,14 @@ public class MovementDetailActivity extends Activity {
 		initData();
 	}
 
+	/**
+	 * Launched by android when creates a new dialog.
+	 * Can create this dialogs:
+	 * 		- Edit the insert date field
+	 * 		- Edit the insert time field
+	 * 		- Edit the get date field
+	 * 		- Edit the get time field
+	 */
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		Calendar cal;
@@ -102,6 +127,9 @@ public class MovementDetailActivity extends Activity {
 		return null;
 	}
 
+	/**
+	 * Load the spinner with the available money coins and bills.
+	 */
 	private void loadSpinner() {
 		Spinner spn;
 
@@ -109,6 +137,9 @@ public class MovementDetailActivity extends Activity {
 		spn.setAdapter(new CurrencySpinnerAdapter(this));
 	}
 
+	/**
+	 * Load the movements data to the window fields.
+	 */
 	private void initData() {
 		TextView txt;
 		Spinner amount;
