@@ -68,7 +68,7 @@ public class MovementsManager {
 			ctx = ContextManager.getContext();
 			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
-			lastBreak = getLastBreakmoneybox();
+			lastBreak = getLastBreakMoneybox();
 			if (lastBreak != null) {
 				c = db.rawQuery(ctx
 						.getString(R.string.SQL_active_movements_by_date),
@@ -94,7 +94,7 @@ public class MovementsManager {
 	 * 
 	 * @return The last movement when the moneybox was broken.
 	 */
-	public static Movement getLastBreakmoneybox() {
+	public static Movement getLastBreakMoneybox() {
 		Cursor c;
 		SQLiteDatabase db = null;
 		Context ctx;
@@ -105,6 +105,36 @@ public class MovementsManager {
 
 			c = db.rawQuery(ctx.getString(R.string.SQL_last_break_movement),
 					null);
+
+			if (c.moveToFirst()) {
+				return createMovement(c);
+			} else {
+				return null;
+			}
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+	}
+
+	/**
+	 * Returns the next break moneybox movement from a date
+	 * @param reference Date from search a break moneybox movement.
+	 * @return The next break movement from the specified date
+	 */
+	public static Movement getNextBreakMoneybox(Movement reference) {
+		Cursor c;
+		SQLiteDatabase db = null;
+		Context ctx;
+
+		try {
+			ctx = ContextManager.getContext();
+			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
+
+			c = db.rawQuery(ctx.getString(R.string.SQL_next_break_movement),
+					new String[] { Long.toString(reference
+							.getInsertDateDB()) });
 
 			if (c.moveToFirst()) {
 				return createMovement(c);
@@ -302,4 +332,21 @@ public class MovementsManager {
 				true);
 	}
 
+	/**
+	 * Returns true if the money can be taken from the moneybox. If the insert
+	 * date of the movement is after the last break movement, then the money can
+	 * be taken.
+	 * 
+	 * @param m
+	 *            Movement to test
+	 * @return true if the money can be taken from the moneybox, false
+	 *         otherwise.
+	 */
+	public static boolean canGetMovement(Movement m) {
+		Movement last;
+
+		last = MovementsManager.getLastBreakMoneybox();
+
+		return (last == null || last.getInsertDate().before(m.getInsertDate()));
+	}
 }

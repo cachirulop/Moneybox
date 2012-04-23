@@ -38,6 +38,13 @@
         ORDER BY insert_date ASC;
     </string>
     
+    <string name="SQL_next_break_movement">
+        SELECT * 
+        FROM movements 
+        WHERE insert_date > ? AND 
+        	break_moneybox &lt;> 0;
+    </string>
+    
     <string name="SQL_active_movements">
         SELECT * 
         FROM movements 

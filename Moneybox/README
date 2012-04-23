@@ -1,0 +1,15 @@
+Monyebox is an Android application to save the movements of 
+a home piggybank.
+
+The application saves all the insert money actions on a moneybox. 
+Also the user can take money of the bank and break it, to get all
+the money. 
+All this movements are saved by the application with the date and
+time when it produces. 
+With the Moneybox app you always can know how many money are saved
+in the real piggybank.
+
+The application is distributed under GNU General Public License.
+
+David Magro Martin.
+dmagrom@gmail.com

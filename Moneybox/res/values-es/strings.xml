@@ -29,6 +29,10 @@
     <string name="get_from_moneybox">Coger</string>
     <string name="delete">Borrar</string>
 
+    <string name="error_date_incorrect_after_break">Fecha no válida. La hucha se ha vaciado después.</string>
+    <string name="error_date_incorrect_after_get">Fecha no válida, tiene que ser anterior a la fecha en la que se cogió</string>
+    <string name="error_date_incorrect_before_insert">Fecha no válida, tiene que ser posterior a la fecha en la que se ha echado</string>
+        
     <!-- tabs -->
     <string name="tab_title_moneybox">Hucha</string>
     <string name="tab_title_movements">Movimientos</string>

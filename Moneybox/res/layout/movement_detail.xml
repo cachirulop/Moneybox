@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/vDateTitleLine"
-                android:onClick="onChangeDateClick"
+                android:onClick="onChangeInsertDateClick"
                 android:text="@string/change" />
 
             <Button
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/btnChangeDate"
-                android:onClick="onChangeTimeClick"
+                android:onClick="onChangeInsertTimeClick"
                 android:text="@string/change" />
 
             <TextView
