@@ -12,7 +12,6 @@ package com.cachirulop.moneybox.activity;
 
 import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -588,8 +587,7 @@ public class MovementDetailActivity extends Activity {
 	 *            View that launch the event.
 	 */
 	public void onGetClick(View v) {
-		_movement.setGetDate(new Date());
-		MovementsManager.updateMovement(_movement);
+		MovementsManager.getMovement (_movement);
 
 		setResult(RESULT_OK);
 		finish();

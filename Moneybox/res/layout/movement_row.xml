@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:text="01/01/2001 00:00"
-                android:textSize="20sp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
             <TextView
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:text="01/01/2001 00:00"
-                android:textSize="20sp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="0.00"
-            android:textSize="25sp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -52,7 +52,7 @@
         android:layout_marginLeft="20dip"
         android:gravity="left"
         android:text="Description"
-        android:textSize="20sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="italic" />
 
 </LinearLayout>

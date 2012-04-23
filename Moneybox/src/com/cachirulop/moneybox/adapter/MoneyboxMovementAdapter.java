@@ -10,8 +10,6 @@
  ******************************************************************************/
 package com.cachirulop.moneybox.adapter;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -84,11 +82,11 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 		txtAmount = (TextView) convertView
 				.findViewById(R.id.txtRowMovementAmount);
 
-		txtDate.setText(formatDate(m.getInsertDate()));
+		txtDate.setText(m.getInsertDateFormatted());
 		if (m.getGetDate() != null) {
 			txtAmount.setPaintFlags(txtAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 			txtGetDate.setVisibility(View.VISIBLE);
-			txtGetDate.setText(formatDate (m.getGetDate()));
+			txtGetDate.setText(m.getGetDateFormatted());
 		}
 		else {
 			txtAmount.setPaintFlags(txtAmount.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
@@ -127,12 +125,12 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 
 		return convertView;
 	}
-
+/*
 	private String formatDate(Date d) {
 		return DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
 				DateFormat.SHORT).format(d);
 	}
-	
+*/	
 	public void refreshMovements() {
 		_lstMovements = MovementsManager.getAllMovements();
 		notifyDataSetChanged();

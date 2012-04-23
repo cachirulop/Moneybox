@@ -15,6 +15,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +32,9 @@ import com.cachirulop.moneybox.manager.MovementsManager;
 public class MovementsActivity extends Activity implements IMoneyboxListener {
 	static final int EDIT_MOVEMENT_REQUEST = 0;
 	static final int MENU_DELETE_ALL = 0;
+
+	static final int CONTEXT_MENU_GET = 0;
+	static final int CONTEXT_MENU_DELETE = 1;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,8 @@ public class MovementsActivity extends Activity implements IMoneyboxListener {
 			}
 		});
 
+		registerForContextMenu(listView);
+
 		((MainTabWidget) getParent()).addListener(this);
 	}
 
@@ -57,8 +64,7 @@ public class MovementsActivity extends Activity implements IMoneyboxListener {
 		switch (requestCode) {
 		case EDIT_MOVEMENT_REQUEST:
 			if (resultCode == RESULT_OK) {
-				updateTotal ();
-				refreshMovements();
+				refresh();
 			}
 			break;
 		}
@@ -92,7 +98,7 @@ public class MovementsActivity extends Activity implements IMoneyboxListener {
 	protected void onResume() {
 		super.onResume();
 
-		refreshMovements();
+		refresh();
 	}
 
 	private void refreshMovements() {
@@ -141,11 +147,12 @@ public class MovementsActivity extends Activity implements IMoneyboxListener {
 	}
 
 	private void onDeleteAll() {
-		MovementsManager.deleteAllMovements ();
-		refreshMovements();
+		MovementsManager.deleteAllMovements();
+		refresh();
 	}
 
 	public void refresh() {
+		updateTotal();
 		refreshMovements();
 	}
 
@@ -154,6 +161,68 @@ public class MovementsActivity extends Activity implements IMoneyboxListener {
 	 */
 	private void updateTotal() {
 		((MainTabWidget) getParent()).updateTotal();
+	}
+
+	/**
+	 * Creates a context menu for the list of movements, showing an option for
+	 * delete the movement and another to get the movement.
+	 */
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+
+		if (v.getId() == R.id.lvMovements) {
+			AdapterView.AdapterContextMenuInfo info;
+			ListView listView;
+			Movement selected;
+
+			listView = (ListView) findViewById(R.id.lvMovements);
+			info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+			selected = (Movement) ((MoneyboxMovementAdapter) listView
+					.getAdapter()).getItem(info.position);
+
+			MenuItem item;
+			
+			menu.setHeaderTitle(selected.getInsertDateFormatted());
+			item = menu.add(Menu.NONE, CONTEXT_MENU_GET, 0, R.string.get_from_moneybox);
+			if (selected.getGetDate() != null) {
+				item.setEnabled(false);
+			}
+			item = menu.add(Menu.NONE, CONTEXT_MENU_DELETE, 1, R.string.delete);
+		}
+	}
+
+	/**
+	 * Handles the selected item on the context menu. Could be an option to
+	 * delete the item or to get it from the moneybox.
+	 */
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		if (item.getItemId() == CONTEXT_MENU_GET
+				|| item.getItemId() == CONTEXT_MENU_DELETE) {
+
+			AdapterView.AdapterContextMenuInfo info;
+			ListView listView;
+			Movement selected;
+
+			listView = (ListView) findViewById(R.id.lvMovements);
+			info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+			selected = (Movement) ((MoneyboxMovementAdapter) listView
+					.getAdapter()).getItem(info.position);
+
+			if (item.getItemId() == CONTEXT_MENU_GET) {
+				MovementsManager.getMovement(selected);
+			} else if (item.getItemId() == CONTEXT_MENU_DELETE) {
+				MovementsManager.deleteMovement(selected);
+			}
+
+			refresh();
+		}
+
+		return true;
 	}
 
 }

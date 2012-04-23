@@ -11,6 +11,7 @@
 package com.cachirulop.moneybox.entity;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.util.Date;
 
 public class Movement 
@@ -44,6 +45,10 @@ public class Movement
 	public long getInsertDateDB() {
 		return _insertDate.getTime();
 	}
+	public String getInsertDateFormatted()
+	{
+		return Movement.formatDate (_insertDate);
+	}
 	public void setInsertDate(Date insertDate) {
 		this._insertDate = insertDate;
 	}
@@ -57,6 +62,9 @@ public class Movement
 		else {
 			return null;
 		}
+	}
+	public String getGetDateFormatted () {
+		return formatDate(_getDate);
 	}
 	public void setGetDate(Date getDate) {
 		this._getDate = getDate;
@@ -84,5 +92,10 @@ public class Movement
 	}
 	public void setBreakMoneyboxAsInt(int breakMoneybox) {
 		this._breakMoneybox = (breakMoneybox != 0);
+	}
+	
+	private static String formatDate (Date value) {
+		return DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
+				DateFormat.SHORT).format(value);
 	}
 }

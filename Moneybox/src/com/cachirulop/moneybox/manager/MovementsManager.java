@@ -120,7 +120,9 @@ public class MovementsManager {
 
 	/**
 	 * Returns the next break moneybox movement from a date
-	 * @param reference Date from search a break moneybox movement.
+	 * 
+	 * @param reference
+	 *            Date from search a break moneybox movement.
 	 * @return The next break movement from the specified date
 	 */
 	public static Movement getNextBreakMoneybox(Movement reference) {
@@ -133,8 +135,7 @@ public class MovementsManager {
 			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
 			c = db.rawQuery(ctx.getString(R.string.SQL_next_break_movement),
-					new String[] { Long.toString(reference
-							.getInsertDateDB()) });
+					new String[] { Long.toString(reference.getInsertDateDB()) });
 
 			if (c.moveToFirst()) {
 				return createMovement(c);
@@ -302,6 +303,18 @@ public class MovementsManager {
 				db.close();
 			}
 		}
+	}
+
+	/**
+	 * Gets a movement from the moneybox. Initialize the get date field with the
+	 * current date and saves the movement to the database.
+	 * 
+	 * @param m
+	 *            Movement to be modified
+	 */
+	public static void getMovement(Movement m) {
+		m.setGetDate(new Date());
+		MovementsManager.updateMovement(m);
 	}
 
 	public static double getTotalAmount() {
