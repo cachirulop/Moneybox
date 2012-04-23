@@ -92,12 +92,19 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 		}
 		else {
 			txtAmount.setPaintFlags(txtAmount.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
-			txtGetDate.setVisibility(View.INVISIBLE);
+			txtGetDate.setVisibility(View.GONE);
 			txtGetDate.setText("");
 		}
 		
 		txtAmount.setText(CurrencyManager.formatAmount(m.getAmount()));
-		txtDescription.setText(m.getDescription());
+		
+		if (m.getDescription() != null && !m.getDescription().trim().equals ("")) {
+			txtDescription.setVisibility(View.VISIBLE);
+			txtDescription.setText(m.getDescription());
+		}
+		else {
+			txtDescription.setVisibility(View.GONE);
+		}
 
 		if (m.isBreakMoneybox()) {
 			txtDate.setTextColor(Color.RED);
