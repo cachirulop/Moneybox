@@ -12,6 +12,7 @@ package com.cachirulop.moneybox.activity;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -375,17 +376,7 @@ public class MovementDetailActivity extends Activity {
 		cal.set(Calendar.MONTH, month);
 		cal.set(Calendar.DAY_OF_MONTH, day);
 
-		Movement nextBreak;
-
-		nextBreak = MovementsManager.getNextBreakMoneybox(_movement);
-		if (nextBreak != null
-				&& nextBreak.getInsertDate().before(cal.getTime())) {
-			Toast.makeText(this, R.string.error_date_incorrect_after_break,
-					Toast.LENGTH_LONG).show();
-		} else if (_movement.getGetDate() != null && _movement.getGetDate().before(cal.getTime())) {
-			Toast.makeText(this, R.string.error_date_incorrect_after_get,
-					Toast.LENGTH_LONG).show();
-		} else {
+		if (validateInsertDate(cal.getTime())) {
 			_movement.setInsertDate(cal.getTime());
 
 			updateInsertDate();
@@ -412,9 +403,11 @@ public class MovementDetailActivity extends Activity {
 		cal.set(Calendar.HOUR_OF_DAY, hour);
 		cal.set(Calendar.MINUTE, minute);
 
-		_movement.setInsertDate(cal.getTime());
+		if (validateInsertDate(cal.getTime())) {
+			_movement.setInsertDate(cal.getTime());
 
-		updateInsertTime();
+			updateInsertTime();
+		}
 	}
 
 	/**
@@ -435,16 +428,14 @@ public class MovementDetailActivity extends Activity {
 
 		cal = Calendar.getInstance();
 
-		cal.setTime(_movement.getInsertDate());
+		cal.setTime(_movement.getGetDate());
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month);
 		cal.set(Calendar.DAY_OF_MONTH, day);
 
-		if (_movement.getInsertDate().after(cal.getTime())) {
-			Toast.makeText(this, R.string.error_date_incorrect_before_insert,
-					Toast.LENGTH_LONG).show();
-		} else {
+		if (validateGetDate(cal.getTime())) {
 			_movement.setGetDate(cal.getTime());
+
 			updateGetDate();
 		}
 	}
@@ -465,14 +456,49 @@ public class MovementDetailActivity extends Activity {
 
 		cal = Calendar.getInstance();
 
-		cal.setTime(_movement.getInsertDate());
+		cal.setTime(_movement.getGetDate());
 		cal.set(Calendar.HOUR_OF_DAY, hour);
 		cal.set(Calendar.MINUTE, minute);
 
-		_movement.setGetDate(cal.getTime());
+		if (validateGetDate(cal.getTime())) {
+			_movement.setGetDate(cal.getTime());
 
-		updateGetTime();
+			updateGetTime();
+		}
 	}
+	
+	public boolean validateGetDate (Date newDate) {
+		if (newDate.after(new Date())) {
+			Toast.makeText(this, R.string.error_date_incorrect_future,
+					Toast.LENGTH_LONG).show();
+
+			return false;
+		} else if (newDate.before(_movement.getInsertDate())) {
+			Toast.makeText(this, R.string.error_date_incorrect_before_insert,
+					Toast.LENGTH_LONG).show();
+
+			return false;
+		}
+		
+		return true;
+	}
+
+	public boolean validateInsertDate (Date newDate) {
+		if (newDate.after(new Date())) {
+			Toast.makeText(this, R.string.error_date_incorrect_future,
+					Toast.LENGTH_LONG).show();
+
+			return false;
+		} else if (newDate.after(_movement.getInsertDate())) {
+			Toast.makeText(this, R.string.error_date_incorrect_after_get,
+					Toast.LENGTH_LONG).show();
+
+			return false;
+		}
+		
+		return true;
+	}
+
 
 	/**
 	 * Update the fields with the insert and the get time with the values of the
@@ -587,7 +613,7 @@ public class MovementDetailActivity extends Activity {
 	 *            View that launch the event.
 	 */
 	public void onGetClick(View v) {
-		MovementsManager.getMovement (_movement);
+		MovementsManager.getMovement(_movement);
 
 		setResult(RESULT_OK);
 		finish();

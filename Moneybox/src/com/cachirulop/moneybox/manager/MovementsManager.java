@@ -148,7 +148,38 @@ public class MovementsManager {
 			}
 		}
 	}
+	
+	/**
+	 * Returns the previous break moneybox movement from a date
+	 * 
+	 * @param reference
+	 *            Date from search a break moneybox movement.
+	 * @return The previous break movement from the specified date
+	 */
+	public static Movement getPrevBreakMoneybox(Movement reference) {
+		Cursor c;
+		SQLiteDatabase db = null;
+		Context ctx;
 
+		try {
+			ctx = ContextManager.getContext();
+			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
+
+			c = db.rawQuery(ctx.getString(R.string.SQL_prev_break_movement),
+					new String[] { Long.toString(reference.getInsertDateDB()) });
+
+			if (c.moveToFirst()) {
+				return createMovement(c);
+			} else {
+				return null;
+			}
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+	}
+	
 	private static ArrayList<Movement> createMovementList(Cursor c) {
 		ArrayList<Movement> result;
 
@@ -170,7 +201,7 @@ public class MovementsManager {
 
 		result = new Movement();
 		result.setIdMovement(c.getInt(c.getColumnIndex("id_movement")));
-		result.setAmount(c.getDouble(c.getColumnIndex("amount")));
+		result.setBreakMoneyboxAsInt(c.getInt(c.getColumnIndex("break_moneybox")));
 		result.setDescription(c.getString(c.getColumnIndex("description")));
 		result.setInsertDate(new Date(
 				c.getLong(c.getColumnIndex("insert_date"))));
@@ -180,8 +211,12 @@ public class MovementsManager {
 			result.setGetDate(null);
 		}
 
-		result.setBreakMoneyboxAsInt(c.getInt(c
-				.getColumnIndex("break_moneybox")));
+		if (result.isBreakMoneybox()) {
+			result.setAmount(MovementsManager.getBreakMoneyboxAmount(result));
+		}
+		else {
+			result.setAmount(c.getDouble(c.getColumnIndex("amount")));
+		}
 
 		return result;
 	}
@@ -321,13 +356,21 @@ public class MovementsManager {
 		SQLiteDatabase db = null;
 		Cursor c;
 		Context ctx;
+		Movement lastBreak;
 
 		try {
 			ctx = ContextManager.getContext();
 			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
-			c = db.rawQuery(ctx.getString(R.string.SQL_movements_sumAmount),
-					null);
+			lastBreak = MovementsManager.getLastBreakMoneybox();
+			if (lastBreak == null) {
+				c = db.rawQuery(ctx.getString(R.string.SQL_movements_sumAmount),
+						null);
+			} else {
+				c = db.rawQuery(ctx.getString(R.string.SQL_movements_sumAmount_after),
+						new String [] { Long.toString(lastBreak.getInsertDate().getTime()) });
+			}
+
 			c.moveToFirst();
 
 			return c.getDouble(0);
@@ -337,10 +380,74 @@ public class MovementsManager {
 			}
 		}
 	}
+	
+	public static double getTotalAmountByDates(Date begin, Date end) {
+		SQLiteDatabase db = null;
+		Cursor c;
+		Context ctx;
+
+		try {
+			ctx = ContextManager.getContext();
+			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
+
+			c = db.rawQuery(ctx.getString(R.string.SQL_movements_sumAmount_by_dates),
+					new String[] { Long.toString(begin.getTime()), 
+								   Long.toString(end.getTime())});
+			
+			c.moveToFirst();
+
+			return c.getDouble(0);
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+	}
+	
+	public static double getTotalAmountBefore(Date reference) {
+		SQLiteDatabase db = null;
+		Cursor c;
+		Context ctx;
+
+		try {
+			ctx = ContextManager.getContext();
+			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
+
+			c = db.rawQuery(ctx.getString(R.string.SQL_movements_sumAmount_before),
+					new String[] { Long.toString(reference.getTime())});
+			
+			c.moveToFirst();
+
+			return c.getDouble(0);
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+	}	
+	
+	/**
+	 * Returns negative value of the amount between the date of the movement
+	 * received and the previous break moneybox movement or the initial state
+	 * of the moneybox.
+	 * 
+	 * @param m
+	 * @return
+	 */
+	public static double getBreakMoneyboxAmount (Movement m) {
+		Movement prev;
+		
+		prev = getPrevBreakMoneybox(m);
+		if (prev != null) {
+			return -getTotalAmountByDates (prev.getInsertDate(), m.getInsertDate());
+		}
+		else {  
+			return -getTotalAmountBefore(m.getInsertDate());
+		}
+	}
 
 	public static void breakMoneybox() {
-		// Negative total amount!
-		MovementsManager.insertMovement(-MovementsManager.getTotalAmount(),
+		MovementsManager.insertMovement(-1,
 				ContextManager.getContext().getString(R.string.break_moneybox),
 				true);
 	}

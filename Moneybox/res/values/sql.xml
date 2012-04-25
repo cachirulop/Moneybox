@@ -24,9 +24,32 @@
     </string>
     
     <string name="SQL_movements_sumAmount">
-        SELECT sum(amount) FROM movements WHERE get_date IS NULL;
+        SELECT sum(amount) FROM movements 
+        WHERE get_date IS NULL
+            break_moneybox = 0;
     </string>
 
+    <string name="SQL_movements_sumAmount_before">
+        SELECT sum(amount) FROM movements 
+        WHERE get_date IS NULL AND 
+            break_moneybox = 0 AND
+            insert_date &lt; ?;
+    </string>
+            
+    <string name="SQL_movements_sumAmount_after">
+        SELECT sum(amount) FROM movements 
+        WHERE get_date IS NULL AND 
+            break_moneybox = 0 AND
+            insert_date > ?;
+    </string>
+        
+    <string name="SQL_movements_sumAmount_by_dates">
+        SELECT sum(amount) FROM movements 
+        WHERE get_date IS NULL AND 
+            break_moneybox = 0 AND
+            insert_date between ? and ?;
+    </string>
+        
     <string name="SQL_last_break_movement">
         SELECT * 
         FROM movements 
@@ -39,11 +62,22 @@
     </string>
     
     <string name="SQL_next_break_movement">
-        SELECT * 
+        SELECT *
         FROM movements 
-        WHERE insert_date > ? AND 
-        	break_moneybox &lt;> 0;
+        WHERE insert_date = 
+        (SELECT min(insert_date)
+         FROM movements 
+         WHERE insert_date > ? AND break_moneybox &lt;> 0)
     </string>
+    
+    <string name="SQL_prev_break_movement">
+		SELECT *
+		FROM movements 
+		WHERE insert_date = 
+		(SELECT max(insert_date)
+		 FROM movements 
+		 WHERE insert_date &lt; ? AND break_moneybox &lt;> 0)
+    </string>    
     
     <string name="SQL_active_movements">
         SELECT * 
@@ -54,7 +88,8 @@
     <string name="SQL_active_movements_by_date">
         SELECT * 
         FROM movements 
-        WHERE insert_date > ? AND get_date IS NULL
+        WHERE insert_date > ? AND 
+            get_date IS NULL
     </string>
         
 </resources>

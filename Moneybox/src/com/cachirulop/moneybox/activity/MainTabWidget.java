@@ -138,12 +138,7 @@ public class MainTabWidget
 	protected void breakMoneybox() {
 		SoundsManager.playBreakingMoneyboxSound();
 		MovementsManager.breakMoneybox();
-/*
-		RelativeLayout layout;
 
-		layout = (RelativeLayout) findViewById(R.id.moneyDropLayout);
-		layout.removeAllViews();
-*/
 		for (IMoneyboxListener l : _listeners) {
 			l.refresh();
 		}

@@ -31,7 +31,7 @@
     <string name="get_from_moneybox">Get it</string>
     <string name="delete">Delete</string>
     
-    <string name="error_date_incorrect_after_break">Invalid date. The moneybox is break before.</string>
+    <string name="error_date_incorrect_future">Invalid date, it can\'t be in the future.</string>
     <string name="error_date_incorrect_after_get">Invalid date. Should be before get.</string>
     <string name="error_date_incorrect_before_insert">Invalid date. Should be after insert.</string>
         
