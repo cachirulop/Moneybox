@@ -283,10 +283,17 @@ public class MovementDetailActivity extends Activity {
 
 		// Change the layout_below property of the end line
 		// to display correctly
-		v = findViewById(R.id.vGetDateTitleEndLine);
-		lpParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
-		lpParams.addRule(RelativeLayout.BELOW, R.id.btnChangeTime);
-		v.setLayoutParams(lpParams);
+		if (!visible) {
+			v = findViewById(R.id.vGetDateTitleEndLine);
+			lpParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
+			lpParams.addRule(RelativeLayout.BELOW, R.id.btnChangeTime);
+			v.setLayoutParams(lpParams);
+
+			txt = (TextView) findViewById(R.id.txtDescription);
+			lpParams = (RelativeLayout.LayoutParams) txt.getLayoutParams();
+			lpParams.addRule(RelativeLayout.RIGHT_OF, R.id.txtDescriptionDesc);
+			txt.setLayoutParams(lpParams);
+		}
 	}
 
 	/**
@@ -466,8 +473,16 @@ public class MovementDetailActivity extends Activity {
 			updateGetTime();
 		}
 	}
-	
-	public boolean validateGetDate (Date newDate) {
+
+	/**
+	 * Validate the get date and get time fields. The date and time can't be in
+	 * the future an the get date should be after the insert date.
+	 * 
+	 * @param newDate
+	 *            Date selected in the dialog
+	 * @return True if the date is valid, false otherwise.
+	 */
+	public boolean validateGetDate(Date newDate) {
 		if (newDate.after(new Date())) {
 			Toast.makeText(this, R.string.error_date_incorrect_future,
 					Toast.LENGTH_LONG).show();
@@ -479,11 +494,19 @@ public class MovementDetailActivity extends Activity {
 
 			return false;
 		}
-		
+
 		return true;
 	}
 
-	public boolean validateInsertDate (Date newDate) {
+	/**
+	 * Validate the insert date and insert time fields. The date and time can't
+	 * be in the future an the get date should be after the insert date.
+	 * 
+	 * @param newDate
+	 *            Date selected in the dialog
+	 * @return True if the date is valid, false otherwise.
+	 */
+	public boolean validateInsertDate(Date newDate) {
 		if (newDate.after(new Date())) {
 			Toast.makeText(this, R.string.error_date_incorrect_future,
 					Toast.LENGTH_LONG).show();
@@ -495,10 +518,9 @@ public class MovementDetailActivity extends Activity {
 
 			return false;
 		}
-		
+
 		return true;
 	}
-
 
 	/**
 	 * Update the fields with the insert and the get time with the values of the
