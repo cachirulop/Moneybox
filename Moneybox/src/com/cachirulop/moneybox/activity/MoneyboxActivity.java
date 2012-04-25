@@ -34,14 +34,13 @@ import android.widget.RelativeLayout;
 import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.entity.CurrencyValueDef;
 import com.cachirulop.moneybox.entity.Movement;
-import com.cachirulop.moneybox.listener.IMoneyboxListener;
 import com.cachirulop.moneybox.manager.ContextManager;
 import com.cachirulop.moneybox.manager.CurrencyManager;
 import com.cachirulop.moneybox.manager.MovementsManager;
 import com.cachirulop.moneybox.manager.SoundsManager;
 import com.cachirulop.moneybox.manager.VibratorManager;
 
-public class MoneyboxActivity extends Activity implements IMoneyboxListener {
+public class MoneyboxActivity extends Activity {
 
 	/** Called when the activity is first created. */
 	@Override
@@ -54,7 +53,7 @@ public class MoneyboxActivity extends Activity implements IMoneyboxListener {
 		initActivity();
 		updateTotal();
 		
-		((MainTabWidget) getParent()).addListener(this);
+		((MainTabWidget) getParent()).setMoneyboxTab(this);
 
 		registerLayoutListener();
 	}

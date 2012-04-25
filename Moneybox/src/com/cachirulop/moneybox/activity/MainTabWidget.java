@@ -10,9 +10,6 @@
  ******************************************************************************/
 package com.cachirulop.moneybox.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.DialogInterface;
@@ -24,7 +21,6 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.cachirulop.moneybox.R;
-import com.cachirulop.moneybox.listener.IMoneyboxListener;
 import com.cachirulop.moneybox.manager.CurrencyManager;
 import com.cachirulop.moneybox.manager.MovementsManager;
 import com.cachirulop.moneybox.manager.SoundsManager;
@@ -33,7 +29,8 @@ public class MainTabWidget
 	extends TabActivity 
 	implements TabHost.OnTabChangeListener {
 	
-	private List<IMoneyboxListener> _listeners = new ArrayList<IMoneyboxListener> ();
+	private MoneyboxActivity _moneyboxTab;
+	private MovementsActivity _movementsTab;
 	
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
@@ -92,8 +89,12 @@ public class MainTabWidget
 		total.setText(CurrencyManager.formatAmount(val));
 	}	
 	
-	public void addListener (IMoneyboxListener listener) {
-		_listeners.add(listener);
+	public void setMoneyboxTab (MoneyboxActivity tab) {
+		this._moneyboxTab = tab;
+	}
+	
+	public void setMovementsTab (MovementsActivity tab) {
+		this._movementsTab = tab;
 	}
 	
 	
@@ -138,9 +139,12 @@ public class MainTabWidget
 	protected void breakMoneybox() {
 		SoundsManager.playBreakingMoneyboxSound();
 		MovementsManager.breakMoneybox();
-
-		for (IMoneyboxListener l : _listeners) {
-			l.refresh();
+		
+		if (getTabHost().getCurrentTab() == 0) {
+			_moneyboxTab.refresh();
+		}
+		else {
+			_movementsTab.refresh();
 		}
 
 		updateTotal();
@@ -148,9 +152,7 @@ public class MainTabWidget
 
 	public void onTabChanged(String tabId) {
 		if ("moneybox".equals(tabId)) {
-			for (IMoneyboxListener l : _listeners) {
-				l.refresh();
-			}
+			_moneyboxTab.refresh();
 		}
 	}
 }
