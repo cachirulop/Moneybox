@@ -25,7 +25,7 @@
     
     <string name="SQL_movements_sumAmount">
         SELECT sum(amount) FROM movements 
-        WHERE get_date IS NULL
+        WHERE get_date IS NULL AND
             break_moneybox = 0;
     </string>
 
