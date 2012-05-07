@@ -28,13 +28,38 @@ import com.cachirulop.moneybox.adapter.MoneyboxMovementAdapter;
 import com.cachirulop.moneybox.entity.Movement;
 import com.cachirulop.moneybox.manager.MovementsManager;
 
+/**
+ * Activity that shows a list with all the movements in the money box.
+ * 
+ * The items in the list can be selected to edit its properties with a simple
+ * click.
+ * 
+ * Also can be selected with a long click to delete of the list or to get from
+ * the moneybox.
+ * 
+ * @author dmagro
+ * 
+ */
 public class MovementsActivity extends Activity {
+	/** Constant to identify the click in the list */
 	static final int EDIT_MOVEMENT_REQUEST = 0;
+
+	/** Constant to identify the menu option to delete all the movements */
 	static final int MENU_DELETE_ALL = 0;
 
+	/**
+	 * Constant to identify the context menu option to get money from the
+	 * moneybox.
+	 */
 	static final int CONTEXT_MENU_GET = 0;
+
+	/** Constant to identify the context menu option to delete a movement */
 	static final int CONTEXT_MENU_DELETE = 1;
 
+	/**
+	 * Creates the ListView object to contains the movements information and
+	 * register the context menu.
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,6 +81,10 @@ public class MovementsActivity extends Activity {
 		((MainTabWidget) getParent()).setMovementsTab(this);
 	}
 
+	/**
+	 * Called when returns of the edit detail window. Refresh the movement list
+	 * to show the possible changes do it in the edit detail window.
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -69,6 +98,9 @@ public class MovementsActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Creates an option to delete all the movements of the moneybox.
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result;
@@ -82,6 +114,10 @@ public class MovementsActivity extends Activity {
 		return result;
 	}
 
+	/**
+	 * Called when the user select the option to delete all the movements. Call
+	 * to the confirmDeleteAll method to confirm and delete the movements.
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -93,6 +129,9 @@ public class MovementsActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	/**
+	 * Refresh the movements list.
+	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -100,6 +139,10 @@ public class MovementsActivity extends Activity {
 		refresh();
 	}
 
+	/**
+	 * Call to the adapter of the ListView with the movements to refresh the
+	 * information.
+	 */
 	private void refreshMovements() {
 		ListView listView;
 
@@ -107,6 +150,20 @@ public class MovementsActivity extends Activity {
 		((MoneyboxMovementAdapter) listView.getAdapter()).refreshMovements();
 	}
 
+	/**
+	 * Called when a movement in the list is clicked.
+	 * 
+	 * Show a window to edit the movement (MovementDetailActivity).
+	 * 
+	 * @param a
+	 *            Adapter of the view that launch the event.
+	 * @param v
+	 *            View that launch the event.
+	 * @param position
+	 *            Position of the item clicked
+	 * @param id
+	 *            Identifier of the clicked item.
+	 */
 	protected void onMovementClick(AdapterView<?> a, View v, int position,
 			long id) {
 		Intent i;
@@ -119,6 +176,12 @@ public class MovementsActivity extends Activity {
 		startActivityForResult(i, EDIT_MOVEMENT_REQUEST);
 	}
 
+	/**
+	 * Show a dialog to confirm that the user want to delete all the movements.
+	 * 
+	 * Register the method onDeleteAll to be called if the user decide to delete
+	 * all the movements.
+	 */
 	private void confirmDeleteAll() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -145,18 +208,25 @@ public class MovementsActivity extends Activity {
 		alert.show();
 	}
 
+	/**
+	 * Delete all the movements in the moneybox calling the deleteAllMovements
+	 * method of the MovementsManager class.
+	 */
 	private void onDeleteAll() {
 		MovementsManager.deleteAllMovements();
 		refresh();
 	}
 
+	/**
+	 * Refresh the total amount and the list of movements.
+	 */
 	public void refresh() {
 		updateTotal();
 		refreshMovements();
 	}
 
 	/**
-	 * Update the total amount
+	 * Update the total amount calling the main tab activity.
 	 */
 	private void updateTotal() {
 		((MainTabWidget) getParent()).updateTotal();
@@ -183,9 +253,10 @@ public class MovementsActivity extends Activity {
 					.getAdapter()).getItem(info.position);
 
 			MenuItem item;
-			
+
 			menu.setHeaderTitle(selected.getInsertDateFormatted());
-			item = menu.add(Menu.NONE, CONTEXT_MENU_GET, 0, R.string.get_from_moneybox);
+			item = menu.add(Menu.NONE, CONTEXT_MENU_GET, 0,
+					R.string.get_from_moneybox);
 			if (selected.getGetDate() != null) {
 				item.setEnabled(false);
 			}

@@ -20,9 +20,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.TranslateAnimation;
@@ -40,9 +38,18 @@ import com.cachirulop.moneybox.manager.MovementsManager;
 import com.cachirulop.moneybox.manager.SoundsManager;
 import com.cachirulop.moneybox.manager.VibratorManager;
 
+/**
+ * Activity that paints the money inside the moneybox and the list of the
+ * available money to insert in the moneybox.
+ * 
+ * @author dmagro
+ * 
+ */
 public class MoneyboxActivity extends Activity {
 
-	/** Called when the activity is first created. */
+	/**
+	 * Called when the activity is first created.
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,15 +59,15 @@ public class MoneyboxActivity extends Activity {
 
 		initActivity();
 		updateTotal();
-		
+
 		((MainTabWidget) getParent()).setMoneyboxTab(this);
 
 		registerLayoutListener();
 	}
 
 	/**
-	 * Register the event OnGlobalLayoutListener to fill the moneybox when
-	 * the layout is created.
+	 * Register the event OnGlobalLayoutListener to fill the moneybox when the
+	 * layout is created.
 	 */
 	private void registerLayoutListener() {
 		final View v;
@@ -79,6 +86,10 @@ public class MoneyboxActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Initialize the activity creating the list of buttons with the coins and
+	 * bills.
+	 */
 	private void initActivity() {
 		String currencyName;
 
@@ -88,6 +99,15 @@ public class MoneyboxActivity extends Activity {
 		addButtons();
 	}
 
+	/**
+	 * Launched when a coin or a bill is clicked to be inserted in the moneybox.
+	 * 
+	 * Drop the clicked element inside the moneybox and updates the total
+	 * amount.
+	 * 
+	 * @param v
+	 *            View that launch the event.
+	 */
 	protected void onMoneyClicked(View v) {
 		CurrencyValueDef value;
 
@@ -148,12 +168,7 @@ public class MoneyboxActivity extends Activity {
 		lpParams.bottomMargin = r.height();
 
 		layout.addView(money, lpParams);
-		/*
-		 * if (c.getType() == CurrencyValueDef.MoneyType.COIN) { moneyDrop =
-		 * (AnimationSet) AnimationUtils.loadAnimation(this, R.anim.coin_drop);
-		 * } else { moneyDrop = (AnimationSet)
-		 * AnimationUtils.loadAnimation(this, R.anim.bill_drop); }
-		 */
+
 		moneyDrop = createDropAnimation(money, layout, c);
 		money.setVisibility(View.VISIBLE);
 
@@ -163,6 +178,18 @@ public class MoneyboxActivity extends Activity {
 		money.startAnimation(moneyDrop);
 	}
 
+	/**
+	 * Create dinamically an android animation for a coin or a bill droping into
+	 * the moneybox.
+	 * 
+	 * @param img
+	 *            ImageView to receive the animation
+	 * @param layout
+	 *            Layout that paint the image
+	 * @param curr
+	 *            Currency value of the image
+	 * @return Set of animations to apply to the image
+	 */
 	private AnimationSet createDropAnimation(ImageView img, View layout,
 			CurrencyValueDef curr) {
 		AnimationSet result;
@@ -199,56 +226,17 @@ public class MoneyboxActivity extends Activity {
 	}
 
 	/**
-	 * Take money of the moneybox removing the image from the view.
-	 * 
-	 * @param c
-	 *            Value to be removed.
-	 */
-	protected void takeMoney(CurrencyValueDef c) {
-		// RelativeLayout layout;
-		Animation takeMoney;
-		ImageView money;
-
-		money = findMoneyImage(c);
-		if (money != null) {
-			// layout = (RelativeLayout) findViewById(R.id.moneyDropLayout);
-			takeMoney = AnimationUtils.loadAnimation(this, R.anim.money_take);
-
-			money.startAnimation(takeMoney);
-			// layout.invalidate();
-		}
-	}
-
-	private ImageView findMoneyImage(CurrencyValueDef c) {
-		RelativeLayout layout;
-
-		layout = (RelativeLayout) findViewById(R.id.moneyDropLayout);
-		for (int i = 0; i < layout.getChildCount(); i++) {
-			View money;
-			CurrencyValueDef current;
-
-			money = layout.getChildAt(i);
-			if (money.getClass() == ImageView.class && money.getTag() != null) {
-				current = (CurrencyValueDef) money.getTag();
-
-				if (current.getAmount() == c.getAmount()) {
-					return (ImageView) money;
-				}
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * Update the total amount
+	 * Update the total amount using the main tab activity.
 	 */
 	private void updateTotal() {
 		((MainTabWidget) getParent()).updateTotal();
 	}
 
 	/**
-	 * Set a value to the total field
+	 * Set a value to the total field using the main tab activity.
+	 * 
+	 * @param val
+	 *            Value to be painted in the total.
 	 */
 	protected void setTotal(double val) {
 		((MainTabWidget) getParent()).setTotal(val);
@@ -324,8 +312,7 @@ public class MoneyboxActivity extends Activity {
 
 				MoneyTimerTask task;
 
-				task = new MoneyTimerTask(this, curr, left, r.width(),
-						m.getAmount(), total);
+				task = new MoneyTimerTask(this, curr, left, r.width(), total);
 
 				layout.postDelayed(task, 400 * i);
 			}
@@ -334,11 +321,11 @@ public class MoneyboxActivity extends Activity {
 		}
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
+	/**
+	 * Initialize the activity filling the window with the coins and bills that
+	 * are inside the moneybox. Also center the coins and bills list to show the
+	 * middle item.
+	 */
 	public void initMoneybox() {
 		fillMoneybox();
 
@@ -355,47 +342,64 @@ public class MoneyboxActivity extends Activity {
 		scroll.scrollTo(offsetX, 0);
 	}
 
+	/**
+	 * Remove the coins and bills inside the moneybox and refill it.
+	 */
 	public void refresh() {
 		RelativeLayout layout;
 
 		layout = (RelativeLayout) findViewById(R.id.moneyDropLayout);
 		layout.removeAllViews();
-		
+
 		fillMoneybox();
 	}
 }
 
+/**
+ * Class that implements a task that drop the coin or bill inside the moneybox
+ * in an independent thread.
+ * 
+ * @author dmagro
+ */
 final class MoneyTimerTask implements Runnable {
 	MoneyboxActivity _parent;
 	CurrencyValueDef _currency;
 	int _left;
 	int _width;
 	double _total;
-	double _amount;
 
+	/**
+	 * Creates new object with then necessary values to launch the coin or the
+	 * bill inside the moneybox.
+	 * 
+	 * @param parent
+	 *            Activity to drop the money
+	 * @param currency
+	 *            Currency to be dropped
+	 * @param left
+	 *            Left coordinate of the money inside the layout
+	 * @param width
+	 *            With of the image that paint the money
+	 * @param total
+	 *            Total to be painted in the total layout.
+	 */
 	public MoneyTimerTask(MoneyboxActivity parent, CurrencyValueDef currency,
-			int left, int width, double amount, double total) {
+			int left, int width, double total) {
 		_parent = parent;
 		_currency = currency;
 		_left = left;
 		_width = width;
-		_amount = amount;
 		_total = total;
 	}
 
+	/**
+	 * Drop the money in the moneybox and update the total amount.
+	 */
 	public void run() {
-		// Log.i("moneybox", "Running timer task");
 		_parent.runOnUiThread(new Runnable() {
 			public void run() {
-
-				if (_amount > 0) {
-					_parent.dropMoney(_left, _width, _currency);
-				} else {
-					_parent.takeMoney(_currency);
-				}
+				_parent.dropMoney(_left, _width, _currency);
 				_parent.setTotal(_total);
-
-				// Log.i("moneybox", "Running timer task in UiThread");
 			}
 		});
 	}

@@ -11,7 +11,8 @@
 -->
 <resources>
 
-    <string name="SQL_oncreate">
+    <!-- Creates the moneybox database. Only the movements table is needed -->
+    <string name="SQL_on_create">
         CREATE TABLE movements (id_movement INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                                 amount NUMERIC NOT NULL,
                                 insert_date TIMESTAMP NOT NULL DEFAULT current_timestamp,
@@ -19,37 +20,45 @@
                                 description TEXT, 
                                 break_moneybox INTEGER);
     </string>
-    <string name="SQL_onUpgrade">
+    
+    <!-- Drop the movements table. -->
+    <string name="SQL_on_upgrade">
         DROP TABLE IF EXISTS movements;
     </string>
     
-    <string name="SQL_movements_sumAmount">
+    <!-- Sum amount of all the movements, discounting the break moneybox and
+         get movements -->
+    <string name="SQL_sum_amount">
         SELECT sum(amount) FROM movements 
         WHERE get_date IS NULL AND
             break_moneybox = 0;
     </string>
 
-    <string name="SQL_movements_sumAmount_before">
+    <!-- Sum the amount of all the movement previous to a given date -->
+    <string name="SQL_sum_amount_before">
         SELECT sum(amount) FROM movements 
         WHERE get_date IS NULL AND 
             break_moneybox = 0 AND
             insert_date &lt; ?;
     </string>
             
-    <string name="SQL_movements_sumAmount_after">
+    <!-- Sum the amount of all the movement after a given date -->
+        <string name="SQL_sum_amount_after">
         SELECT sum(amount) FROM movements 
         WHERE get_date IS NULL AND 
             break_moneybox = 0 AND
             insert_date > ?;
     </string>
-        
-    <string name="SQL_movements_sumAmount_by_dates">
+
+    <!-- Sum the amount of all the movement between two dates -->
+    <string name="SQL_sum_amount_by_dates">
         SELECT sum(amount) FROM movements 
         WHERE get_date IS NULL AND 
             break_moneybox = 0 AND
             insert_date between ? and ?;
     </string>
-        
+
+    <!-- Get the most recent break moneybox movement -->
     <string name="SQL_last_break_movement">
         SELECT * 
         FROM movements 
@@ -61,6 +70,7 @@
         ORDER BY insert_date ASC;
     </string>
     
+    <!-- Get the next break moneybox movement from a given date -->
     <string name="SQL_next_break_movement">
         SELECT *
         FROM movements 
@@ -70,6 +80,7 @@
          WHERE insert_date > ? AND break_moneybox &lt;> 0)
     </string>
     
+    <!-- Get the previous break moneybox movement to a given date -->
     <string name="SQL_prev_break_movement">
 		SELECT *
 		FROM movements 
@@ -79,12 +90,15 @@
 		 WHERE insert_date &lt; ? AND break_moneybox &lt;> 0)
     </string>    
     
+    <!-- Get all the active movements, that is the movements that the get date
+         is null  -->
     <string name="SQL_active_movements">
         SELECT * 
         FROM movements 
         WHERE get_date IS NULL
     </string>
-        
+    
+    <!-- Get the active movements (get date is null) after a given date -->
     <string name="SQL_active_movements_by_date">
         SELECT * 
         FROM movements 

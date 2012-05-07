@@ -364,10 +364,10 @@ public class MovementsManager {
 
 			lastBreak = MovementsManager.getLastBreakMoneybox();
 			if (lastBreak == null) {
-				c = db.rawQuery(ctx.getString(R.string.SQL_movements_sumAmount),
+				c = db.rawQuery(ctx.getString(R.string.SQL_sum_amount),
 						null);
 			} else {
-				c = db.rawQuery(ctx.getString(R.string.SQL_movements_sumAmount_after),
+				c = db.rawQuery(ctx.getString(R.string.SQL_sum_amount_after),
 						new String [] { Long.toString(lastBreak.getInsertDate().getTime()) });
 			}
 
@@ -390,7 +390,7 @@ public class MovementsManager {
 			ctx = ContextManager.getContext();
 			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
-			c = db.rawQuery(ctx.getString(R.string.SQL_movements_sumAmount_by_dates),
+			c = db.rawQuery(ctx.getString(R.string.SQL_sum_amount_by_dates),
 					new String[] { Long.toString(begin.getTime()), 
 								   Long.toString(end.getTime())});
 			
@@ -413,7 +413,7 @@ public class MovementsManager {
 			ctx = ContextManager.getContext();
 			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
-			c = db.rawQuery(ctx.getString(R.string.SQL_movements_sumAmount_before),
+			c = db.rawQuery(ctx.getString(R.string.SQL_sum_amount_before),
 					new String[] { Long.toString(reference.getTime())});
 			
 			c.moveToFirst();

@@ -27,16 +27,41 @@ import com.cachirulop.moneybox.entity.Movement;
 import com.cachirulop.moneybox.manager.CurrencyManager;
 import com.cachirulop.moneybox.manager.MovementsManager;
 
+/**
+ * Adapter to show an item inside the movements list.
+ * 
+ * The view of the adapter is created from the movement_row resource.
+ * 
+ * It shows the insert date, the get date, the amount and the description
+ * of the movement.
+ * 
+ * @author dmagro
+ *
+ */
 public class MoneyboxMovementAdapter extends BaseAdapter {
+	/** Parent activity of the movement list */
 	private MovementsActivity _parent;
+	
+	/** Inflater to load the xml with the definition of the view */
 	private LayoutInflater _inflater;
+	
+	/** List of movements to be showed */
 	private List<Movement> _lstMovements = null;
 
+	/**
+	 * Constructor that receives the context (parent) of the adapter.
+	 * Creates the inflater to load the xml with the definition of the view.
+	 * 
+	 * @param context Parent of the adapter. Should be a {@link MovementsActivity MovementsActivity}.
+	 */
 	public MoneyboxMovementAdapter(Context context) {
 		_parent = (MovementsActivity) context;
 		_inflater = LayoutInflater.from(_parent);
 	}
 
+	/**
+	 * Returns the number of items in the list of movements.
+	 */
 	public int getCount() {
 		if (_lstMovements == null) {
 			refreshMovements();
@@ -45,6 +70,9 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 		return _lstMovements.size();
 	}
 
+	/**
+	 * Returns the item of the specified position.
+	 */
 	public Object getItem(int position) {
 		if (_lstMovements == null) {
 			refreshMovements();
@@ -53,6 +81,10 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 		return _lstMovements.get(position);
 	}
 
+	/**
+	 * Returns the identifier of the item in the specified position.
+	 * The identifier is the field IdMovement of the movement.
+	 */
 	public long getItemId(int position) {
 		if (_lstMovements == null) {
 			refreshMovements();
@@ -61,6 +93,19 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 		return _lstMovements.get(position).getIdMovement();
 	}
 
+	/**
+	 * Returns the view to be showed in a row of the list.
+	 * 
+	 * The view is created from the layout movement_row in the folder res of
+	 * the project.
+	 * 
+	 * It shows a text with the insert date, another one in yellow color
+	 * with the get date, another with the amount and other one with the
+	 * description of the movement.
+	 * 
+	 * If the movement is of the break moneybox type then the texts are displayed
+	 * in red color.
+	 */
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			convertView = _inflater.inflate(R.layout.movement_row, null);
@@ -125,12 +170,11 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 
 		return convertView;
 	}
-/*
-	private String formatDate(Date d) {
-		return DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
-				DateFormat.SHORT).format(d);
-	}
-*/	
+
+	/**
+	 * Update the list of movement reading from the database with the 
+	 * method {@link MovementsManager#getAllMovements}
+	 */
 	public void refreshMovements() {
 		_lstMovements = MovementsManager.getAllMovements();
 		notifyDataSetChanged();

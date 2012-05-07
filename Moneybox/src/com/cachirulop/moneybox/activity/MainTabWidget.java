@@ -25,49 +25,62 @@ import com.cachirulop.moneybox.manager.CurrencyManager;
 import com.cachirulop.moneybox.manager.MovementsManager;
 import com.cachirulop.moneybox.manager.SoundsManager;
 
-public class MainTabWidget 
-	extends TabActivity 
-	implements TabHost.OnTabChangeListener {
-	
+/**
+ * Main activity of the moneybox.
+ * 
+ * Construct the tab container and the activities of the tabs. Creates the
+ * layout that contains the total amount of the moneybox.
+ * 
+ * @author dmagro
+ */
+public class MainTabWidget extends TabActivity implements
+		TabHost.OnTabChangeListener {
+
+	/** Tab that paint the money inside the moneybox */
 	private MoneyboxActivity _moneyboxTab;
+
+	/** Tab with the list of movements */
 	private MovementsActivity _movementsTab;
-	
+
+	/**
+	 * Creates the two tabs of the application and the total amount layout.
+	 */
 	public void onCreate(Bundle savedInstanceState) {
-	    super.onCreate(savedInstanceState);
-	    setContentView(R.layout.main);
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
 
-	    Resources res = getResources();  // Resource object to get Drawables
-	    TabHost tabHost = getTabHost();  // The activity TabHost
-	    TabHost.TabSpec spec;            // Reusable TabSpec for each tab
-	    Intent intent;                   // Reusable Intent for each tab
-	    
-	    getTabHost().setOnTabChangedListener(this);
+		Resources res = getResources(); // Resource object to get Drawables
+		TabHost tabHost = getTabHost(); // The activity TabHost
+		TabHost.TabSpec spec; // Reusable TabSpec for each tab
+		Intent intent; // Reusable Intent for each tab
 
-	    // Create an Intent to launch an Activity for the tab (to be reused)
-	    // Initialize a TabSpec for each tab and add it to the TabHost
+		getTabHost().setOnTabChangedListener(this);
 
-	    // Moneybox tab
-	    intent = new Intent(this, MoneyboxActivity.class);
-	    spec = tabHost.newTabSpec("moneybox");
-	    spec.setIndicator(res.getString(R.string.tab_title_moneybox), 
-	    				  res.getDrawable(R.drawable.ic_tab_moneybox));
-	    spec.setContent(intent);
-	    tabHost.addTab(spec);
-    	    
-	    // Movements tab
-	    intent = new Intent(this, MovementsActivity.class);
-	    spec = tabHost.newTabSpec("movements");
-	    spec.setIndicator(res.getString(R.string.tab_title_movements),
-	                      res.getDrawable(R.drawable.ic_tab_movements));
-	    spec.setContent(intent);
-	    tabHost.addTab(spec);
-	    
-	    // Select the default tab
-	    tabHost.setCurrentTab(0);
-	    
-	    updateTotal ();
+		// Create an Intent to launch an Activity for the tab (to be reused)
+		// Initialize a TabSpec for each tab and add it to the TabHost
+
+		// Moneybox tab
+		intent = new Intent(this, MoneyboxActivity.class);
+		spec = tabHost.newTabSpec("moneybox");
+		spec.setIndicator(res.getString(R.string.tab_title_moneybox),
+				res.getDrawable(R.drawable.ic_tab_moneybox));
+		spec.setContent(intent);
+		tabHost.addTab(spec);
+
+		// Movements tab
+		intent = new Intent(this, MovementsActivity.class);
+		spec = tabHost.newTabSpec("movements");
+		spec.setIndicator(res.getString(R.string.tab_title_movements),
+				res.getDrawable(R.drawable.ic_tab_movements));
+		spec.setContent(intent);
+		tabHost.addTab(spec);
+
+		// Select the default tab
+		tabHost.setCurrentTab(0);
+
+		updateTotal();
 	}
-	
+
 	/**
 	 * Update the total amount
 	 */
@@ -78,7 +91,7 @@ public class MainTabWidget
 		total.setText(CurrencyManager.formatAmount(MovementsManager
 				.getTotalAmount()));
 	}
-	
+
 	/**
 	 * Set a value to the total field
 	 */
@@ -87,17 +100,35 @@ public class MainTabWidget
 
 		total = (TextView) findViewById(R.id.txtTotal);
 		total.setText(CurrencyManager.formatAmount(val));
-	}	
-	
-	public void setMoneyboxTab (MoneyboxActivity tab) {
+	}
+
+	/**
+	 * Initialize the reference to the activity with the tab of the money box.
+	 * 
+	 * With this reference the main tab can refresh the moneybox when is
+	 * necessary.
+	 * 
+	 * @param tab
+	 *            Reference to the activity
+	 */
+	public void setMoneyboxTab(MoneyboxActivity tab) {
 		this._moneyboxTab = tab;
 	}
-	
-	public void setMovementsTab (MovementsActivity tab) {
+
+	/**
+	 * Initialize the reference to the activity with the tab of the movements
+	 * list.
+	 * 
+	 * With this reference the main tab can refresh the movements when is
+	 * necessary.
+	 * 
+	 * @param tab
+	 *            Reference to the activity
+	 */
+	public void setMovementsTab(MovementsActivity tab) {
 		this._movementsTab = tab;
 	}
-	
-	
+
 	/**
 	 * Hammer is clicked, so the moneybox should be empty.
 	 * 
@@ -139,17 +170,22 @@ public class MainTabWidget
 	protected void breakMoneybox() {
 		SoundsManager.playBreakingMoneyboxSound();
 		MovementsManager.breakMoneybox();
-		
+
 		if (getTabHost().getCurrentTab() == 0) {
 			_moneyboxTab.refresh();
-		}
-		else {
+		} else {
 			_movementsTab.refresh();
 		}
 
 		updateTotal();
 	}
 
+	/**
+	 * Launched when the user select one tab.
+	 * 
+	 * If the tab is the moneybox tab then it should be refresh to update the
+	 * movements.
+	 */
 	public void onTabChanged(String tabId) {
 		if ("moneybox".equals(tabId)) {
 			_moneyboxTab.refresh();
