@@ -76,7 +76,7 @@ public class MainTabWidget extends TabActivity implements
 		tabHost.addTab(spec);
 
 		// Select the default tab
-		tabHost.setCurrentTab(0);
+		selectMainTab();
 
 		updateTotal();
 	}
@@ -191,4 +191,13 @@ public class MainTabWidget extends TabActivity implements
 			_moneyboxTab.refresh();
 		}
 	}
+
+	/**
+	 * Select the default main tab (number 0).
+	 */
+	public void selectMainTab() {
+		getTabHost().setCurrentTab(0);
+	}
+	
+	
 }
