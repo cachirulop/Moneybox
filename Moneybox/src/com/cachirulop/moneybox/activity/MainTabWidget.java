@@ -24,6 +24,7 @@ import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.manager.CurrencyManager;
 import com.cachirulop.moneybox.manager.MovementsManager;
 import com.cachirulop.moneybox.manager.SoundsManager;
+import com.cachirulop.moneybox.manager.VibratorManager;
 
 /**
  * Main activity of the moneybox.
@@ -74,9 +75,13 @@ public class MainTabWidget extends TabActivity implements
 				res.getDrawable(R.drawable.ic_tab_movements));
 		spec.setContent(intent);
 		tabHost.addTab(spec);
+		
+		// Init the sound and vibrator managers
+		SoundsManager.initSounds();
+		VibratorManager.initVibrator();
 
 		// Select the default tab
-		tabHost.setCurrentTab(0);
+		selectMainTab();
 
 		updateTotal();
 	}
@@ -191,4 +196,13 @@ public class MainTabWidget extends TabActivity implements
 			_moneyboxTab.refresh();
 		}
 	}
+
+	/**
+	 * Select the default main tab (number 0).
+	 */
+	public void selectMainTab() {
+		getTabHost().setCurrentTab(0);
+	}
+	
+	
 }

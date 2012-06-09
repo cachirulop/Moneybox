@@ -294,5 +294,14 @@ public class MovementsActivity extends Activity {
 
 		return true;
 	}
+	
+	/**
+	 * Don't close the application, select the default tab.
+	 */
+	@Override
+	public void onBackPressed() {
+		((MainTabWidget) getParent()).selectMainTab();
+	}
+
 
 }

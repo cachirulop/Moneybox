@@ -16,6 +16,11 @@ import android.content.Context;
 import android.os.Vibrator;
 
 public class VibratorManager {
+	private static Vibrator _vibrator;
+	
+	static {
+		_vibrator = (Vibrator) ContextManager.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+	}
 
 	public static void vibrateMoneyDrop(CurrencyValueDef.MoneyType type) {
 		if (type == CurrencyValueDef.MoneyType.COIN) {
@@ -27,20 +32,18 @@ public class VibratorManager {
 	}
 	
 	public static void vibrateCoinDrop () {
-		Vibrator v;
 		long [] pattern = { 800, 200, 300, 100, 200, 50 };
 		
-		v = (Vibrator) ContextManager.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-		
-		v.vibrate(pattern, -1);
+		_vibrator.vibrate(pattern, -1);
 	}
 	
 	public static void vibrateBillDrop () {
-		Vibrator v;
 		long [] pattern = { 1700, 200 };
 		
-		v = (Vibrator) ContextManager.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-		
-		v.vibrate(pattern, -1);
+		_vibrator.vibrate(pattern, -1);
+	}
+	
+	public static void initVibrator () {
+		// Do nothing, the initialization is done in the static constructor.
 	}
 }

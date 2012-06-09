@@ -26,23 +26,34 @@ public class SoundsManager {
 	private static SoundPool _sounds;
 	private static int _soundsMap[];
 
+	/**
+	 * Load the sound to be used by the object.
+	 */
 	static {
-		_sounds = new SoundPool(20, AudioManager.STREAM_MUSIC, 0);
-		_soundsMap = new int[3];
-
-		_soundsMap[SOUND_DROP_COIN] = _sounds.load(
-				ContextManager.getContext(), R.raw.coin_dropping, 1);
-		_soundsMap[SOUND_DROP_BILL] = _sounds.load(
-				ContextManager.getContext(), R.raw.paper_dropping, 1);
-		_soundsMap[SOUND_BREAK_MONEYBOX] = _sounds.load(
-				ContextManager.getContext(), R.raw.breaking_glass, 1);
+		loadSounds();
 	}
-	
-	public static void playMoneySound (CurrencyValueDef.MoneyType type) {
+
+	/**
+	 * Load the sound in the _soundMap object and create the sound pool.
+	 */
+	private synchronized static void loadSounds() {
+		if (_sounds == null) {
+			_sounds = new SoundPool(20, AudioManager.STREAM_MUSIC, 0);
+			_soundsMap = new int[3];
+
+			_soundsMap[SOUND_DROP_COIN] = _sounds.load(
+					ContextManager.getContext(), R.raw.coin_dropping, 1);
+			_soundsMap[SOUND_DROP_BILL] = _sounds.load(
+					ContextManager.getContext(), R.raw.paper_dropping, 1);
+			_soundsMap[SOUND_BREAK_MONEYBOX] = _sounds.load(
+					ContextManager.getContext(), R.raw.breaking_glass, 1);
+		}
+	}
+
+	public static void playMoneySound(CurrencyValueDef.MoneyType type) {
 		if (type == CurrencyValueDef.MoneyType.COIN) {
 			playCoinsSound();
-		}
-		else {
+		} else {
 			playBillSound();
 		}
 	}
@@ -66,5 +77,13 @@ public class SoundsManager {
 			Log.w(SoundsManager.class.getName(), "Sound not found ("
 					+ soundIndex + ")");
 		}
+	}
+
+	/**
+	 * Load the sounds to avoid delays.
+	 */
+	public static void initSounds() {
+		// Do nothing, the initialization is done in the static constructor
+		// loadSounds();
 	}
 }
