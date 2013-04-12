@@ -25,6 +25,7 @@ import android.widget.ListView;
 
 import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.adapter.MoneyboxMovementAdapter;
+import com.cachirulop.moneybox.data.MoneyboxDataHelper;
 import com.cachirulop.moneybox.entity.Movement;
 import com.cachirulop.moneybox.manager.MovementsManager;
 
@@ -46,6 +47,12 @@ public class MovementsActivity extends Activity {
 
 	/** Constant to identify the menu option to delete all the movements */
 	static final int MENU_DELETE_ALL = 0;
+
+	/** Constant to identify the menu option to import the database*/
+	static final int MENU_IMPORT_DATABASE = 1;
+
+	/** Constant to identify the menu option to export the database*/
+	static final int MENU_EXPORT_DATABASE = 2;
 
 	/**
 	 * Constant to identify the context menu option to get money from the
@@ -110,6 +117,12 @@ public class MovementsActivity extends Activity {
 
 		item = menu.add(0, MENU_DELETE_ALL, 0, R.string.menu_delete_all);
 		item.setIcon(R.drawable.ic_menu_delete_all);
+		
+		item = menu.add(1, MENU_EXPORT_DATABASE, 1, R.string.menu_export_database);
+		item.setIcon(R.drawable.ic_menu_export);
+		
+		item = menu.add(1, MENU_IMPORT_DATABASE, 2, R.string.menu_import_database);
+		item.setIcon(R.drawable.ic_menu_import);
 
 		return result;
 	}
@@ -123,6 +136,14 @@ public class MovementsActivity extends Activity {
 		switch (item.getItemId()) {
 		case MENU_DELETE_ALL:
 			confirmDeleteAll();
+			return true;
+			
+		case MENU_EXPORT_DATABASE:
+			MoneyboxDataHelper.exportDB(this);
+			return true;
+
+		case MENU_IMPORT_DATABASE:
+			MoneyboxDataHelper.importDB(this);
 			return true;
 		}
 

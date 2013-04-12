@@ -33,11 +33,21 @@
     <string name="error_date_incorrect_after_get">Fecha no válida, tiene que ser anterior a la fecha en la que se cogió</string>
     <string name="error_date_incorrect_before_insert">Fecha no válida, tiene que ser posterior a la fecha en la que se ha echado</string>
         
+    <!-- Import/export messages -->
+    <string name="error_cant_read_file">No se puede leer el fichero, no existe</string>
+    <string name="error_cant_write_file">No se puede escribir el fichero, no tiene permisos</string>
+    <string name="msg_database_exporting">Exportando la base de datos al fichero %s</string>
+    <string name="msg_database_exported">Base de datos exportada correctamente</string>
+    <string name="msg_database_importing">Importando la base de datos de %s</string>
+    <string name="msg_database_imported">Base de datos importada correctamente</string>
+    
     <!-- tabs -->
     <string name="tab_title_moneybox">Hucha</string>
     <string name="tab_title_movements">Movimientos</string>
     
     <!-- Menu -->
     <string name="menu_delete_all">Borrar todo</string>
+    <string name="menu_export_database">Exportar datos</string>
+    <string name="menu_import_database">Importar datos</string>
     
 </resources>

@@ -10,11 +10,20 @@
  ******************************************************************************/
 package com.cachirulop.moneybox.data;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.cachirulop.moneybox.R;
 
@@ -106,5 +115,124 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 				db.execSQL(s);
 			}
 		}
+	}
+
+	/**
+	 * Copy the database file in the sd card
+	 */
+	public static void exportDB(Context ctx) {
+		try {
+			String backup;
+			
+			backup = getBackupPath(ctx);
+			
+			Toast.makeText(ctx, String.format(ctx.getString(R.string.msg_database_exporting), backup), Toast.LENGTH_LONG).show();
+
+			copyFile(ctx, ctx.getDatabasePath(DATABASE_NAME).getAbsolutePath(), backup, false);
+
+			Toast.makeText(ctx, ctx.getString(R.string.msg_database_exported), Toast.LENGTH_LONG).show();
+		}
+		catch (Exception e) {
+			Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
+		}
+	}
+
+	/**
+	 * Import the database file located in the sd card
+	 */
+	public static void importDB(Context ctx) {
+		try {
+			String backup;
+			
+			backup = getBackupPath(ctx);
+			
+			Toast.makeText(ctx, String.format(ctx.getString(R.string.msg_database_importing), backup), Toast.LENGTH_LONG).show();
+
+			copyFile(ctx, backup, ctx.getDatabasePath(DATABASE_NAME).getAbsolutePath(), true);
+			
+			Toast.makeText(ctx, ctx.getString(R.string.msg_database_imported), Toast.LENGTH_LONG).show();
+		}
+		catch (Exception e) {
+			Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
+		}
+	}
+
+	/**
+	 * Copy source file to destination file
+	 * 
+	 * @param src Source file path
+	 * @param dst Destination file path
+	 * @param deleteSrc If true delete the source file when done
+	 * @throws FileNotFoundException If the source file is not found
+	 * @throws IOException If there is some error writing/reading file
+	 * @throws Exception If the source file can't be read or the destination
+	 * file can't be write
+	 */
+	private static void copyFile(Context ctx, String src, String dst, boolean deleteSrc) throws FileNotFoundException, IOException, Exception {
+		FileChannel srcChannel = null;
+		FileChannel dstChannel = null;
+
+		try {
+			File dstFile;
+			File dstParentFile;
+
+			dstFile = new File(dst);
+			dstParentFile = dstFile.getParentFile();
+			if (!dstParentFile.exists()) {
+				dstParentFile.mkdirs();
+			}
+			
+			if (dstParentFile.canWrite()) {
+				File srcFile;
+
+				srcFile = new File(src);
+				if (srcFile.exists()) {
+					srcChannel = new FileInputStream(srcFile).getChannel();
+					dstChannel = new FileOutputStream(dstFile).getChannel();
+
+					dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
+					
+					if (deleteSrc) {
+						srcFile.delete();
+					}
+				}
+				else {
+					throw new Exception(ctx.getString(R.string.error_cant_read_file));
+				}
+					
+			}
+			else {
+				throw new Exception(ctx.getString(R.string.error_cant_write_file));
+			}
+		} finally {
+			try {
+				if (srcChannel != null) {
+					srcChannel.close();
+				}
+
+				if (dstChannel != null) {
+					dstChannel.close();
+				}
+			} catch (Exception e2) {
+			}
+		}
+	}
+	
+	/**
+	 * Constructs the file path for the database backup
+	 * 
+	 * @return The absolute path to the database backup file
+	 */
+	private static String getBackupPath(Context ctx) {
+		StringBuffer backupPath;
+
+		backupPath = new StringBuffer();
+		backupPath.append(Environment.getExternalStorageDirectory());
+		backupPath.append(File.separator);
+		backupPath.append(ctx.getString(R.string.app_name));
+		backupPath.append(File.separator);
+		backupPath.append(DATABASE_NAME);
+
+		return backupPath.toString();
 	}
 }

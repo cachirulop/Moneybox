@@ -34,11 +34,21 @@
     <string name="error_date_incorrect_future">Invalid date, it can\'t be in the future.</string>
     <string name="error_date_incorrect_after_get">Invalid date. Should be before get.</string>
     <string name="error_date_incorrect_before_insert">Invalid date. Should be after insert.</string>
-        
+    
+    <!-- Import/export messages -->
+    <string name="error_cant_read_file">Can\'t read file</string>
+    <string name="error_cant_write_file">Can\'t write file, read only path</string>
+    <string name="msg_database_exporting">Exporting database to %s</string>
+    <string name="msg_database_exported">Database exported successfully</string>
+    <string name="msg_database_importing">Importing database from %s</string>
+    <string name="msg_database_imported">Database imported</string>
+    
     <!-- tabs -->
     <string name="tab_title_moneybox">Moneybox</string>
     <string name="tab_title_movements">Movements</string>
     
     <!-- Menu -->
     <string name="menu_delete_all">Delete all</string>
+    <string name="menu_export_database">Export data</string>
+    <string name="menu_import_database">Import data</string>
 </resources>
