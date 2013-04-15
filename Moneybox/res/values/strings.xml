@@ -10,31 +10,28 @@
       David Magro Martin - initial API and implementation
 -->
 <resources>
+
     <!-- I18n -->
     <string name="app_name">Moneybox</string>
     <string name="txtTotalTitle">Total:</string>
     <string name="break_moneybox">Piggy bank is empty!</string>
     <string name="break_moneybox_confirm">Are you sure?</string>
     <string name="delete_all_confirm">Are you sure?</string>
-        
-    
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="insert_date">Insert date</string>
     <string name="get_date">Get date</string>
     <string name="amount">Amount</string>
     <string name="description">Description</string>
-        
     <string name="change">Set</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="get_from_moneybox">Get it</string>
     <string name="delete">Delete</string>
-    
     <string name="error_date_incorrect_future">Invalid date, it can\'t be in the future.</string>
     <string name="error_date_incorrect_after_get">Invalid date. Should be before get.</string>
     <string name="error_date_incorrect_before_insert">Invalid date. Should be after insert.</string>
-    
+
     <!-- Import/export messages -->
     <string name="error_cant_read_file">Can\'t read file</string>
     <string name="error_cant_write_file">Can\'t write file, read only path</string>
@@ -42,13 +39,19 @@
     <string name="msg_database_exported">Database exported successfully</string>
     <string name="msg_database_importing">Importing database from %s</string>
     <string name="msg_database_imported">Database imported</string>
-    
+
     <!-- tabs -->
     <string name="tab_title_moneybox">Moneybox</string>
     <string name="tab_title_movements">Movements</string>
-    
+
     <!-- Menu -->
     <string name="menu_delete_all">Delete all</string>
     <string name="menu_export_database">Export data</string>
     <string name="menu_import_database">Import data</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
 </resources>

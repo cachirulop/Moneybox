@@ -55,7 +55,7 @@ public class MainTabWidget extends TabActivity implements
 		TabHost.TabSpec spec; // Reusable TabSpec for each tab
 		Intent intent; // Reusable Intent for each tab
 
-		getTabHost().setOnTabChangedListener(this);
+		tabHost.setOnTabChangedListener(this);
 
 		// Create an Intent to launch an Activity for the tab (to be reused)
 		// Initialize a TabSpec for each tab and add it to the TabHost
