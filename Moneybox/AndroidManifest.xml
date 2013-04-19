@@ -16,7 +16,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="15"
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -29,11 +29,6 @@
         <activity
             android:name="com.cachirulop.moneybox.activity.MainTabWidget"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name="com.cachirulop.moneybox.activity.MoneyboxActivity" >
         </activity>
@@ -42,8 +37,13 @@
         <activity android:name="com.cachirulop.moneybox.activity.MovementDetailActivity" >
         </activity>
         <activity
-            android:name="com.cachirulop.moneybox.MainActivity"
-            android:label="@string/title_activity_main" >
+            android:name="com.cachirulop.moneybox.activity.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

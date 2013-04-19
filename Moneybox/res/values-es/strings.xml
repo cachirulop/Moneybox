@@ -46,6 +46,7 @@
     <string name="tab_title_movements">Movimientos</string>
     
     <!-- Menu -->
+    <string name="menu_break_moneybox">Romper la hucha</string>
     <string name="menu_delete_all">Borrar todo</string>
     <string name="menu_export_database">Exportar datos</string>
     <string name="menu_import_database">Importar datos</string>
