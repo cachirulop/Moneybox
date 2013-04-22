@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_delete_all"
+        android:icon="@drawable/ic_menu_delete_all"
+        android:showAsAction="never"
+        android:title="@string/menu_delete_all"/>
+    <item
+        android:id="@+id/action_import"
+        android:icon="@drawable/ic_menu_import"
+        android:showAsAction="never"
+        android:title="@string/menu_import_database" />
+    <item
+        android:id="@+id/action_export"
+        android:icon="@drawable/ic_menu_export"
+        android:showAsAction="never"
+        android:title="@string/menu_export_database" />
+    <item
+        android:id="@+id/action_break_moneybox"
+        android:icon="@drawable/hammer"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/menu_break_moneybox" />
+    
+</menu>

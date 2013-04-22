@@ -15,8 +15,8 @@
     <string name="app_name">Moneybox</string>
     <string name="txtTotalTitle">Total:</string>
     <string name="break_moneybox">Piggy bank is empty!</string>
-    <string name="break_moneybox_confirm">Are you sure?</string>
-    <string name="delete_all_confirm">Are you sure?</string>
+    <string name="break_moneybox_confirm">Are you sure to break the moneybox?</string>
+    <string name="delete_all_confirm">Are you sure to delete all movements?</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="insert_date">Insert date</string>
@@ -49,5 +49,6 @@
     <string name="menu_export_database">Export data</string>
     <string name="menu_import_database">Import data</string>
     <string name="menu_break_moneybox">Break moneybox</string>
-
+    <string name="title_activity_main">MainActivity</string>
+    
 </resources>
