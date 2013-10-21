@@ -12,7 +12,6 @@ package com.cachirulop.moneybox.adapter;
 
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -23,7 +22,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.cachirulop.moneybox.R;
-import com.cachirulop.moneybox.activity.MovementsActivity;
 import com.cachirulop.moneybox.entity.Movement;
 import com.cachirulop.moneybox.manager.CurrencyManager;
 import com.cachirulop.moneybox.manager.MovementsManager;
