@@ -171,6 +171,8 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 	private static void copyFile(Context ctx, String src, String dst, boolean deleteSrc) throws FileNotFoundException, IOException, Exception {
 		FileChannel srcChannel = null;
 		FileChannel dstChannel = null;
+		FileInputStream srcStream = null;
+		FileOutputStream dstStream = null;
 
 		try {
 			File dstFile;
@@ -187,8 +189,11 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 
 				srcFile = new File(src);
 				if (srcFile.exists()) {
-					srcChannel = new FileInputStream(srcFile).getChannel();
-					dstChannel = new FileOutputStream(dstFile).getChannel();
+					srcStream = new FileInputStream(srcFile);
+					dstStream = new FileOutputStream(dstFile);
+					
+					srcChannel = srcStream.getChannel();
+					dstChannel = dstStream.getChannel();
 
 					dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
 					
@@ -199,13 +204,20 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 				else {
 					throw new Exception(ctx.getString(R.string.error_cant_read_file));
 				}
-					
 			}
 			else {
 				throw new Exception(ctx.getString(R.string.error_cant_write_file));
 			}
 		} finally {
 			try {
+				if (srcStream != null) {
+					srcStream.close();
+				}
+				
+				if (dstStream != null) {
+					dstStream.close();
+				}
+				
 				if (srcChannel != null) {
 					srcChannel.close();
 				}
