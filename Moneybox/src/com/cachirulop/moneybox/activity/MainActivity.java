@@ -10,11 +10,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cachirulop.moneybox.R;
@@ -236,6 +233,9 @@ public class MainActivity extends FragmentActivity implements
 		refresh();
 	}
 	
+	/**
+	 * Refresh the contents of the tabs
+	 */
 	public void refresh() {
 		_sectionsPagerAdapter.getMoneyboxFragment().refresh();
 		_sectionsPagerAdapter.getMovementsFragment().refresh();
@@ -343,6 +343,10 @@ public class MainActivity extends FragmentActivity implements
 
 	public void onUpdateMovements() {
 		_sectionsPagerAdapter.getMovementsFragment().refresh();
+	}
+	
+	public void onSelectDefaultTab() {
+		_viewPager.setCurrentItem(0);
 	}
 
 }

@@ -5,4 +5,5 @@ public interface IMoneyboxListener {
 	void onSetTotal(double value);
 	void onUpdateMoneybox();
 	void onUpdateMovements();
+	void onSelectDefaultTab();
 }

@@ -10,10 +10,10 @@
  ******************************************************************************/
 package com.cachirulop.moneybox.manager;
 
-import com.cachirulop.moneybox.entity.CurrencyValueDef;
-
 import android.content.Context;
 import android.os.Vibrator;
+
+import com.cachirulop.moneybox.entity.CurrencyValueDef;
 
 public class VibratorManager {
 	private static Vibrator _vibrator;

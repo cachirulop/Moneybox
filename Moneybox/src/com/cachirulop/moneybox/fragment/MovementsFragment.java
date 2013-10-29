@@ -1,8 +1,6 @@
 package com.cachirulop.moneybox.fragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,10 +16,8 @@ import android.widget.ListView;
 
 import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.activity.IMoneyboxListener;
-import com.cachirulop.moneybox.activity.MainTabWidget;
 import com.cachirulop.moneybox.activity.MovementDetailActivity;
 import com.cachirulop.moneybox.adapter.MoneyboxMovementAdapter;
-import com.cachirulop.moneybox.data.MoneyboxDataHelper;
 import com.cachirulop.moneybox.entity.Movement;
 import com.cachirulop.moneybox.manager.MovementsManager;
 
@@ -132,6 +128,8 @@ public class MovementsFragment extends Fragment {
 
 		listView = (ListView) getActivity().findViewById(R.id.lvMovements);
 		((MoneyboxMovementAdapter) listView.getAdapter()).refreshMovements();
+		
+		updateTotal();
 	}
 
 	/**
@@ -209,8 +207,7 @@ public class MovementsFragment extends Fragment {
 	 */
 	// @Override
 	public void onBackPressed() {
-		// TODO: Get the back button press event and return to the moneybox tab
-		// ((MainTabWidget) getParent()).selectMainTab();
+		((IMoneyboxListener) getActivity()).onSelectDefaultTab();
 	}
 
 

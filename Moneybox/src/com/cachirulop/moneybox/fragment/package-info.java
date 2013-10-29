@@ -1,8 +1,8 @@
 /**
- * Package with the fragment classes for the differents tabs. 
+ * Package with the fragment classes for the different tabs. 
  */
 /**
- * @author david
+ * @author David Magro Martin
  *
  */
 package com.cachirulop.moneybox.fragment;
