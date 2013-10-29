@@ -128,6 +128,7 @@ public class MainActivity extends FragmentActivity implements
 			return true;
 
 		case R.id.action_import:
+			// TODO: Refresh the movements and the moneybox screens
 			MoneyboxDataHelper.importDB(this);
 			return true;
 
