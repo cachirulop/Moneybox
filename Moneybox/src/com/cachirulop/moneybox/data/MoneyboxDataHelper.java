@@ -38,7 +38,7 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "moneybox";
 
 	/** Current version */
-	private static final int DATABASE_VERSION = 5;
+	private static final int DATABASE_VERSION = 6;
 
 	/** Context where the object is created */
 	private final Context _ctx;
@@ -62,7 +62,7 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		String[] sql = _ctx.getString(R.string.SQL_on_create).split("\n");
+		String[] sql = _ctx.getString(R.string.SQL_on_create).split(";");
 
 		db.beginTransaction();
 		try {
@@ -71,7 +71,7 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 
 			db.setTransactionSuccessful();
 		} catch (SQLException e) {
-			Log.e("Error creating tables and debug data", e.toString());
+			Log.e("Error creating tables", e.toString());
 			throw e;
 		} finally {
 			db.endTransaction();
@@ -85,20 +85,20 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		String[] sql = _ctx.getString(R.string.SQL_on_upgrade).split("\n");
+		String[] sql = _ctx.getString(R.string.SQL_on_upgrade).split(";");
 
 		db.beginTransaction();
 		try {
 			execMultipleSQL(db, sql);
 			db.setTransactionSuccessful();
 		} catch (SQLException e) {
-			Log.e("Error upgrading tables and debug data", e.toString());
+			Log.e("Error upgrading tables", e.toString());
 			throw e;
 		} finally {
 			db.endTransaction();
 		}
 
-		onCreate(db);
+		/* onCreate(db); */
 	}
 
 	/**
