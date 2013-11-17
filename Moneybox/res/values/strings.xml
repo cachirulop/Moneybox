@@ -31,6 +31,9 @@
     <string name="error_date_incorrect_future">Invalid date, it can\'t be in the future.</string>
     <string name="error_date_incorrect_after_get">Invalid date. Should be before get.</string>
     <string name="error_date_incorrect_before_insert">Invalid date. Should be after insert.</string>
+    
+    <string name="drawer_open">Open left drawer</string>
+    <string name="drawer_close">Close left drawer</string>    
 
     <!-- Import/export messages -->
     <string name="error_cant_read_file">Can\'t read file</string>

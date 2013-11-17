@@ -29,28 +29,25 @@
     <!-- Drop the movements table. -->
     <string name="SQL_on_upgrade">
         <![CDATA[
-        -- DROP TABLE IF EXISTS movements;
-        
         CREATE TABLE moneyboxes (id_moneybox INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         						 description TEXT NOT NULL, 
         						 creation_date TIMESTAMP NOT NULL DEFAULT current_timestamp);
         						 
-		INSERT INTO moneyboxes (1, \'Hucha\');
+		INSERT INTO moneyboxes (id_moneybox, description) VALUES (1, \'Hucha\');
 		
 		ALTER TABLE movements RENAME TO movements_backup;
 		
         CREATE TABLE movements (id_movement INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        						FOREIGN KEY(id_moneybox) REFERENCES moneyboxes(id_moneybox),
+        						id_moneybox INTEGER,
                                 amount NUMERIC NOT NULL,
                                 insert_date TIMESTAMP NOT NULL DEFAULT current_timestamp,
                                 get_date TIMESTAMP,
                                 description TEXT, 
-                                break_moneybox INTEGER);
+                                break_moneybox INTEGER,
+                                FOREIGN KEY(id_moneybox) REFERENCES moneyboxes(id_moneybox));
 
 		INSERT INTO movements (id_movement, id_moneybox, amount, insert_date, description, break_moneybox) 
-		VALUES (
-			SELECT (id_movement, 1, amount, insert_date, description, break_moneybox) FROM movements_backup
-		);
+		SELECT id_movement, 1, amount, insert_date, description, break_moneybox FROM movements_backup;
 		
 		DROP TABLE movements_backup;
 		]]>

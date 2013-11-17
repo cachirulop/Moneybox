@@ -38,7 +38,7 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "moneybox";
 
 	/** Current version */
-	private static final int DATABASE_VERSION = 6;
+	private static final int DATABASE_VERSION = 8;
 
 	/** Context where the object is created */
 	private final Context _ctx;
@@ -73,7 +73,8 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 		} catch (SQLException e) {
 			Log.e("Error creating tables", e.toString());
 			throw e;
-		} finally {
+		} 
+		finally {
 			db.endTransaction();
 		}
 	}
@@ -94,8 +95,9 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 		} catch (SQLException e) {
 			Log.e("Error upgrading tables", e.toString());
 			throw e;
-		} finally {
-			db.endTransaction();
+		} 
+  		finally {
+ 			db.endTransaction();
 		}
 
 		/* onCreate(db); */
@@ -123,16 +125,21 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 	public static void exportDB(Context ctx) {
 		try {
 			String backup;
-			
+
 			backup = getBackupPath(ctx);
-			
-			Toast.makeText(ctx, String.format(ctx.getString(R.string.msg_database_exporting), backup), Toast.LENGTH_LONG).show();
 
-			copyFile(ctx, ctx.getDatabasePath(DATABASE_NAME).getAbsolutePath(), backup, false);
+			Toast.makeText(
+					ctx,
+					String.format(
+							ctx.getString(R.string.msg_database_exporting),
+							backup), Toast.LENGTH_LONG).show();
 
-			Toast.makeText(ctx, ctx.getString(R.string.msg_database_exported), Toast.LENGTH_LONG).show();
-		}
-		catch (Exception e) {
+			copyFile(ctx, ctx.getDatabasePath(DATABASE_NAME).getAbsolutePath(),
+					backup, false);
+
+			Toast.makeText(ctx, ctx.getString(R.string.msg_database_exported),
+					Toast.LENGTH_LONG).show();
+		} catch (Exception e) {
 			Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
 	}
@@ -143,16 +150,21 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 	public static void importDB(Context ctx) {
 		try {
 			String backup;
-			
-			backup = getBackupPath(ctx);
-			
-			Toast.makeText(ctx, String.format(ctx.getString(R.string.msg_database_importing), backup), Toast.LENGTH_LONG).show();
 
-			copyFile(ctx, backup, ctx.getDatabasePath(DATABASE_NAME).getAbsolutePath(), true);
-			
-			Toast.makeText(ctx, ctx.getString(R.string.msg_database_imported), Toast.LENGTH_LONG).show();
-		}
-		catch (Exception e) {
+			backup = getBackupPath(ctx);
+
+			Toast.makeText(
+					ctx,
+					String.format(
+							ctx.getString(R.string.msg_database_importing),
+							backup), Toast.LENGTH_LONG).show();
+
+			copyFile(ctx, backup, ctx.getDatabasePath(DATABASE_NAME)
+					.getAbsolutePath(), true);
+
+			Toast.makeText(ctx, ctx.getString(R.string.msg_database_imported),
+					Toast.LENGTH_LONG).show();
+		} catch (Exception e) {
 			Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
 	}
@@ -160,15 +172,23 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 	/**
 	 * Copy source file to destination file
 	 * 
-	 * @param src Source file path
-	 * @param dst Destination file path
-	 * @param deleteSrc If true delete the source file when done
-	 * @throws FileNotFoundException If the source file is not found
-	 * @throws IOException If there is some error writing/reading file
-	 * @throws Exception If the source file can't be read or the destination
-	 * file can't be write
+	 * @param src
+	 *            Source file path
+	 * @param dst
+	 *            Destination file path
+	 * @param deleteSrc
+	 *            If true delete the source file when done
+	 * @throws FileNotFoundException
+	 *             If the source file is not found
+	 * @throws IOException
+	 *             If there is some error writing/reading file
+	 * @throws Exception
+	 *             If the source file can't be read or the destination file
+	 *             can't be write
 	 */
-	private static void copyFile(Context ctx, String src, String dst, boolean deleteSrc) throws FileNotFoundException, IOException, Exception {
+	private static void copyFile(Context ctx, String src, String dst,
+			boolean deleteSrc) throws FileNotFoundException, IOException,
+			Exception {
 		FileChannel srcChannel = null;
 		FileChannel dstChannel = null;
 		FileInputStream srcStream = null;
@@ -183,7 +203,7 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 			if (!dstParentFile.exists()) {
 				dstParentFile.mkdirs();
 			}
-			
+
 			if (dstParentFile.canWrite()) {
 				File srcFile;
 
@@ -191,33 +211,33 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 				if (srcFile.exists()) {
 					srcStream = new FileInputStream(srcFile);
 					dstStream = new FileOutputStream(dstFile);
-					
+
 					srcChannel = srcStream.getChannel();
 					dstChannel = dstStream.getChannel();
 
 					dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
-					
+
 					if (deleteSrc) {
 						srcFile.delete();
 					}
+				} else {
+					throw new Exception(
+							ctx.getString(R.string.error_cant_read_file));
 				}
-				else {
-					throw new Exception(ctx.getString(R.string.error_cant_read_file));
-				}
-			}
-			else {
-				throw new Exception(ctx.getString(R.string.error_cant_write_file));
+			} else {
+				throw new Exception(
+						ctx.getString(R.string.error_cant_write_file));
 			}
 		} finally {
 			try {
 				if (srcStream != null) {
 					srcStream.close();
 				}
-				
+
 				if (dstStream != null) {
 					dstStream.close();
 				}
-				
+
 				if (srcChannel != null) {
 					srcChannel.close();
 				}
@@ -229,7 +249,7 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
 			}
 		}
 	}
-	
+
 	/**
 	 * Constructs the file path for the database backup
 	 * 

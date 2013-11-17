@@ -32,6 +32,9 @@
     <string name="error_date_incorrect_future">Fecha no válida, no se puede usar una fecha futura</string>
     <string name="error_date_incorrect_after_get">Fecha no válida, tiene que ser anterior a la fecha en la que se cogió</string>
     <string name="error_date_incorrect_before_insert">Fecha no válida, tiene que ser posterior a la fecha en la que se ha echado</string>
+    
+    <string name="drawer_open">Abrir el menú lateral</string>
+    <string name="drawer_close">Cerrar el menú lateral</string>
         
     <!-- Import/export messages -->
     <string name="error_cant_read_file">No se puede leer el fichero, no existe</string>

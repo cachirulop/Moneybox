@@ -1,54 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/moneyBoxLayout"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="match_parent" >
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/moneyboxSeparator"
-        tools:context=".MainActivity" />
-
-    <View
-        android:id="@+id/moneyboxSeparator"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_above="@+id/totalLayout"
-        android:background="@android:color/darker_gray"/>
-    
-    <LinearLayout
-        android:id="@+id/totalLayout"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/moneyBoxLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:showDividers="none" >
+        android:layout_height="fill_parent" >
 
-        <TextView
-            android:id="@+id/txtTotalTitle"
-            android:layout_width="wrap_content"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/moneyboxSeparator"
+            tools:context=".MainActivity" />
+
+        <View
+            android:id="@+id/moneyboxSeparator"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_above="@+id/totalLayout"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:id="@+id/totalLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
             android:gravity="center_vertical"
-            android:text="@string/txtTotalTitle"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/txtTotal"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="bottom|right"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="0.0"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-    </LinearLayout>
+            android:showDividers="none" >
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/txtTotalTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/txtTotalTitle"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
+            <TextView
+                android:id="@+id/txtTotal"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="bottom|right"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="0.0"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- The navigation drawer -->
+
+    <ListView
+        android:id="@+id/left_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#111"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp" />
+
+</android.support.v4.widget.DrawerLayout>

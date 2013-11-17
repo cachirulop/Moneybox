@@ -20,5 +20,4 @@
         android:icon="@drawable/hammer"
         android:showAsAction="ifRoom|withText"
         android:title="@string/menu_break_moneybox" />
-    
 </menu>
