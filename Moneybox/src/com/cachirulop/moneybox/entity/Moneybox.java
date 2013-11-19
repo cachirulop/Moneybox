@@ -3,7 +3,8 @@ package com.cachirulop.moneybox.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import common.Util;
+import com.cachirulop.moneybox.common.Util;
+
 
 public class Moneybox implements Serializable {
 

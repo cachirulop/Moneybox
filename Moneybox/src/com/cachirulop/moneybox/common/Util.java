@@ -1,4 +1,4 @@
-package common;
+package com.cachirulop.moneybox.common;
 
 import java.text.DateFormat;
 import java.util.Date;

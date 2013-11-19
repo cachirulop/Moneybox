@@ -38,9 +38,6 @@ import com.cachirulop.moneybox.manager.MovementsManager;
  *
  */
 public class MoneyboxMovementAdapter extends BaseAdapter {
-	/** Parent activity of the movement list */
-	//private Activity _parent;
-	
 	/** Inflater to load the xml with the definition of the view */
 	private LayoutInflater _inflater;
 	
@@ -54,7 +51,6 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 	 * @param context Parent of the adapter. Should be a {@link MovementsActivity MovementsActivity}.
 	 */
 	public MoneyboxMovementAdapter(Context context) {
-		// _parent = (Activity) context;
 		_inflater = LayoutInflater.from(context);
 	}
 
