@@ -15,7 +15,7 @@
     <string name="SQL_on_create">
         CREATE TABLE moneyboxes (id_moneybox INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         						 description TEXT, 
-        						 creation_date TIMESTAMP);
+        						 creation_date TIMESTAMP NOT NULL DEFAULT current_timestamp);
         
         CREATE TABLE movements (id_movement INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         						FOREIGN KEY(id_moneybox) REFERENCES moneyboxes(id_moneybox),
@@ -33,7 +33,8 @@
         						 description TEXT NOT NULL, 
         						 creation_date TIMESTAMP NOT NULL DEFAULT current_timestamp);
         						 
-		INSERT INTO moneyboxes (id_moneybox, description) VALUES (1, \'Hucha\');
+        INSERT INTO moneyboxes (id_moneybox, description, creation_date) 
+        VALUES (1, \'Hucha\', strftime(\'%s\', \'now\') * 1000);
 		
 		ALTER TABLE movements RENAME TO movements_backup;
 		

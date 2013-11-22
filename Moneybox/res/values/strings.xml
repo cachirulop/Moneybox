@@ -33,8 +33,11 @@
     <string name="error_date_incorrect_before_insert">Invalid date. Should be after insert.</string>
     
     <string name="drawer_open">Open left drawer</string>
-    <string name="drawer_close">Close left drawer</string>    
-
+    <string name="drawer_close">Close left drawer</string>
+    
+    <string name="moneybox_add_moneybox">Add new moneybox</string>
+    <string name="moneybox_del_moneybox">Delete current moneybox</string>
+    
     <!-- Import/export messages -->
     <string name="error_cant_read_file">Can\'t read file</string>
     <string name="error_cant_write_file">Can\'t write file, read only path</string>

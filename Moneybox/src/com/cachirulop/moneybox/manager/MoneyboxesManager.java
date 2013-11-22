@@ -72,8 +72,7 @@ public class MoneyboxesManager {
         result = new Moneybox();
         result.setIdMoneybox(c.getInt(c.getColumnIndex("id_moneybox")));
         result.setDescription(c.getString(c.getColumnIndex("description")));
-        result.setCreationDate(new Date(c.getLong(c
-                .getColumnIndex("creation_date"))));
+        result.setCreationDate(new Date(c.getLong(c.getColumnIndex("creation_date"))));
 
         return result;
     }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.cachirulop.moneybox.R;
@@ -86,63 +87,19 @@ public class MoneyboxAdapter extends BaseAdapter {
         }
 
         Moneybox m;
-        TextView txtDate;
-        TextView txtGetDate;
-        TextView txtDescription;
-        TextView txtAmount;
+        RadioButton rbMoneybox;
+        TextView txtCreationDate;
 
         m = _lstMoneyboxes.get(position);
-/*        
-        txtDate = (TextView) convertView
-                .findViewById(R.id.txtRowMovementDate);
-        txtGetDate = (TextView) convertView
-                .findViewById(R.id.txtRowMovementGetDate);
-        txtDescription = (TextView) convertView
-                .findViewById(R.id.txtRowMovementDescription);
-        txtAmount = (TextView) convertView
-                .findViewById(R.id.txtRowMovementAmount);
-
-        txtDate.setText(m.getInsertDateFormatted());
-        if (m.getGetDate() != null) {
-            txtAmount.setPaintFlags(txtAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            txtGetDate.setVisibility(View.VISIBLE);
-            txtGetDate.setText(m.getGetDateFormatted());
-        }
-        else {
-            txtAmount.setPaintFlags(txtAmount.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
-            txtGetDate.setVisibility(View.GONE);
-            txtGetDate.setText("");
-        }
         
-        txtAmount.setText(CurrencyManager.formatAmount(m.getAmount()));
+        rbMoneybox = (RadioButton) convertView
+                .findViewById(R.id.rbMoneyboxRowMoneybox);
+        txtCreationDate = (TextView) convertView
+                .findViewById(R.id.txtMoneyboxRowCreationDate);
+
+        rbMoneybox.setText(m.getDescription());
+        txtCreationDate.setText(m.getCreationDateFormatted());
         
-        if (m.getDescription() != null && !m.getDescription().trim().equals ("")) {
-            txtDescription.setVisibility(View.VISIBLE);
-            txtDescription.setText(m.getDescription());
-        }
-        else {
-            txtDescription.setVisibility(View.GONE);
-        }
-
-        if (m.isBreakMoneybox()) {
-            txtDate.setTextColor(Color.RED);
-            txtAmount.setTextColor(Color.RED);
-            txtDescription.setTextColor(Color.RED);
-        }
-        else {
-            int blue;
-            
-            blue = Color.rgb(5, 143, 255);
-            
-            txtDate.setTextColor(blue);
-            txtAmount.setTextColor(blue);
-            txtDescription.setTextColor(blue);
-
-            if (m.getGetDate() != null) {
-                txtGetDate.setTextColor(Color.YELLOW);
-            }           
-        }
-*/
         return convertView;
     }
 

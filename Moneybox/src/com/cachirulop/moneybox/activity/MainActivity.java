@@ -1,7 +1,5 @@
 package com.cachirulop.moneybox.activity;
 
-import java.util.ArrayList;
-
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
@@ -19,18 +17,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cachirulop.moneybox.R;
+import com.cachirulop.moneybox.adapter.MoneyboxAdapter;
 import com.cachirulop.moneybox.data.MoneyboxDataHelper;
-import com.cachirulop.moneybox.entity.Moneybox;
 import com.cachirulop.moneybox.fragment.MoneyboxFragment;
 import com.cachirulop.moneybox.fragment.MovementsFragment;
 import com.cachirulop.moneybox.manager.ContextManager;
 import com.cachirulop.moneybox.manager.CurrencyManager;
-import com.cachirulop.moneybox.manager.MoneyboxesManager;
 import com.cachirulop.moneybox.manager.MovementsManager;
 import com.cachirulop.moneybox.manager.SoundsManager;
 
@@ -52,8 +48,14 @@ public class MainActivity extends FragmentActivity implements
      */
     ViewPager _viewPager;
 
+    /** 
+     * Drawer menu toggle to get the events of the menu
+     */
     ActionBarDrawerToggle _drawerToggle;
 
+    /**
+     * Creates the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,26 +86,14 @@ public class MainActivity extends FragmentActivity implements
     private void createDrawer() {
         ListView drawerList;
         DrawerLayout layout;
-        ArrayList<Moneybox> moneyboxes;
+        MoneyboxAdapter adapter;
 
-        String[] options;
-        
-        moneyboxes = MoneyboxesManager.getAllMoneyboxes();
-
-        // TODO: Search another adapter
-        options = new String[4];
-        options[0] = "Opcion 0";
-        options[1] = "Opción 1";
-        options[2] = "Opcion 2";
-        options[3] = "Opcion 3";
-
+        adapter = new MoneyboxAdapter(this);
+        drawerList = (ListView) findViewById(R.id.lvMoneyboxes);
         layout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerList = (ListView) findViewById(R.id.left_drawer);
-
-        // Set the adapter for the list view
-        drawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, options));
-
+        
+        drawerList.setAdapter(adapter);
+        
         // Set the list's click listener
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- two_col_row.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llMoneyboxRow"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RadioButton
+        android:id="@+id/rbMoneyboxRowMoneybox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="RadioButton" />
+
+    <TextView
+        android:id="@+id/txtMoneyboxRowCreationDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:gravity="right"
+        android:text="01/01/2001"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="italic" />
+
+</LinearLayout>
