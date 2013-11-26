@@ -98,6 +98,7 @@ public class MoneyboxAdapter extends BaseAdapter {
                 .findViewById(R.id.txtMoneyboxRowCreationDate);
 
         rbMoneybox.setText(m.getDescription());
+        rbMoneybox.setTag(m);
         txtCreationDate.setText(m.getCreationDateFormatted());
         
         return convertView;

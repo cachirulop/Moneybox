@@ -111,7 +111,7 @@ public class MoneyboxesManager {
      * @param description
      *            Description of the moneybox
      */
-    public static void insertMovement(String description) {
+    public static void insertMoneybox(String description) {
         Moneybox m;
 
         m = new Moneybox();
