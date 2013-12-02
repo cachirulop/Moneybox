@@ -309,20 +309,20 @@ public class MovementsManager {
     /**
      * Add a moneybox movement to the database
      * 
-     * @param idMoneybox
-     *            ID of the moneybox in which the movement will be inserted
+     * @param m
+     *            Moneybox in which the movement will be inserted
      * @param amount
      *            Amount of money to add
      */
-    public static void insertMovement(int idMoneybox, double amount) {
-        insertMovement(idMoneybox, amount, null, false);
+    public static void insertMovement(Moneybox m, double amount) {
+        insertMovement(m, amount, null, false);
     }
 
     /**
      * Add a moneybox movement to the database
      * 
-     * @param idMoneybox
-     *            ID of the moneybox in which the movement will be inserted
+     * @param n
+     *            Moneybox in which the movement will be inserted
      * @param amount
      *            Amount of money to add
      * @param description
@@ -330,21 +330,21 @@ public class MovementsManager {
      * @param isBreakMoneybox
      *            The movement breaks the moneybox or not
      */
-    public static void insertMovement(int idMoneybox, double amount,
+    public static void insertMovement(Moneybox m, double amount,
             String description, boolean isBreakMoneybox) {
-        Movement m;
+        Movement mov;
 
-        m = new Movement();
-        m.setIdMoneybox(idMoneybox);
-        m.setAmount(amount);
-        m.setInsertDate(new Date());
-        m.setGetDate(null);
-        m.setBreakMoneybox(isBreakMoneybox);
+        mov = new Movement();
+        mov.setMoneybox(m);
+        mov.setAmount(amount);
+        mov.setInsertDate(new Date());
+        mov.setGetDate(null);
+        mov.setBreakMoneybox(isBreakMoneybox);
         if (description != null) {
-            m.setDescription(description);
+            mov.setDescription(description);
         }
 
-        MovementsManager.insertMovement(m);
+        MovementsManager.insertMovement(mov);
     }
 
     /**
@@ -538,21 +538,21 @@ public class MovementsManager {
 
         prev = getPrevBreakMoneybox(m);
         if (prev != null) {
-            return -getTotalAmountByDates(m.getIdMoneybox(),
+            return -getTotalAmountByDates(m.getMoneybox(),
                     prev.getInsertDate(), m.getInsertDate());
         } else {
-            return -getTotalAmountBefore(m.getIdMoneybox(), m.getInsertDate());
+            return -getTotalAmountBefore(m.getMoneybox(), m.getInsertDate());
         }
     }
 
     /**
      * Breaks the specified moneybox putting its amount to 0
      * 
-     * @param idMoneybox
-     *            ID of the moneybox to be broken
+     * @param m
+     *            Moneybox to be broken
      */
-    public static void breakMoneybox(int idMoneybox) {
-        MovementsManager.insertMovement(idMoneybox, -1, ContextManager
+    public static void breakMoneybox(Moneybox m) {
+        MovementsManager.insertMovement(m, -1, ContextManager
                 .getContext().getString(R.string.break_moneybox), true);
     }
 
@@ -569,7 +569,7 @@ public class MovementsManager {
     public static boolean canGetMovement(Movement m) {
         Movement last;
 
-        last = MovementsManager.getLastBreakMoneybox(m.getIdMoneybox());
+        last = MovementsManager.getLastBreakMoneybox(m.getMoneybox());
 
         return (last == null || last.getInsertDate().before(m.getInsertDate()));
     }

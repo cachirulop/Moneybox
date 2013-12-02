@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 
 import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.activity.IMoneyboxListener;
+import com.cachirulop.moneybox.activity.MainActivity;
 import com.cachirulop.moneybox.entity.CurrencyValueDef;
 import com.cachirulop.moneybox.entity.Movement;
 import com.cachirulop.moneybox.manager.CurrencyManager;
@@ -99,7 +100,11 @@ public class MoneyboxFragment extends Fragment {
 
 		value = (CurrencyValueDef) v.getTag();
 		if (value != null) {
-			MovementsManager.insertMovement(value.getAmount());
+			MainActivity parent;
+			
+			parent = (MainActivity) getActivity();
+
+			MovementsManager.insertMovement(parent.getCurrentMoneybox(), value.getAmount());
 			dropMoney(v, value);
 
 			updateTotal();
@@ -284,9 +289,9 @@ public class MoneyboxFragment extends Fragment {
 		Random rnd;
 		double total;
 		int i;
-		Activity parent;
+		MainActivity parent;
 		
-		parent = getActivity();
+		parent = (MainActivity) getActivity();
 
 		layout = (RelativeLayout) parent.findViewById(R.id.moneyDropLayout);
 		maxWidth = layout.getWidth();
@@ -299,7 +304,7 @@ public class MoneyboxFragment extends Fragment {
 		i = 0;
 
 		rnd = new Random();
-		lstMoney = MovementsManager.getActiveMovements();
+		lstMoney = MovementsManager.getActiveMovements(parent.getCurrentMoneybox());
 		for (Movement m : lstMoney) {
 			Rect r;
 			CurrencyValueDef curr;

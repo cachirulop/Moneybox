@@ -16,6 +16,7 @@ import android.widget.ListView;
 
 import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.activity.IMoneyboxListener;
+import com.cachirulop.moneybox.activity.MainActivity;
 import com.cachirulop.moneybox.activity.MovementDetailActivity;
 import com.cachirulop.moneybox.adapter.MoneyboxMovementAdapter;
 import com.cachirulop.moneybox.entity.Movement;
@@ -47,12 +48,12 @@ public class MovementsFragment extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		ListView listView;
-		Activity parent;
+		MainActivity parent;
 		
-		parent = getActivity();
+		parent = (MainActivity) getActivity();
 
 		listView = (ListView) parent.findViewById(R.id.lvMovements);
-		listView.setAdapter(new MoneyboxMovementAdapter(parent));
+		listView.setAdapter(new MoneyboxMovementAdapter(parent, parent.getCurrentMoneybox()));
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> a, View v, int position,
 					long id) {
@@ -125,9 +126,16 @@ public class MovementsFragment extends Fragment {
 	 */
 	public void refresh() {
 		ListView listView;
-
+		MoneyboxMovementAdapter adapter;
+		MainActivity parent;
+		
+		parent = (MainActivity) getActivity();
+		
 		listView = (ListView) getActivity().findViewById(R.id.lvMovements);
-		((MoneyboxMovementAdapter) listView.getAdapter()).refreshMovements();
+		
+		adapter = (MoneyboxMovementAdapter) listView.getAdapter();
+		adapter.setMoneybox(parent.getCurrentMoneybox());
+		adapter.refreshMovements();
 		
 		updateTotal();
 	}

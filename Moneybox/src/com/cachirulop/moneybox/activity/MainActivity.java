@@ -101,6 +101,9 @@ public class MainActivity extends FragmentActivity implements
                 selectMoneybox((Moneybox) adapter.getItem(position));
             }
         });
+        
+        // TODO: Get the selected moneybox from configuration
+        _currentMoneybox = (Moneybox) adapter.getItem(0);
 
         drawerList = (ListView) findViewById(R.id.lvMoneyboxes);
         drawerList.setAdapter(adapter);
@@ -113,13 +116,13 @@ public class MainActivity extends FragmentActivity implements
 
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
-                getActionBar().setTitle("Titulo");
+                getActionBar().setTitle(getString(R.string.moneybox_select_moneybox));
                 invalidateOptionsMenu();
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle("Titulo 2");
+                getActionBar().setTitle(_currentMoneybox.getDescription());
                 invalidateOptionsMenu();
             }
         };
@@ -174,7 +177,7 @@ public class MainActivity extends FragmentActivity implements
 
         total = (TextView) findViewById(R.id.txtTotal);
         total.setText(CurrencyManager.formatAmount(MovementsManager
-                .getTotalAmount(_currentMoneybox.getIdMoneybox())));
+                .getTotalAmount(_currentMoneybox)));
     }
 
     /**
@@ -284,7 +287,7 @@ public class MainActivity extends FragmentActivity implements
      */
     protected void breakMoneybox() {
         SoundsManager.playBreakingMoneyboxSound();
-        MovementsManager.breakMoneybox(_currentMoneybox.getIdMoneybox());
+        MovementsManager.breakMoneybox(_currentMoneybox);
 
         refresh();
 
@@ -328,7 +331,7 @@ public class MainActivity extends FragmentActivity implements
      * method of the MovementsManager class.
      */
     private void onDeleteAll() {
-        MovementsManager.deleteAllMovements(_currentMoneybox.getIdMoneybox());
+        MovementsManager.deleteAllMovements(_currentMoneybox);
 
         refresh();
     }
@@ -382,6 +385,8 @@ public class MainActivity extends FragmentActivity implements
     public void selectMoneybox(Moneybox m) {
         _currentMoneybox = m;
         _drawerLayout.closeDrawer(Gravity.START);
+        
+        refresh();
     }
 
     public void onIbAddMoneyboxClick(View sender) {
@@ -403,5 +408,9 @@ public class MainActivity extends FragmentActivity implements
 
     public void onIbDelMoneyboxClick(View sender) {
 
+    }
+    
+    public Moneybox getCurrentMoneybox() {
+    	return _currentMoneybox;
     }
 }

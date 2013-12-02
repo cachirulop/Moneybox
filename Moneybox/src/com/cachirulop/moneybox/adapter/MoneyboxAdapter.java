@@ -49,6 +49,9 @@ public class MoneyboxAdapter extends BaseAdapter {
 	 */
 	public MoneyboxAdapter(Context context) {
 		_inflater = LayoutInflater.from(context);
+
+		// TODO: Get the selected moneybox from configuration
+		_currentPosition = 0;
 	}
 
 	/**
@@ -84,7 +87,7 @@ public class MoneyboxAdapter extends BaseAdapter {
 
 		return _lstMoneyboxes.get(position).getIdMoneybox();
 	}
-
+	
 	/**
 	 * Update the list of moneyboxes reading from the database with the method
 	 * {@link MoneyboxesManager#getAllMoneyboxes}
@@ -140,7 +143,7 @@ public class MoneyboxAdapter extends BaseAdapter {
 		}
 		else {
 			holder.btn.setChecked(true);
-			if (_currentButton != null && holder.btn != _currentButton) {
+			if (holder.btn != _currentButton) {
 				_currentButton = holder.btn;
 			}
 		}

@@ -129,5 +129,6 @@ public class Movement implements Serializable {
     
     public void setMoneybox(Moneybox m) {
         _moneybox = m;
+        _idMoneybox = m.getIdMoneybox();
     }
 }
