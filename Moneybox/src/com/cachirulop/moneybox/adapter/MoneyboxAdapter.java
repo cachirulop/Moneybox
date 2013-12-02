@@ -31,10 +31,15 @@ public class MoneyboxAdapter extends BaseAdapter {
 	/** List of moneyboxes to be showed */
 	private List<Moneybox> _lstMoneyboxes = null;
 	
+	/** Index of the selected row */ 
 	private int _currentPosition = -1;
+	
+	/** Radio button object of the selected row */
 	private RadioButton _currentButton = null;
 	
-
+	/** Listener for the row clicked event */ 
+	private OnRowClickListener _rowClickListener = null;
+	
 	/**
 	 * Constructor that receives the context (parent) of the adapter. Creates
 	 * the inflater to load the xml with the definition of the view.
@@ -102,7 +107,6 @@ public class MoneyboxAdapter extends BaseAdapter {
 		ViewHolder holder;
 
 		view = convertView;
-
 		if (view == null) {
 			view = _inflater.inflate(R.layout.moneybox_row, null);
 			
@@ -124,6 +128,10 @@ public class MoneyboxAdapter extends BaseAdapter {
 				
 				_currentPosition = position;
 				_currentButton = (RadioButton) v;
+				
+				if (_rowClickListener != null) {
+				    _rowClickListener.onClick(position);
+				}
 			}
 		});
 		
@@ -147,26 +155,20 @@ public class MoneyboxAdapter extends BaseAdapter {
 		
 		return view;
 	}
+	
+	public void setOnRowClickListener(OnRowClickListener listener) {
+	    _rowClickListener = listener;
+	}
+	
+	public abstract static interface OnRowClickListener {
+	    public abstract void onClick(int position);
+	}
 
-	/*
-	 * public View getView(int position, View convertView, ViewGroup parent) {
-	 * if (convertView == null) { convertView =
-	 * _inflater.inflate(R.layout.moneybox_row, null); }
+	/**
+	 * Class to cache a row in the view
 	 * 
-	 * Moneybox m; RadioButton rbMoneybox; TextView txtCreationDate;
-	 * 
-	 * m = _lstMoneyboxes.get(position);
-	 * 
-	 * rbMoneybox = (RadioButton) convertView
-	 * .findViewById(R.id.rbMoneyboxRowMoneybox); txtCreationDate = (TextView)
-	 * convertView .findViewById(R.id.txtMoneyboxRowCreationDate);
-	 * 
-	 * rbMoneybox.setText(m.getDescription()); rbMoneybox.setTag(m);
-	 * txtCreationDate.setText(m.getCreationDateFormatted());
-	 * 
-	 * return convertView; }
+	 * @author david
 	 */
-
 	private class ViewHolder {
 		RadioButton btn;
 		TextView txt;

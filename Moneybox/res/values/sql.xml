@@ -59,7 +59,8 @@
     <string name="SQL_sum_amount">
         SELECT sum(amount) FROM movements 
         WHERE get_date IS NULL AND
-            break_moneybox = 0;
+            break_moneybox = 0 AND 
+            id_moneybox = ?;
     </string>
 
     <!-- Sum the amount of all the movement previous to a given date -->
@@ -67,7 +68,8 @@
         SELECT sum(amount) FROM movements 
         WHERE get_date IS NULL AND 
             break_moneybox = 0 AND
-            insert_date &lt; ?;
+            insert_date &lt; ? AND
+            id_moneybox = ?;
     </string>
             
     <!-- Sum the amount of all the movement after a given date -->
@@ -75,7 +77,8 @@
         SELECT sum(amount) FROM movements 
         WHERE get_date IS NULL AND 
             break_moneybox = 0 AND
-            insert_date > ?;
+            insert_date > ? AND
+            id_moneybox = ?;
     </string>
 
     <!-- Sum the amount of all the movement between two dates -->
@@ -83,7 +86,8 @@
         SELECT sum(amount) FROM movements 
         WHERE get_date IS NULL AND 
             break_moneybox = 0 AND
-            insert_date between ? and ?;
+            insert_date between ? and ? AND
+            id_moneybox = ?;
     </string>
 
     <!-- Get the most recent break moneybox movement -->
@@ -93,7 +97,8 @@
         WHERE insert_date = (
                 SELECT max(insert_date) 
                 FROM movements 
-                WHERE break_moneybox &lt;> 0
+                WHERE break_moneybox &lt;> 0 AND
+                    id_moneybox = ?
               )
         ORDER BY insert_date ASC;
     </string>
@@ -105,7 +110,7 @@
         WHERE insert_date = 
         (SELECT min(insert_date)
          FROM movements 
-         WHERE insert_date > ? AND break_moneybox &lt;> 0)
+         WHERE insert_date > ? AND break_moneybox &lt;> 0 AND id_moneybox = ?)
     </string>
     
     <!-- Get the previous break moneybox movement to a given date -->
@@ -115,7 +120,7 @@
 		WHERE insert_date = 
 		(SELECT max(insert_date)
 		 FROM movements 
-		 WHERE insert_date &lt; ? AND break_moneybox &lt;> 0)
+		 WHERE insert_date &lt; ? AND break_moneybox &lt;> 0 AND id_moneybox = ?)
     </string>    
     
     <!-- Get all the active movements, that is the movements that the get date
@@ -123,7 +128,8 @@
     <string name="SQL_active_movements">
         SELECT * 
         FROM movements 
-        WHERE get_date IS NULL
+        WHERE get_date IS NULL AND
+            id_moneybox = ?
     </string>
     
     <!-- Get the active movements (get date is null) after a given date -->
@@ -131,7 +137,8 @@
         SELECT * 
         FROM movements 
         WHERE insert_date > ? AND 
-            get_date IS NULL
+            get_date IS NULL AND
+            id_moneybox = ?
     </string>
         
 </resources>

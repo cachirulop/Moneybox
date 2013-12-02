@@ -22,6 +22,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.cachirulop.moneybox.R;
+import com.cachirulop.moneybox.entity.Moneybox;
 import com.cachirulop.moneybox.entity.Movement;
 import com.cachirulop.moneybox.manager.CurrencyManager;
 import com.cachirulop.moneybox.manager.MovementsManager;
@@ -43,6 +44,9 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 	
 	/** List of movements to be showed */
 	private List<Movement> _lstMovements = null;
+	
+	/** Moneybox to get the movements */
+	Moneybox _moneybox;
 
 	/**
 	 * Constructor that receives the context (parent) of the adapter.
@@ -50,8 +54,28 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 	 * 
 	 * @param context Parent of the adapter. Should be a {@link MovementsActivity MovementsActivity}.
 	 */
-	public MoneyboxMovementAdapter(Context context) {
+	public MoneyboxMovementAdapter(Context context, Moneybox moneybox) {
 		_inflater = LayoutInflater.from(context);
+		_moneybox = moneybox;
+	}
+	
+	/**
+	 * Returns the moneybox of the movements to be displayed
+	 * 
+	 * @return Moneybox object of the movements
+	 */
+	public Moneybox getMoneybox() {
+	    return _moneybox;
+	}
+	
+	/**
+	 * Change the moneybox to be displayed
+	 * 
+	 * @param m New moneybox
+	 */
+	public void setMoneybox(Moneybox m) {
+	    _moneybox = m;
+	    refreshMovements();
 	}
 
 	/**
@@ -171,7 +195,7 @@ public class MoneyboxMovementAdapter extends BaseAdapter {
 	 * method {@link MovementsManager#getAllMovements}
 	 */
 	public void refreshMovements() {
-		_lstMovements = MovementsManager.getAllMovements();
+		_lstMovements = MovementsManager.getAllMovements(_moneybox);
 		notifyDataSetChanged();
 	}
 

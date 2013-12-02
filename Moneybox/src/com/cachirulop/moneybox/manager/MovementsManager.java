@@ -20,453 +20,557 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.data.MoneyboxDataHelper;
+import com.cachirulop.moneybox.entity.Moneybox;
 import com.cachirulop.moneybox.entity.Movement;
 
+/**
+ * Manages the movements logic.
+ * 
+ * Access to the database to the movements table to obtain and save the values
+ * of the movements.
+ * 
+ * @author david
+ * 
+ */
 public class MovementsManager {
 
-	public static ArrayList<Movement> getAllMovements() {
-		Cursor c;
-		SQLiteDatabase db = null;
+    /**
+     * Returns all the movements of the specified moneybox.
+     * 
+     * @param m
+     *            Moneybox to obtain all the movements
+     * @return List of objects of the Movement class
+     */
+    public static ArrayList<Movement> getAllMovements(Moneybox m) {
+        Cursor c;
+        SQLiteDatabase db = null;
 
-		try {
-			db = new MoneyboxDataHelper(ContextManager.getContext())
-					.getReadableDatabase();
+        try {
+            db = new MoneyboxDataHelper(ContextManager.getContext())
+                    .getReadableDatabase();
 
-			c = db.query("movements", null, null, null, null, null,
-					"insert_date ASC");
+            c = db.query("movements", null, "id_moneybox = ?",
+                    new String[] { Integer.toString(m.getIdMoneybox()) }, null, null,
+                    "insert_date ASC");
 
-			return createMovementList(c);
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
+            return createMovementList(c);
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
-	public static void deleteAllMovements() {
-		SQLiteDatabase db = null;
+    /**
+     * Delete all the movements of the specified moneybox.
+     * 
+     * @param m
+     *            Moneybox where the movements will be deleted
+     */
+    public static void deleteAllMovements(Moneybox m) {
+        SQLiteDatabase db = null;
 
-		try {
-			db = new MoneyboxDataHelper(ContextManager.getContext())
-					.getWritableDatabase();
+        try {
+            db = new MoneyboxDataHelper(ContextManager.getContext())
+                    .getWritableDatabase();
 
-			db.delete("movements", "", null);
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
+            db.delete("movements", "id_moneybox = ?",
+                    new String[] { Integer.toString(m.getIdMoneybox()) });
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
-	public static ArrayList<Movement> getActiveMovements() {
-		Movement lastBreak;
-		Cursor c;
-		Context ctx;
-		SQLiteDatabase db = null;
+    /**
+     * Returns the active movements of the specified moneybox.
+     * 
+     * An active movement is a movement that doesn't be getted.
+     * 
+     * @param m
+     *            Moneybox to obtain the movements
+     * @return A list of Movement objects
+     */
+    public static ArrayList<Movement> getActiveMovements(Moneybox m) {
+        Movement lastBreak;
+        Cursor c;
+        Context ctx;
+        SQLiteDatabase db = null;
 
-		try {
-			ctx = ContextManager.getContext();
-			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
+        try {
+            ctx = ContextManager.getContext();
+            db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
-			lastBreak = getLastBreakMoneybox();
-			if (lastBreak != null) {
-				c = db.rawQuery(ctx
-						.getString(R.string.SQL_active_movements_by_date),
-						new String[] { Long.toString(lastBreak
-								.getInsertDateDB()) });
+            lastBreak = getLastBreakMoneybox(m);
+            if (lastBreak != null) {
+                c = db.rawQuery(
+                        ctx.getString(R.string.SQL_active_movements_by_date),
+                        new String[] {
+                                Long.toString(lastBreak.getInsertDateDB()),
+                                Integer.toString(m.getIdMoneybox()) });
 
-			} else {
-				c = db.rawQuery(ctx.getString(R.string.SQL_active_movements),
-						null);
-			}
+            } else {
+                c = db.rawQuery(ctx.getString(R.string.SQL_active_movements),
+                        new String[] { Integer.toString(m.getIdMoneybox()) });
+            }
 
-			return createMovementList(c);
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
+            return createMovementList(c);
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
-	/**
-	 * Return the last time when the moneybox was broken or null if the moneybox
-	 * is never broken.
-	 * 
-	 * @return The last movement when the moneybox was broken.
-	 */
-	public static Movement getLastBreakMoneybox() {
-		Cursor c;
-		SQLiteDatabase db = null;
-		Context ctx;
+    /**
+     * Return the last time when the moneybox was broken or null if the moneybox
+     * is never broken.
+     * 
+     * @param m
+     *            Moneybox to obtain the movement
+     * @return The last movement when the moneybox was broken.
+     */
+    public static Movement getLastBreakMoneybox(Moneybox m) {
+        Cursor c;
+        SQLiteDatabase db = null;
+        Context ctx;
 
-		try {
-			ctx = ContextManager.getContext();
-			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
+        try {
+            ctx = ContextManager.getContext();
+            db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
-			c = db.rawQuery(ctx.getString(R.string.SQL_last_break_movement),
-					null);
+            c = db.rawQuery(ctx.getString(R.string.SQL_last_break_movement),
+                    new String[] { Integer.toString(m.getIdMoneybox()) });
 
-			if (c.moveToFirst()) {
-				return createMovement(c);
-			} else {
-				return null;
-			}
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
+            if (c.moveToFirst()) {
+                return createMovement(c);
+            } else {
+                return null;
+            }
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
-	/**
-	 * Returns the next break moneybox movement from a date
-	 * 
-	 * @param reference
-	 *            Date from search a break moneybox movement.
-	 * @return The next break movement from the specified date
-	 */
-	public static Movement getNextBreakMoneybox(Movement reference) {
-		Cursor c;
-		SQLiteDatabase db = null;
-		Context ctx;
+    /**
+     * Returns the next break moneybox movement from a date
+     * 
+     * @param reference
+     *            Date from search a break moneybox movement.
+     * @return The next break movement from the specified date
+     */
+    public static Movement getNextBreakMoneybox(Movement reference) {
+        Cursor c;
+        SQLiteDatabase db = null;
+        Context ctx;
 
-		try {
-			ctx = ContextManager.getContext();
-			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
+        try {
+            ctx = ContextManager.getContext();
+            db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
-			c = db.rawQuery(ctx.getString(R.string.SQL_next_break_movement),
-					new String[] { Long.toString(reference.getInsertDateDB()) });
+            c = db.rawQuery(ctx.getString(R.string.SQL_next_break_movement),
+                    new String[] { Long.toString(reference.getInsertDateDB()),
+                            Integer.toString(reference.getIdMoneybox()) });
 
-			if (c.moveToFirst()) {
-				return createMovement(c);
-			} else {
-				return null;
-			}
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
-	
-	/**
-	 * Returns the previous break moneybox movement from a date
-	 * 
-	 * @param reference
-	 *            Date from search a break moneybox movement.
-	 * @return The previous break movement from the specified date
-	 */
-	public static Movement getPrevBreakMoneybox(Movement reference) {
-		Cursor c;
-		SQLiteDatabase db = null;
-		Context ctx;
+            if (c.moveToFirst()) {
+                return createMovement(c);
+            } else {
+                return null;
+            }
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
-		try {
-			ctx = ContextManager.getContext();
-			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
+    /**
+     * Returns the previous break moneybox movement from a date
+     * 
+     * @param reference
+     *            Date from search a break moneybox movement.
+     * @return The previous break movement from the specified date
+     */
+    public static Movement getPrevBreakMoneybox(Movement reference) {
+        Cursor c;
+        SQLiteDatabase db = null;
+        Context ctx;
 
-			c = db.rawQuery(ctx.getString(R.string.SQL_prev_break_movement),
-					new String[] { Long.toString(reference.getInsertDateDB()) });
+        try {
+            ctx = ContextManager.getContext();
+            db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
-			if (c.moveToFirst()) {
-				return createMovement(c);
-			} else {
-				return null;
-			}
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
-	
-	private static ArrayList<Movement> createMovementList(Cursor c) {
-		ArrayList<Movement> result;
+            c = db.rawQuery(ctx.getString(R.string.SQL_prev_break_movement),
+                    new String[] { Long.toString(reference.getInsertDateDB()),
+                            Integer.toString(reference.getIdMoneybox()) });
 
-		result = new ArrayList<Movement>();
+            if (c.moveToFirst()) {
+                return createMovement(c);
+            } else {
+                return null;
+            }
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
-		if (c != null) {
-			if (c.moveToFirst()) {
-				do {
-					result.add(createMovement(c));
-				} while (c.moveToNext());
-			}
-		}
+    /**
+     * Read the data from the database (Cursor) and creates a list of movements
+     * 
+     * @param c
+     *            Cursor with the database data
+     * @return New list of object of Movement class.
+     */
+    private static ArrayList<Movement> createMovementList(Cursor c) {
+        ArrayList<Movement> result;
 
-		return result;
-	}
+        result = new ArrayList<Movement>();
 
-	private static Movement createMovement(Cursor c) {
-		Movement result;
+        if (c != null) {
+            if (c.moveToFirst()) {
+                do {
+                    result.add(createMovement(c));
+                } while (c.moveToNext());
+            }
+        }
 
-		result = new Movement();
-		result.setIdMovement(c.getInt(c.getColumnIndex("id_movement")));
-		result.setBreakMoneyboxAsInt(c.getInt(c.getColumnIndex("break_moneybox")));
-		result.setDescription(c.getString(c.getColumnIndex("description")));
-		result.setInsertDate(new Date(
-				c.getLong(c.getColumnIndex("insert_date"))));
-		if (!c.isNull(c.getColumnIndex("get_date"))) {
-			result.setGetDate(new Date(c.getLong(c.getColumnIndex("get_date"))));
-		} else {
-			result.setGetDate(null);
-		}
+        return result;
+    }
 
-		if (result.isBreakMoneybox()) {
-			result.setAmount(MovementsManager.getBreakMoneyboxAmount(result));
-		}
-		else {
-			result.setAmount(c.getDouble(c.getColumnIndex("amount")));
-		}
+    /**
+     * Creates a new Movement object from the database data (Cursor)
+     * 
+     * @param c
+     *            Cursor with the database data of the Movement
+     * @return New Movement object with the data of the Cursor.
+     */
+    private static Movement createMovement(Cursor c) {
+        Movement result;
 
-		return result;
-	}
+        result = new Movement();
+        result.setIdMovement(c.getInt(c.getColumnIndex("id_movement")));
+        result.setIdMoneybox(c.getInt(c.getColumnIndex("id_moneybox")));
+        result.setBreakMoneyboxAsInt(c.getInt(c
+                .getColumnIndex("break_moneybox")));
+        result.setDescription(c.getString(c.getColumnIndex("description")));
+        result.setInsertDate(new Date(
+                c.getLong(c.getColumnIndex("insert_date"))));
+        if (!c.isNull(c.getColumnIndex("get_date"))) {
+            result.setGetDate(new Date(c.getLong(c.getColumnIndex("get_date"))));
+        } else {
+            result.setGetDate(null);
+        }
 
-	/**
-	 * Add a moneybox movement to the database
-	 * 
-	 * @param m
-	 *            Movement to be added
-	 */
-	public static void insertMovement(Movement m) {
-		SQLiteDatabase db = null;
+        if (result.isBreakMoneybox()) {
+            result.setAmount(MovementsManager.getBreakMoneyboxAmount(result));
+        } else {
+            result.setAmount(c.getDouble(c.getColumnIndex("amount")));
+        }
 
-		try {
-			db = new MoneyboxDataHelper(ContextManager.getContext())
-					.getWritableDatabase();
+        return result;
+    }
 
-			ContentValues values;
+    /**
+     * Add a moneybox movement to the database
+     * 
+     * @param m
+     *            Movement to be added
+     */
+    public static void insertMovement(Movement m) {
+        SQLiteDatabase db = null;
 
-			values = new ContentValues();
-			values.put("amount", m.getAmount());
-			values.put("description", m.getDescription());
-			values.put("insert_date", m.getInsertDateDB());
-			values.put("get_date", m.getGetDateDB());
-			values.put("break_moneybox", m.isBreakMoneyboxAsInt());
+        try {
+            db = new MoneyboxDataHelper(ContextManager.getContext())
+                    .getWritableDatabase();
 
-			db.insert("movements", null, values);
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
+            ContentValues values;
 
-	/**
-	 * Add a moneybox movement to the database
-	 * 
-	 * @param amount
-	 *            Amount of money to add
-	 */
-	public static void insertMovement(double amount) {
-		insertMovement(amount, null, false);
-	}
+            values = new ContentValues();
+            values.put("id_moneybox", m.getIdMoneybox());
+            values.put("amount", m.getAmount());
+            values.put("description", m.getDescription());
+            values.put("insert_date", m.getInsertDateDB());
+            values.put("get_date", m.getGetDateDB());
+            values.put("break_moneybox", m.isBreakMoneyboxAsInt());
 
-	/**
-	 * Add a moneybox movement to the database
-	 * 
-	 * @param amount
-	 *            Amount of money to add
-	 * @param description
-	 *            Description of the movement
-	 * @param isBreakMoneybox
-	 *            The movemento breaks the moneybox or not
-	 */
-	public static void insertMovement(double amount, String description,
-			boolean isBreakMoneybox) {
-		Movement m;
+            db.insert("movements", null, values);
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
-		m = new Movement();
-		m.setAmount(amount);
-		m.setInsertDate(new Date());
-		m.setGetDate(null);
-		m.setBreakMoneybox(isBreakMoneybox);
-		if (description != null) {
-			m.setDescription(description);
-		}
+    /**
+     * Add a moneybox movement to the database
+     * 
+     * @param idMoneybox
+     *            ID of the moneybox in which the movement will be inserted
+     * @param amount
+     *            Amount of money to add
+     */
+    public static void insertMovement(int idMoneybox, double amount) {
+        insertMovement(idMoneybox, amount, null, false);
+    }
 
-		MovementsManager.insertMovement(m);
-	}
+    /**
+     * Add a moneybox movement to the database
+     * 
+     * @param idMoneybox
+     *            ID of the moneybox in which the movement will be inserted
+     * @param amount
+     *            Amount of money to add
+     * @param description
+     *            Description of the movement
+     * @param isBreakMoneybox
+     *            The movement breaks the moneybox or not
+     */
+    public static void insertMovement(int idMoneybox, double amount,
+            String description, boolean isBreakMoneybox) {
+        Movement m;
 
-	/**
-	 * Saves the values of a movement in the database
-	 * 
-	 * @param m
-	 *            Movement to be saved
-	 */
-	public static void updateMovement(Movement m) {
-		SQLiteDatabase db = null;
+        m = new Movement();
+        m.setIdMoneybox(idMoneybox);
+        m.setAmount(amount);
+        m.setInsertDate(new Date());
+        m.setGetDate(null);
+        m.setBreakMoneybox(isBreakMoneybox);
+        if (description != null) {
+            m.setDescription(description);
+        }
 
-		try {
-			db = new MoneyboxDataHelper(ContextManager.getContext())
-					.getWritableDatabase();
+        MovementsManager.insertMovement(m);
+    }
 
-			ContentValues values;
+    /**
+     * Saves the values of a movement in the database
+     * 
+     * @param m
+     *            Movement to be saved
+     */
+    public static void updateMovement(Movement m) {
+        SQLiteDatabase db = null;
 
-			values = new ContentValues();
-			values.put("amount", m.getAmount());
-			values.put("description", m.getDescription());
-			values.put("insert_date", m.getInsertDateDB());
-			values.put("get_date", m.getGetDateDB());
-			values.put("break_moneybox", m.isBreakMoneyboxAsInt());
+        try {
+            db = new MoneyboxDataHelper(ContextManager.getContext())
+                    .getWritableDatabase();
 
-			db.update("movements", values, "id_movement = ?",
-					new String[] { Integer.toString(m.getIdMovement()) });
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
+            ContentValues values;
 
-	/**
-	 * Delete a movement from the database
-	 * 
-	 * @param m
-	 *            Movement to be deleted
-	 */
-	public static void deleteMovement(Movement m) {
-		SQLiteDatabase db = null;
+            values = new ContentValues();
+            values.put("id_moneybox", m.getIdMoneybox());
+            values.put("amount", m.getAmount());
+            values.put("description", m.getDescription());
+            values.put("insert_date", m.getInsertDateDB());
+            values.put("get_date", m.getGetDateDB());
+            values.put("break_moneybox", m.isBreakMoneyboxAsInt());
 
-		try {
-			db = new MoneyboxDataHelper(ContextManager.getContext())
-					.getWritableDatabase();
+            db.update("movements", values, "id_movement = ?",
+                    new String[] { Integer.toString(m.getIdMovement()) });
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
-			db.delete("movements", "id_movement = ?",
-					new String[] { Integer.toString(m.getIdMovement()) });
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
+    /**
+     * Delete a movement from the database
+     * 
+     * @param m
+     *            Movement to be deleted
+     */
+    public static void deleteMovement(Movement m) {
+        SQLiteDatabase db = null;
 
-	/**
-	 * Gets a movement from the moneybox. Initialize the get date field with the
-	 * current date and saves the movement to the database.
-	 * 
-	 * @param m
-	 *            Movement to be modified
-	 */
-	public static void getMovement(Movement m) {
-		m.setGetDate(new Date());
-		MovementsManager.updateMovement(m);
-	}
+        try {
+            db = new MoneyboxDataHelper(ContextManager.getContext())
+                    .getWritableDatabase();
 
-	public static double getTotalAmount() {
-		SQLiteDatabase db = null;
-		Cursor c;
-		Context ctx;
-		Movement lastBreak;
+            db.delete("movements", "id_movement = ?",
+                    new String[] { Integer.toString(m.getIdMovement()) });
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
-		try {
-			ctx = ContextManager.getContext();
-			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
+    /**
+     * Gets a movement from the moneybox. Initialize the get date field with the
+     * current date and saves the movement to the database.
+     * 
+     * @param m
+     *            Movement to be modified
+     */
+    public static void getMovement(Movement m) {
+        m.setGetDate(new Date());
+        MovementsManager.updateMovement(m);
+    }
 
-			lastBreak = MovementsManager.getLastBreakMoneybox();
-			if (lastBreak == null) {
-				c = db.rawQuery(ctx.getString(R.string.SQL_sum_amount),
-						null);
-			} else {
-				c = db.rawQuery(ctx.getString(R.string.SQL_sum_amount_after),
-						new String [] { Long.toString(lastBreak.getInsertDate().getTime()) });
-			}
+    /**
+     * Returns the total amount in the specified moneybox
+     * 
+     * @param m
+     *            Moneybox to get the amount
+     * @return The sum of the active movements alfter the last moneybox break
+     */
+    public static double getTotalAmount(Moneybox m) {
+        SQLiteDatabase db = null;
+        Cursor c;
+        Context ctx;
+        Movement lastBreak;
 
-			c.moveToFirst();
+        try {
+            ctx = ContextManager.getContext();
+            db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
-			return c.getDouble(0);
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
-	
-	public static double getTotalAmountByDates(Date begin, Date end) {
-		SQLiteDatabase db = null;
-		Cursor c;
-		Context ctx;
+            lastBreak = MovementsManager.getLastBreakMoneybox(m);
+            if (lastBreak == null) {
+                c = db.rawQuery(ctx.getString(R.string.SQL_sum_amount),
+                        new String[] { Integer.toString(m.getIdMoneybox()) });
+            } else {
+                c = db.rawQuery(
+                        ctx.getString(R.string.SQL_sum_amount_after),
+                        new String[] {
+                                Long.toString(lastBreak.getInsertDate()
+                                        .getTime()),
+                                Integer.toString(m.getIdMoneybox()) });
+            }
 
-		try {
-			ctx = ContextManager.getContext();
-			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
+            c.moveToFirst();
 
-			c = db.rawQuery(ctx.getString(R.string.SQL_sum_amount_by_dates),
-					new String[] { Long.toString(begin.getTime()), 
-								   Long.toString(end.getTime())});
-			
-			c.moveToFirst();
+            return c.getDouble(0);
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
-			return c.getDouble(0);
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
-	
-	public static double getTotalAmountBefore(Date reference) {
-		SQLiteDatabase db = null;
-		Cursor c;
-		Context ctx;
+    /**
+     * Returns the total amount of a moneybox between two dates
+     * 
+     * @param m
+     *            Moneybox to get the amount
+     * @param begin
+     *            Begin date of the query
+     * @param end
+     *            End date of the query
+     * @return The amount of the active movements of the moneybox
+     */
+    public static double getTotalAmountByDates(Moneybox m, Date begin,
+            Date end) {
+        SQLiteDatabase db = null;
+        Cursor c;
+        Context ctx;
 
-		try {
-			ctx = ContextManager.getContext();
-			db = new MoneyboxDataHelper(ctx).getReadableDatabase();
+        try {
+            ctx = ContextManager.getContext();
+            db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
-			c = db.rawQuery(ctx.getString(R.string.SQL_sum_amount_before),
-					new String[] { Long.toString(reference.getTime())});
-			
-			c.moveToFirst();
+            c = db.rawQuery(
+                    ctx.getString(R.string.SQL_sum_amount_by_dates),
+                    new String[] { Long.toString(begin.getTime()),
+                            Long.toString(end.getTime()),
+                            Integer.toString(m.getIdMoneybox()) });
 
-			return c.getDouble(0);
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}	
-	
-	/**
-	 * Returns negative value of the amount between the date of the movement
-	 * received and the previous break moneybox movement or the initial state
-	 * of the moneybox.
-	 * 
-	 * @param m
-	 * @return
-	 */
-	public static double getBreakMoneyboxAmount (Movement m) {
-		Movement prev;
-		
-		prev = getPrevBreakMoneybox(m);
-		if (prev != null) {
-			return -getTotalAmountByDates (prev.getInsertDate(), m.getInsertDate());
-		}
-		else {  
-			return -getTotalAmountBefore(m.getInsertDate());
-		}
-	}
+            c.moveToFirst();
 
-	public static void breakMoneybox() {
-		MovementsManager.insertMovement(-1,
-				ContextManager.getContext().getString(R.string.break_moneybox),
-				true);
-	}
+            return c.getDouble(0);
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
-	/**
-	 * Returns true if the money can be taken from the moneybox. If the insert
-	 * date of the movement is after the last break movement, then the money can
-	 * be taken.
-	 * 
-	 * @param m
-	 *            Movement to test
-	 * @return true if the money can be taken from the moneybox, false
-	 *         otherwise.
-	 */
-	public static boolean canGetMovement(Movement m) {
-		Movement last;
+    /**
+     * Returns the total amount of a moneybox before a specified date
+     * 
+     * @param m
+     *            Moneybox to obtain the data
+     * @param reference
+     *            Date to obtain the query
+     * @return The amount of the active movements before the specified date of
+     *         the selected moneybox
+     */
+    public static double getTotalAmountBefore(Moneybox m, Date reference) {
+        SQLiteDatabase db = null;
+        Cursor c;
+        Context ctx;
 
-		last = MovementsManager.getLastBreakMoneybox();
+        try {
+            ctx = ContextManager.getContext();
+            db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
-		return (last == null || last.getInsertDate().before(m.getInsertDate()));
-	}
+            c = db.rawQuery(
+                    ctx.getString(R.string.SQL_sum_amount_before),
+                    new String[] { Long.toString(reference.getTime()),
+                            Integer.toString(m.getIdMoneybox()) });
+
+            c.moveToFirst();
+
+            return c.getDouble(0);
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    /**
+     * Returns negative value of the amount between the date of the movement
+     * received and the previous break moneybox movement or the initial state of
+     * the moneybox.
+     * 
+     * @param m
+     *            Movement with the date to filter the result date
+     * @return Amount until the specified movement
+     */
+    public static double getBreakMoneyboxAmount(Movement m) {
+        Movement prev;
+
+        prev = getPrevBreakMoneybox(m);
+        if (prev != null) {
+            return -getTotalAmountByDates(m.getIdMoneybox(),
+                    prev.getInsertDate(), m.getInsertDate());
+        } else {
+            return -getTotalAmountBefore(m.getIdMoneybox(), m.getInsertDate());
+        }
+    }
+
+    /**
+     * Breaks the specified moneybox putting its amount to 0
+     * 
+     * @param idMoneybox
+     *            ID of the moneybox to be broken
+     */
+    public static void breakMoneybox(int idMoneybox) {
+        MovementsManager.insertMovement(idMoneybox, -1, ContextManager
+                .getContext().getString(R.string.break_moneybox), true);
+    }
+
+    /**
+     * Returns true if the money can be taken from the moneybox. If the insert
+     * date of the movement is after the last break movement, then the money can
+     * be taken.
+     * 
+     * @param m
+     *            Movement to test
+     * @return true if the money can be taken from the moneybox, false
+     *         otherwise.
+     */
+    public static boolean canGetMovement(Movement m) {
+        Movement last;
+
+        last = MovementsManager.getLastBreakMoneybox(m.getIdMoneybox());
+
+        return (last == null || last.getInsertDate().before(m.getInsertDate()));
+    }
 }

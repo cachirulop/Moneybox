@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.cachirulop.moneybox.common.Util;
+import com.cachirulop.moneybox.manager.MoneyboxesManager;
 
 
 public class Movement implements Serializable {
@@ -21,11 +22,14 @@ public class Movement implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int _idMovement;
+    private int _idMoneybox;
     private double _amount;
     private Date _insertDate;
     private Date _getDate;
     private String _description;
     private boolean _breakMoneybox;
+    
+    private Moneybox _moneybox = null;
 
     public int getIdMovement() {
         return _idMovement;
@@ -33,6 +37,14 @@ public class Movement implements Serializable {
 
     public void setIdMovement(int idMovement) {
         this._idMovement = idMovement;
+    }
+    
+    public int getIdMoneybox() {
+        return _idMoneybox;
+    }
+    
+    public void setIdMoneybox(int idMoneybox) {
+        this._idMoneybox = idMoneybox;
     }
 
     public double getAmount() {
@@ -107,4 +119,15 @@ public class Movement implements Serializable {
         this._breakMoneybox = (breakMoneybox != 0);
     }
 
+    public Moneybox getMoneybox() {
+        if (_moneybox == null) {
+            _moneybox = MoneyboxesManager.getMoneybox(this.getIdMoneybox());
+        }
+        
+        return _moneybox;
+    }
+    
+    public void setMoneybox(Moneybox m) {
+        _moneybox = m;
+    }
 }
