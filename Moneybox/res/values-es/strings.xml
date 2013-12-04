@@ -36,7 +36,7 @@
     <string name="drawer_open">Abrir el menú lateral</string>
     <string name="drawer_close">Cerrar el menú lateral</string>
     
-	<string name="moneybox_select_moneybox">Seleccionar la hucha activa</string>
+	<string name="moneybox_select_moneybox">Seleccionar hucha</string>
     <string name="moneybox_add_moneybox">Crear una hucha nueva</string>
     <string name="moneybox_del_moneybox">Borrar la hucha seleccionada</string>
         

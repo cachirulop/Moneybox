@@ -92,10 +92,16 @@ public class MoneyboxesManager {
 		try {
 			db = new MoneyboxDataHelper(ContextManager.getContext())
 					.getReadableDatabase();
-			
-			c = db.query("moneyboxes", null, "id_moneybox", new String [] { Integer.toString(idMoneybox)}, null, null, null);
-			
-			return createMoneybox(c);
+
+			c = db.query("moneyboxes", null, "id_moneybox = ?",
+					new String[] { Integer.toString(idMoneybox) }, null, null,
+					null);
+
+			if (c != null && c.moveToFirst()) {
+				return createMoneybox(c);
+			} else {
+				return null;
+			}
 		} finally {
 			if (db != null) {
 				db.close();

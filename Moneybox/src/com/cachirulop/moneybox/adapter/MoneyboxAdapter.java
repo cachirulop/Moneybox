@@ -68,7 +68,7 @@ public class MoneyboxAdapter extends BaseAdapter {
 	/**
 	 * Returns the item of the specified position.
 	 */
-	public Object getItem(int position) {
+	public Moneybox getItem(int position) {
 		if (_lstMoneyboxes == null) {
 			refreshMoneyboxes();
 		}
@@ -88,6 +88,34 @@ public class MoneyboxAdapter extends BaseAdapter {
 		return _lstMoneyboxes.get(position).getIdMoneybox();
 	}
 	
+	public Moneybox getCurrentItem() {
+		return getItem(_currentPosition);
+	}
+	
+	public void setCurrentId(int id) {
+		if (_lstMoneyboxes == null) {
+			refreshMoneyboxes();
+		}
+		
+		int i;
+		boolean find;
+		
+		find = false;
+		i = 0;
+		while (i < _lstMoneyboxes.size() && !find){
+			Moneybox m;
+			
+			m = _lstMoneyboxes.get(i);
+			if (m.getIdMoneybox() == id) {
+				_currentPosition = i;
+				
+				find = true;
+			}
+			
+			i++;
+		}
+	}
+		
 	/**
 	 * Update the list of moneyboxes reading from the database with the method
 	 * {@link MoneyboxesManager#getAllMoneyboxes}

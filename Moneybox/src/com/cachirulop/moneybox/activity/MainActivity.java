@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.adapter.MoneyboxAdapter;
+import com.cachirulop.moneybox.common.Preferences;
 import com.cachirulop.moneybox.common.PromptDialog;
 import com.cachirulop.moneybox.data.MoneyboxDataHelper;
 import com.cachirulop.moneybox.entity.Moneybox;
@@ -102,8 +103,8 @@ public class MainActivity extends FragmentActivity implements
             }
         });
         
-        // TODO: Get the selected moneybox from configuration
-        _currentMoneybox = (Moneybox) adapter.getItem(0);
+        adapter.setCurrentId(Preferences.getLastMoneyboxId(this));
+        _currentMoneybox = adapter.getCurrentItem();
 
         drawerList = (ListView) findViewById(R.id.lvMoneyboxes);
         drawerList.setAdapter(adapter);
@@ -116,13 +117,13 @@ public class MainActivity extends FragmentActivity implements
 
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
-                getActionBar().setTitle(getString(R.string.moneybox_select_moneybox));
+                getActionBar().setTitle(_currentMoneybox.getDescription());
                 invalidateOptionsMenu();
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(_currentMoneybox.getDescription());
+                getActionBar().setTitle(getString(R.string.moneybox_select_moneybox));
                 invalidateOptionsMenu();
             }
         };
@@ -385,6 +386,8 @@ public class MainActivity extends FragmentActivity implements
     public void selectMoneybox(Moneybox m) {
         _currentMoneybox = m;
         _drawerLayout.closeDrawer(Gravity.START);
+        
+        Preferences.setLastMoneyboxId(this, m.getIdMoneybox());
         
         refresh();
     }
