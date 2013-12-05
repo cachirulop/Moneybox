@@ -26,15 +26,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
-        <activity
-            android:name="com.cachirulop.moneybox.activity.MainTabWidget"
-            android:label="@string/app_name" >
-        </activity>
-        <activity android:name="com.cachirulop.moneybox.activity.MoneyboxActivity" >
-        </activity>
-        <activity android:name="com.cachirulop.moneybox.activity.MovementsActivity" >
-        </activity>
-        <activity android:name="com.cachirulop.moneybox.activity.MovementDetailActivity" >
+        <activity android:name="com.cachirulop.moneybox.activity.MovementDetailActivity">
         </activity>
         <activity
             android:name="com.cachirulop.moneybox.activity.MainActivity"

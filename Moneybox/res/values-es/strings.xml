@@ -39,7 +39,9 @@
 	<string name="moneybox_select_moneybox">Seleccionar hucha</string>
     <string name="moneybox_add_moneybox">Crear una hucha nueva</string>
     <string name="moneybox_del_moneybox">Borrar la hucha seleccionada</string>
-        
+    
+    <string name="empty_text_not_allowed">El texto no puede estar vacío</string>
+    
     <string name="moneybox_new_moneybox">Nueva hucha</string>
     <string name="moneybox_new_moneybox_description">Indique el nombre de la nueva hucha</string>
     
