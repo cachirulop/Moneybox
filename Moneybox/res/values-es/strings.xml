@@ -46,6 +46,8 @@
     <string name="moneybox_new_moneybox_description">Indique el nombre de la nueva hucha</string>
     <string name="moneybox_edit_moneybox">Cambiar nombre</string>
     <string name="moneybox_edit_moneybox_description">Indique el nuevo nombre de la hucha</string>
+    <string name="moneybox_delete">Borrar hucha</string>
+    <string name="moneybox_delete_confirm">¿Seguro que quieres borrar la hucha seleccionada?</string>
     
     <!-- Import/export messages -->
     <string name="error_cant_read_file">No se puede leer el fichero, no existe</string>

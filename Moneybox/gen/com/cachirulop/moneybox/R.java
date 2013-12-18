@@ -201,8 +201,8 @@ public final class R {
         /**  Import/export messages 
  Import/export messages 
          */
-        public static final int error_cant_read_file=0x7f08002b;
-        public static final int error_cant_write_file=0x7f08002c;
+        public static final int error_cant_read_file=0x7f08002d;
+        public static final int error_cant_write_file=0x7f08002e;
         public static final int error_date_incorrect_after_get=0x7f080020;
         public static final int error_date_incorrect_before_insert=0x7f080021;
         public static final int error_date_incorrect_future=0x7f08001f;
@@ -210,35 +210,37 @@ public final class R {
         public static final int get_date=0x7f080017;
         public static final int get_from_moneybox=0x7f08001d;
         public static final int insert_date=0x7f080016;
-        public static final int menu_add_moneybox=0x7f080036;
+        public static final int menu_add_moneybox=0x7f080038;
         /**  Menu 
          */
-        public static final int menu_break_moneybox=0x7f080039;
-        public static final int menu_del_moneybox=0x7f080037;
+        public static final int menu_break_moneybox=0x7f08003b;
+        public static final int menu_del_moneybox=0x7f080039;
         /**  Menu 
          */
-        public static final int menu_delete_all=0x7f080033;
-        public static final int menu_edit_moneybox=0x7f080038;
-        public static final int menu_export_database=0x7f080034;
-        public static final int menu_import_database=0x7f080035;
+        public static final int menu_delete_all=0x7f080035;
+        public static final int menu_edit_moneybox=0x7f08003a;
+        public static final int menu_export_database=0x7f080036;
+        public static final int menu_import_database=0x7f080037;
         public static final int money_bill=0x7f080002;
         public static final int money_coin=0x7f080003;
+        public static final int moneybox_delete=0x7f08002b;
+        public static final int moneybox_delete_confirm=0x7f08002c;
         public static final int moneybox_edit_moneybox=0x7f080029;
         public static final int moneybox_edit_moneybox_description=0x7f08002a;
         public static final int moneybox_new_moneybox=0x7f080027;
         public static final int moneybox_new_moneybox_description=0x7f080028;
         public static final int moneybox_select_moneybox=0x7f080025;
-        public static final int msg_database_exported=0x7f08002e;
-        public static final int msg_database_exporting=0x7f08002d;
-        public static final int msg_database_imported=0x7f080030;
-        public static final int msg_database_importing=0x7f08002f;
+        public static final int msg_database_exported=0x7f080030;
+        public static final int msg_database_exporting=0x7f08002f;
+        public static final int msg_database_imported=0x7f080032;
+        public static final int msg_database_importing=0x7f080031;
         public static final int msg_last_moneybox=0x7f080022;
         public static final int save=0x7f08001b;
         /**  tabs 
  tabs 
          */
-        public static final int tab_title_moneybox=0x7f080031;
-        public static final int tab_title_movements=0x7f080032;
+        public static final int tab_title_moneybox=0x7f080033;
+        public static final int tab_title_movements=0x7f080034;
         public static final int time=0x7f080015;
         public static final int txtTotalTitle=0x7f080010;
     }

@@ -15,8 +15,8 @@
     <string name="app_name">Moneybox</string>
     <string name="txtTotalTitle">Total:</string>
     <string name="break_moneybox">Piggy bank is empty!</string>
-    <string name="break_moneybox_confirm">Are you sure to break the moneybox?</string>
-    <string name="delete_all_confirm">Are you sure to delete all movements?</string>
+    <string name="break_moneybox_confirm">Break the moneybox, are you sure?</string>
+    <string name="delete_all_confirm">Delete all movements, are you sure?</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="insert_date">Insert date</string>
@@ -45,6 +45,8 @@
     <string name="moneybox_new_moneybox_description">Insert the name of the new moneybox</string>
     <string name="moneybox_edit_moneybox">Change moneybox name</string>
     <string name="moneybox_edit_moneybox_description">Change the name of the moneybox</string>
+    <string name="moneybox_delete">Delete moneybox</string>
+    <string name="moneybox_delete_confirm">Delete the current moneybox, are you sure?</string>
     
     <!-- Import/export messages -->
     <string name="error_cant_read_file">Can\'t read file</string>

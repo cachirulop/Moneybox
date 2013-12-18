@@ -13,6 +13,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.cachirulop.moneybox.R;
+import com.cachirulop.moneybox.activity.IMoneyboxListener;
 import com.cachirulop.moneybox.common.Preferences;
 import com.cachirulop.moneybox.entity.Moneybox;
 import com.cachirulop.moneybox.manager.ContextManager;
@@ -43,6 +44,8 @@ public class MoneyboxAdapter extends BaseAdapter implements SpinnerAdapter {
 
     /** Listener for the row clicked event */
     private OnRowClickListener _rowClickListener = null;
+    
+    private IMoneyboxListener _moneyboxListener;
 
     /**
      * Constructor that receives the context (parent) of the adapter. Creates
@@ -53,6 +56,7 @@ public class MoneyboxAdapter extends BaseAdapter implements SpinnerAdapter {
      */
     public MoneyboxAdapter(Context context) {
         _inflater = LayoutInflater.from(context);
+        _moneyboxListener = (IMoneyboxListener) context;
 
         _currentPosition = 0;
     }
@@ -141,6 +145,7 @@ public class MoneyboxAdapter extends BaseAdapter implements SpinnerAdapter {
         Preferences.setLastMoneyboxId(ContextManager.getContext(),
                 m.getIdMoneybox());
 
+        _moneyboxListener.onUpdateMoneyboxesList();
         notifyDataSetChanged();
     }
     
@@ -153,7 +158,10 @@ public class MoneyboxAdapter extends BaseAdapter implements SpinnerAdapter {
         MoneyboxesManager.updateMoneybox(m);
         
         refreshMoneyboxes(false);
+        
+        setCurrentMoneybox(m);
 
+        _moneyboxListener.onUpdateMoneyboxesList();
         notifyDataSetChanged();        
     }
     
@@ -179,6 +187,7 @@ public class MoneyboxAdapter extends BaseAdapter implements SpinnerAdapter {
         refreshMoneyboxes(false);
         setCurrentMoneybox(_lstMoneyboxes.get(0));
 
+        _moneyboxListener.onUpdateMoneyboxesList();
         notifyDataSetChanged();
     }
 
