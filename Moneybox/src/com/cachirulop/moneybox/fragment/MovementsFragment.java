@@ -212,12 +212,11 @@ public class MovementsFragment extends Fragment {
 	
 	/**
 	 * Don't close the application, select the default tab.
+	 * 
+	 * It doesn't work!!
 	 */
-	// @Override
 	public void onBackPressed() {
+	    // TODO: It doesn't work
 		((IMoneyboxListener) getActivity()).onSelectDefaultTab();
 	}
-
-
-	
 }

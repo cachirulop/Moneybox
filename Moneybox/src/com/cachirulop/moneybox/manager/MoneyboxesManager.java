@@ -9,197 +9,227 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.cachirulop.moneybox.data.MoneyboxDataHelper;
 import com.cachirulop.moneybox.entity.Moneybox;
+import com.cachirulop.moneybox.entity.Movement;
 
 public class MoneyboxesManager {
-	/**
-	 * Create a list with all the moneyboxes of the database
-	 * 
-	 * @return New ArrayList of Moneybox objects
-	 */
-	public static ArrayList<Moneybox> getAllMoneyboxes() {
-		Cursor c;
-		SQLiteDatabase db = null;
+    /**
+     * Create a list with all the moneyboxes of the database
+     * 
+     * @return New ArrayList of Moneybox objects
+     */
+    public static ArrayList<Moneybox> getAllMoneyboxes() {
+        Cursor c;
+        SQLiteDatabase db = null;
 
-		try {
-			db = new MoneyboxDataHelper(ContextManager.getContext())
-					.getReadableDatabase();
+        try {
+            db = new MoneyboxDataHelper(ContextManager.getContext())
+                    .getReadableDatabase();
 
-			c = db.query("moneyboxes", null, null, null, null, null,
-					"description ASC");
+            c = db.query("moneyboxes", null, null, null, null, null,
+                    "description COLLATE NOCASE ASC");
 
-			return createMoneyboxesList(c);
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
+            return createMoneyboxesList(c);
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
-	/**
-	 * Create a list of moneyboxes from a database cursor
-	 * 
-	 * @param c
-	 *            Cursor with the database data
-	 * @return New ArrayList with the moneyboxes of the cursor
-	 */
-	private static ArrayList<Moneybox> createMoneyboxesList(Cursor c) {
-		ArrayList<Moneybox> result;
+    /**
+     * Create a list of moneyboxes from a database cursor
+     * 
+     * @param c
+     *            Cursor with the database data
+     * @return New ArrayList with the moneyboxes of the cursor
+     */
+    private static ArrayList<Moneybox> createMoneyboxesList(Cursor c) {
+        ArrayList<Moneybox> result;
 
-		result = new ArrayList<Moneybox>();
+        result = new ArrayList<Moneybox>();
 
-		if (c != null) {
-			if (c.moveToFirst()) {
-				do {
-					result.add(createMoneybox(c));
-				} while (c.moveToNext());
-			}
-		}
+        if (c != null) {
+            if (c.moveToFirst()) {
+                do {
+                    result.add(createMoneybox(c));
+                } while (c.moveToNext());
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Create new moneybox object from a database cursor
-	 * 
-	 * @param c
-	 *            Cursor with the data of the moneybox
-	 * @return New object of {@link com.cachirulop.moneybox.entity.Moneybox}
-	 *         class with the data of the cursor
-	 */
-	private static Moneybox createMoneybox(Cursor c) {
-		Moneybox result;
+    /**
+     * Create new moneybox object from a database cursor
+     * 
+     * @param c
+     *            Cursor with the data of the moneybox
+     * @return New object of {@link com.cachirulop.moneybox.entity.Moneybox}
+     *         class with the data of the cursor
+     */
+    private static Moneybox createMoneybox(Cursor c) {
+        Moneybox result;
 
-		result = new Moneybox();
-		result.setIdMoneybox(c.getInt(c.getColumnIndex("id_moneybox")));
-		result.setDescription(c.getString(c.getColumnIndex("description")));
-		result.setCreationDate(new Date(c.getLong(c
-				.getColumnIndex("creation_date"))));
+        result = new Moneybox();
+        result.setIdMoneybox(c.getLong(c.getColumnIndex("id_moneybox")));
+        result.setDescription(c.getString(c.getColumnIndex("description")));
+        result.setCreationDate(new Date(c.getLong(c
+                .getColumnIndex("creation_date"))));
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Gets a moneybox from the database
-	 * 
-	 * @param idMoneybox
-	 *            ID of the Moneybox to be loaded
-	 * @return New Moneybox object with the data of the database
-	 */
-	public static Moneybox getMoneybox(int idMoneybox) {
-		SQLiteDatabase db = null;
-		Cursor c;
+    /**
+     * Gets a moneybox from the database
+     * 
+     * @param idMoneybox
+     *            ID of the Moneybox to be loaded
+     * @return New Moneybox object with the data of the database
+     */
+    public static Moneybox getMoneybox(long idMoneybox) {
+        SQLiteDatabase db = null;
+        Cursor c;
 
-		try {
-			db = new MoneyboxDataHelper(ContextManager.getContext())
-					.getReadableDatabase();
+        try {
+            db = new MoneyboxDataHelper(ContextManager.getContext())
+                    .getReadableDatabase();
 
-			c = db.query("moneyboxes", null, "id_moneybox = ?",
-					new String[] { Integer.toString(idMoneybox) }, null, null,
-					null);
+            c = db.query("moneyboxes", null, "id_moneybox = ?",
+                    new String[] { Long.toString(idMoneybox) }, null, null,
+                    null);
 
-			if (c != null && c.moveToFirst()) {
-				return createMoneybox(c);
-			} else {
-				return null;
-			}
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
+            if (c != null && c.moveToFirst()) {
+                return createMoneybox(c);
+            } else {
+                return null;
+            }
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
-	/**
-	 * Add a moneybox to the database
-	 * 
-	 * @param m
-	 *            Moneybox to be added
-	 */
-	public static void insertMoneybox(Moneybox m) {
-		SQLiteDatabase db = null;
+    /**
+     * Add a moneybox to the database
+     * 
+     * @param m
+     *            Moneybox to be added
+     * @return The new Moneybox inserted
+     */
+    public static Moneybox insertMoneybox(Moneybox m) {
+        SQLiteDatabase db = null;
 
-		try {
-			db = new MoneyboxDataHelper(ContextManager.getContext())
-					.getWritableDatabase();
+        try {
+            db = new MoneyboxDataHelper(ContextManager.getContext())
+                    .getWritableDatabase();
 
-			ContentValues values;
+            ContentValues values;
 
-			values = new ContentValues();
-			values.put("description", m.getDescription());
-			values.put("creation_date", m.getCreationDateDB());
+            values = new ContentValues();
+            values.put("description", m.getDescription());
+            values.put("creation_date", m.getCreationDateDB());
 
-			db.insert("moneyboxes", null, values);
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
+            db.insert("moneyboxes", null, values);
 
-	/**
-	 * Add a moneybox with specified description to the database. The creation
-	 * date is the current date.
-	 * 
-	 * @param description
-	 *            Description of the moneybox
-	 */
-	public static void insertMoneybox(String description) {
-		Moneybox m;
+            m.setIdMoneybox(getLastIdMoneybox());
 
-		m = new Moneybox();
-		m.setDescription(description);
-		m.setCreationDate(new Date());
+            return m;
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
-		insertMoneybox(m);
-	}
+    /**
+     * Gets the maximum identifier of the moneyboxes table
+     * 
+     * @return
+     */
+    private static long getLastIdMoneybox() {
+        return new MoneyboxDataHelper(ContextManager.getContext())
+                .getLastId("moneyboxes");
+    }
 
-	/**
-	 * Saves the values of a moneybox in the database
-	 * 
-	 * @param m
-	 *            Moneybox to be saved
-	 */
-	public static void updateMoneybox(Moneybox m) {
-		SQLiteDatabase db = null;
+    /**
+     * Add a moneybox with specified description to the database. The creation
+     * date is the current date.
+     * 
+     * @param description
+     *            Description of the moneybox
+     * @return The new Moneybox inserted
+     */
+    public static Moneybox insertMoneybox(String description) {
+        Moneybox m;
 
-		try {
-			db = new MoneyboxDataHelper(ContextManager.getContext())
-					.getWritableDatabase();
+        m = new Moneybox();
+        m.setDescription(description);
+        m.setCreationDate(new Date());
 
-			ContentValues values;
+        return insertMoneybox(m);
+    }
 
-			values = new ContentValues();
-			values.put("description", m.getDescription());
-			values.put("creation_date", m.getCreationDateDB());
+    /**
+     * Saves the values of a moneybox in the database
+     * 
+     * @param m
+     *            Moneybox to be saved
+     */
+    public static void updateMoneybox(Moneybox m) {
+        SQLiteDatabase db = null;
 
-			db.update("moneyboxes", values, "id_moneybox = ?",
-					new String[] { Integer.toString(m.getIdMoneybox()) });
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
+        try {
+            db = new MoneyboxDataHelper(ContextManager.getContext())
+                    .getWritableDatabase();
 
-	/**
-	 * Delete a moneybox from the database
-	 * 
-	 * @param m
-	 *            Moneybox to be deleted
-	 */
-	public static void deleteMoneybox(Moneybox m) {
-		SQLiteDatabase db = null;
+            ContentValues values;
 
-		try {
-			db = new MoneyboxDataHelper(ContextManager.getContext())
-					.getWritableDatabase();
+            values = new ContentValues();
+            values.put("description", m.getDescription());
+            values.put("creation_date", m.getCreationDateDB());
 
-			db.delete("moneyboxes", "id_moneybox = ?",
-					new String[] { Integer.toString(m.getIdMoneybox()) });
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
-	}
+            db.update("moneyboxes", values, "id_moneybox = ?",
+                    new String[] { Long.toString(m.getIdMoneybox()) });
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    /**
+     * Delete a moneybox from the database
+     * 
+     * @param m
+     *            Moneybox to be deleted
+     */
+    public static void deleteMoneybox(Moneybox m) {
+        SQLiteDatabase db = null;
+
+        try {
+            db = new MoneyboxDataHelper(ContextManager.getContext())
+                    .getWritableDatabase();
+
+            db.delete("moneyboxes", "id_moneybox = ?",
+                    new String[] { Long.toString(m.getIdMoneybox()) });
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+    
+    public static double getMoneyboxTotal(Moneybox m) {
+        double result;
+        ArrayList<Movement> movements;
+        
+        result = 0.0;
+        movements = MovementsManager.getActiveMovements(m);
+        for (Movement mov : movements) {
+            result += mov.getAmount();
+        }
+        
+        return result;
+    }
 }

@@ -21,8 +21,8 @@ public class Movement implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private int _idMovement;
-    private int _idMoneybox;
+    private long _idMovement;
+    private long _idMoneybox;
     private double _amount;
     private Date _insertDate;
     private Date _getDate;
@@ -31,19 +31,19 @@ public class Movement implements Serializable {
     
     private Moneybox _moneybox = null;
 
-    public int getIdMovement() {
+    public long getIdMovement() {
         return _idMovement;
     }
 
-    public void setIdMovement(int idMovement) {
+    public void setIdMovement(long idMovement) {
         this._idMovement = idMovement;
     }
     
-    public int getIdMoneybox() {
+    public long getIdMoneybox() {
         return _idMoneybox;
     }
     
-    public void setIdMoneybox(int idMoneybox) {
+    public void setIdMoneybox(long idMoneybox) {
         this._idMoneybox = idMoneybox;
     }
 

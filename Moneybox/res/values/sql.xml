@@ -24,6 +24,9 @@
                                 get_date TIMESTAMP,
                                 description TEXT, 
                                 break_moneybox INTEGER);
+
+        INSERT INTO moneyboxes (id_moneybox, description, creation_date) 
+        VALUES (1, \'Hucha\', strftime(\'%s\', \'now\') * 1000);
     </string>
     
     <!-- Drop the movements table. -->

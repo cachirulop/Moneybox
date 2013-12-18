@@ -10,15 +10,15 @@ public class Moneybox implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private int _idMoneybox;
+    private long _idMoneybox;
     private Date _creationDate;
     private String _description;
 
-    public int getIdMoneybox() {
+    public long getIdMoneybox() {
         return _idMoneybox;
     }
 
-    public void setIdMoneybox(int idMoneybox) {
+    public void setIdMoneybox(long idMoneybox) {
         this._idMoneybox = idMoneybox;
     }
 

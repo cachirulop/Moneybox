@@ -50,7 +50,7 @@ public class MovementsManager {
                     .getReadableDatabase();
 
             c = db.query("movements", null, "id_moneybox = ?",
-                    new String[] { Integer.toString(m.getIdMoneybox()) }, null, null,
+                    new String[] { Long.toString(m.getIdMoneybox()) }, null, null,
                     "insert_date ASC");
 
             return createMovementList(c);
@@ -75,7 +75,7 @@ public class MovementsManager {
                     .getWritableDatabase();
 
             db.delete("movements", "id_moneybox = ?",
-                    new String[] { Integer.toString(m.getIdMoneybox()) });
+                    new String[] { Long.toString(m.getIdMoneybox()) });
         } finally {
             if (db != null) {
                 db.close();
@@ -86,7 +86,9 @@ public class MovementsManager {
     /**
      * Returns the active movements of the specified moneybox.
      * 
-     * An active movement is a movement that doesn't be getted.
+     * An active movement is a movement that doesn't be getted from the
+     * last break of the moneybox or from the begining if there isn't any
+     * break.
      * 
      * @param m
      *            Moneybox to obtain the movements
@@ -108,11 +110,11 @@ public class MovementsManager {
                         ctx.getString(R.string.SQL_active_movements_by_date),
                         new String[] {
                                 Long.toString(lastBreak.getInsertDateDB()),
-                                Integer.toString(m.getIdMoneybox()) });
+                                Long.toString(m.getIdMoneybox()) });
 
             } else {
                 c = db.rawQuery(ctx.getString(R.string.SQL_active_movements),
-                        new String[] { Integer.toString(m.getIdMoneybox()) });
+                        new String[] { Long.toString(m.getIdMoneybox()) });
             }
 
             return createMovementList(c);
@@ -141,7 +143,7 @@ public class MovementsManager {
             db = new MoneyboxDataHelper(ctx).getReadableDatabase();
 
             c = db.rawQuery(ctx.getString(R.string.SQL_last_break_movement),
-                    new String[] { Integer.toString(m.getIdMoneybox()) });
+                    new String[] { Long.toString(m.getIdMoneybox()) });
 
             if (c.moveToFirst()) {
                 return createMovement(c);
@@ -173,7 +175,7 @@ public class MovementsManager {
 
             c = db.rawQuery(ctx.getString(R.string.SQL_next_break_movement),
                     new String[] { Long.toString(reference.getInsertDateDB()),
-                            Integer.toString(reference.getIdMoneybox()) });
+                            Long.toString(reference.getIdMoneybox()) });
 
             if (c.moveToFirst()) {
                 return createMovement(c);
@@ -205,7 +207,7 @@ public class MovementsManager {
 
             c = db.rawQuery(ctx.getString(R.string.SQL_prev_break_movement),
                     new String[] { Long.toString(reference.getInsertDateDB()),
-                            Integer.toString(reference.getIdMoneybox()) });
+                            Long.toString(reference.getIdMoneybox()) });
 
             if (c.moveToFirst()) {
                 return createMovement(c);
@@ -253,8 +255,8 @@ public class MovementsManager {
         Movement result;
 
         result = new Movement();
-        result.setIdMovement(c.getInt(c.getColumnIndex("id_movement")));
-        result.setIdMoneybox(c.getInt(c.getColumnIndex("id_moneybox")));
+        result.setIdMovement(c.getLong(c.getColumnIndex("id_movement")));
+        result.setIdMoneybox(c.getLong(c.getColumnIndex("id_moneybox")));
         result.setBreakMoneyboxAsInt(c.getInt(c
                 .getColumnIndex("break_moneybox")));
         result.setDescription(c.getString(c.getColumnIndex("description")));
@@ -371,7 +373,7 @@ public class MovementsManager {
             values.put("break_moneybox", m.isBreakMoneyboxAsInt());
 
             db.update("movements", values, "id_movement = ?",
-                    new String[] { Integer.toString(m.getIdMovement()) });
+                    new String[] { Long.toString(m.getIdMovement()) });
         } finally {
             if (db != null) {
                 db.close();
@@ -393,7 +395,7 @@ public class MovementsManager {
                     .getWritableDatabase();
 
             db.delete("movements", "id_movement = ?",
-                    new String[] { Integer.toString(m.getIdMovement()) });
+                    new String[] { Long.toString(m.getIdMovement()) });
         } finally {
             if (db != null) {
                 db.close();
@@ -433,14 +435,14 @@ public class MovementsManager {
             lastBreak = MovementsManager.getLastBreakMoneybox(m);
             if (lastBreak == null) {
                 c = db.rawQuery(ctx.getString(R.string.SQL_sum_amount),
-                        new String[] { Integer.toString(m.getIdMoneybox()) });
+                        new String[] { Long.toString(m.getIdMoneybox()) });
             } else {
                 c = db.rawQuery(
                         ctx.getString(R.string.SQL_sum_amount_after),
                         new String[] {
                                 Long.toString(lastBreak.getInsertDate()
                                         .getTime()),
-                                Integer.toString(m.getIdMoneybox()) });
+                                Long.toString(m.getIdMoneybox()) });
             }
 
             c.moveToFirst();
@@ -478,7 +480,7 @@ public class MovementsManager {
                     ctx.getString(R.string.SQL_sum_amount_by_dates),
                     new String[] { Long.toString(begin.getTime()),
                             Long.toString(end.getTime()),
-                            Integer.toString(m.getIdMoneybox()) });
+                            Long.toString(m.getIdMoneybox()) });
 
             c.moveToFirst();
 
@@ -512,7 +514,7 @@ public class MovementsManager {
             c = db.rawQuery(
                     ctx.getString(R.string.SQL_sum_amount_before),
                     new String[] { Long.toString(reference.getTime()),
-                            Integer.toString(m.getIdMoneybox()) });
+                            Long.toString(m.getIdMoneybox()) });
 
             c.moveToFirst();
 

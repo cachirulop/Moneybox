@@ -4,23 +4,21 @@
     android:id="@+id/llMoneyboxRow"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
 
     <RadioButton
         android:id="@+id/rbMoneyboxRowMoneybox"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="RadioButton"
-        android:onClick="onRbMoneyboxClick" />
+        android:onClick="onRbMoneyboxClick"
+        android:text="RadioButton" />
 
     <TextView
-        android:id="@+id/txtMoneyboxRowCreationDate"
+        android:id="@+id/txtMoneyboxTotal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
         android:gravity="right"
-        android:text="01/01/2001"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textStyle="italic" />
+        android:text="0.0€" />
 
 </LinearLayout>

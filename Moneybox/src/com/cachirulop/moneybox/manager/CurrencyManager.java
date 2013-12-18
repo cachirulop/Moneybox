@@ -60,6 +60,7 @@ public class CurrencyManager {
 	
 	/**
 	 * Returns the currency definition of the specified amount 
+	 * 
 	 * @param amount Value to obtain the currency definition
 	 * @return The currency definition of the specified amount
 	 */

@@ -64,46 +64,46 @@
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#111" >
+        android:background="#000000" >
 
         <ListView
             android:id="@+id/lvMoneyboxes"
-            android:layout_width="match_parent"
-            android:layout_height="344dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_above="@+id/moneyboxButtonsSeparator"
             android:layout_alignParentTop="true"
             android:layout_gravity="start"
-            android:background="#111"
-            android:choiceMode="singleChoice"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dp" />
+            android:choiceMode="singleChoice" />        
+        <TextView
+            android:id="@+id/txtTotalMoneyboxes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:gravity="bottom|right"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:text="0.0€"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <View
             android:id="@+id/moneyboxButtonsSeparator"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:layout_above="@+id/ibAddMoneybox"
+            android:layout_above="@+id/txtTotalMoneyboxes"
+            android:layout_alignParentLeft="true"
             android:background="@android:color/darker_gray" />
 
-        <ImageButton
-            android:id="@+id/ibAddMoneybox"
+        <TextView
+            android:id="@+id/txtTotalTitleMoneyboxes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:contentDescription="@string/moneybox_add_moneybox"
-            android:src="@drawable/ic_add_moneybox"
-            android:onClick="onIbAddMoneyboxClick" />
+            android:layout_alignTop="@+id/moneyboxButtonsSeparator"
+            android:text="@string/txtTotalTitle"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <ImageButton
-            android:id="@+id/ibDelMoneybox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:contentDescription="@string/moneybox_add_moneybox"
-            android:src="@drawable/ic_add_moneybox" 
-            android:onClick="onIbDelMoneyboxClick" />
+
     </RelativeLayout>
 
 </android.support.v4.widget.DrawerLayout>

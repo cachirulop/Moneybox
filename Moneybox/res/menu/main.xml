@@ -1,5 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
     <item
         android:id="@+id/action_delete_all"
         android:icon="@drawable/ic_menu_delete_all"
@@ -9,15 +8,31 @@
         android:id="@+id/action_import"
         android:icon="@drawable/ic_menu_import"
         android:showAsAction="never"
-        android:title="@string/menu_import_database" />
+        android:title="@string/menu_import_database"/>
     <item
         android:id="@+id/action_export"
         android:icon="@drawable/ic_menu_export"
         android:showAsAction="never"
-        android:title="@string/menu_export_database" />
+        android:title="@string/menu_export_database"/>
+    <item
+        android:id="@+id/action_add_moneybox"
+        android:icon="@android:drawable/ic_menu_add"
+        android:showAsAction="never"
+        android:title="@string/menu_add_moneybox"/>
+    <item
+        android:id="@+id/action_del_moneybox"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:showAsAction="never"
+        android:title="@string/menu_del_moneybox"/>
+    <item
+        android:id="@+id/action_edit_moneybox"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:showAsAction="never"
+        android:title="@string/menu_edit_moneybox"/>
     <item
         android:id="@+id/action_break_moneybox"
         android:icon="@drawable/hammer"
-        android:showAsAction="ifRoom|withText"
-        android:title="@string/menu_break_moneybox" />
+        android:showAsAction="always"
+        android:title="@string/menu_break_moneybox"/>
+
 </menu>
