@@ -137,6 +137,8 @@ public class MovementsFragment extends Fragment {
 		adapter.setMoneybox(parent.getCurrentMoneybox());
 		adapter.refreshMovements();
 		
+		parent.onUpdateMoneybox();
+		
 		updateTotal();
 	}
 
