@@ -211,6 +211,9 @@ public class MoneyboxesManager {
             db = new MoneyboxDataHelper(ContextManager.getContext())
                     .getWritableDatabase();
 
+            db.delete("movements", "id_moneybox = ?",
+                    new String[] { Long.toString(m.getIdMoneybox()) });
+            
             db.delete("moneyboxes", "id_moneybox = ?",
                     new String[] { Long.toString(m.getIdMoneybox()) });
         } finally {
