@@ -14,11 +14,16 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -74,8 +79,20 @@ public class MovementDetailActivity extends Activity {
 
 		loadSpinner();
 		initData();
+		createActionBar();
 		initButtons();
 	}
+	
+    /**
+     * Initialize the activity action bar
+     */
+    private void createActionBar() {
+        final ActionBar actionBar = getActionBar();
+
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+    }
 
 	/**
 	 * Launched by android when creates a new dialog. Can create this dialogs: -
@@ -146,6 +163,17 @@ public class MovementDetailActivity extends Activity {
 		return null;
 	}
 
+    /**
+     * Load the menu from the movement_detail.xml file.
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.movement_detail, menu);
+
+        return true;
+    }
+	
 	/**
 	 * Load the spinner with the available money coins and bills.
 	 */
