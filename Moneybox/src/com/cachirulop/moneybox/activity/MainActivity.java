@@ -371,9 +371,9 @@ public class MainActivity extends FragmentActivity implements
 	 * Refresh the contents of the tabs
 	 */
 	public void refresh() {
+		_drawerAdapter.refreshMoneyboxes();
 		_sectionsPagerAdapter.getMoneyboxFragment().refresh();
 		_sectionsPagerAdapter.getMovementsFragment().refresh();
-		_drawerAdapter.refreshMoneyboxes();
 	}
 
 	// @Override
@@ -403,13 +403,13 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	public void onUpdateMoneybox() {
-		_sectionsPagerAdapter.getMoneyboxFragment().refresh();
 		_drawerAdapter.refreshMoneyboxes();
+		_sectionsPagerAdapter.getMoneyboxFragment().refresh();
 	}
 
 	public void onUpdateMovements() {
-		_sectionsPagerAdapter.getMovementsFragment().refresh();
 		_drawerAdapter.refreshMoneyboxes();
+		_sectionsPagerAdapter.getMovementsFragment().refresh();
 	}
 
 	public void onSelectDefaultTab() {

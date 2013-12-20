@@ -201,6 +201,7 @@ public class MoneyboxAdapter extends BaseAdapter implements SpinnerAdapter {
 
     public void refreshMoneyboxes(boolean notify) {
         _lstMoneyboxes = MoneyboxesManager.getAllMoneyboxes();
+        setCurrentMoneybox(getCurrentItem());
 
         if (notify) {
             notifyDataSetChanged();

@@ -137,8 +137,6 @@ public class MovementsFragment extends Fragment {
 		adapter.setMoneybox(parent.getCurrentMoneybox());
 		adapter.refreshMovements();
 		
-		parent.onUpdateMoneybox();
-		
 		updateTotal();
 	}
 
@@ -177,6 +175,7 @@ public class MovementsFragment extends Fragment {
 			if (selected.getGetDate() != null) {
 				item.setEnabled(false);
 			}
+			
 			item = menu.add(Menu.NONE, CONTEXT_MENU_DELETE, 1, R.string.delete);
 		}
 	}

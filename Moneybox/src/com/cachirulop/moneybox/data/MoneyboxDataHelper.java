@@ -159,7 +159,7 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
                             backup), Toast.LENGTH_LONG).show();
 
             copyFile(ctx, backup, ctx.getDatabasePath(DATABASE_NAME)
-                    .getAbsolutePath(), true);
+                    .getAbsolutePath(), false);
 
             Toast.makeText(ctx, ctx.getString(R.string.msg_database_imported),
                     Toast.LENGTH_LONG).show();

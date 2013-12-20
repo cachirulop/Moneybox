@@ -147,10 +147,10 @@ public class MoneyboxFragment extends Fragment {
 		
 		parent = getActivity();
 
-		money = new ImageView(parent);
-		money.setVisibility(View.INVISIBLE);
 		r = c.getDrawable().getBounds();
 
+		money = new ImageView(parent);
+		money.setVisibility(View.INVISIBLE);
 		money.setImageDrawable(c.getDrawable().getConstantState().newDrawable());
 		money.setTag(c);
 
@@ -322,7 +322,8 @@ public class MoneyboxFragment extends Fragment {
 
 				task = new MoneyTimerTask(this, curr, left, r.width(), total);
 
-				layout.postDelayed(task, 400 * i);
+				//layout.postDelayed(task, 400 * i);
+				layout.postDelayed(task, 400);
 			}
 
 			i++;

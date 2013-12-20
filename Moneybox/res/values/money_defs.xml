@@ -65,10 +65,10 @@
         <item>bill</item>
     </array>
     
-    <string name="euro_sign">€</string>
+    <string name="euro_sign" translatable="false">€</string>
     
-    <string name="currency_name">euro</string>
+    <string name="currency_name" translatable="false">euro</string>
     
-    <string name="money_bill">bill</string>
-    <string name="money_coin">coin</string>
+    <string name="money_bill" translatable="false">bill</string>
+    <string name="money_coin" translatable="false">coin</string>
 </resources>
