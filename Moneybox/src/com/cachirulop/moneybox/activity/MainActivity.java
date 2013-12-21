@@ -262,7 +262,7 @@ public class MainActivity extends FragmentActivity implements
 
 		case R.id.action_import:
 			MoneyboxDataHelper.importDB(this);
-			refresh();
+			refresh(true);
 			return true;
 
 		case R.id.action_export:
@@ -333,7 +333,7 @@ public class MainActivity extends FragmentActivity implements
 		SoundsManager.playBreakingMoneyboxSound();
 		MovementsManager.breakMoneybox(_drawerAdapter.getCurrentItem());
 
-		refresh();
+		refresh(true);
 
 		updateTotal();
 	}
@@ -364,18 +364,22 @@ public class MainActivity extends FragmentActivity implements
 	private void onDeleteAll() {
 		MovementsManager.deleteAllMovements(_drawerAdapter.getCurrentItem());
 
-		refresh();
+		refresh(true);
 	}
 
 	/**
 	 * Refresh the contents of the tabs
 	 */
-	public void refresh() {
-		_drawerAdapter.refreshMoneyboxes();
+	public void refresh(boolean updateDrawer) {
+	    if (updateDrawer) {
+	        _drawerAdapter.refreshMoneyboxes();
+	    }
+        
+	    getActionBar().setTitle(_drawerAdapter.getCurrentItem().getDescription());
 		_sectionsPagerAdapter.getMoneyboxFragment().refresh();
 		_sectionsPagerAdapter.getMovementsFragment().refresh();
 	}
-
+	
 	// @Override
 	public void onTabSelected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
@@ -419,7 +423,7 @@ public class MainActivity extends FragmentActivity implements
 	public void selectMoneybox(Moneybox m) {
 		_drawerLayout.closeDrawer(Gravity.START);
 
-		refresh();
+		refresh(false);
 	}
 
 	public void onAddMoneyboxClicked() {
@@ -493,10 +497,6 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	public void onUpdateMoneyboxesList() {
-		getActionBar().setTitle(
-				_drawerAdapter.getCurrentItem().getDescription());
-
-		_sectionsPagerAdapter.getMoneyboxFragment().refresh();
-		_sectionsPagerAdapter.getMovementsFragment().refresh();
+	    refresh(false);
 	}
 }

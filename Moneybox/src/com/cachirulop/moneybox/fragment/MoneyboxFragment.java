@@ -286,7 +286,7 @@ public class MoneyboxFragment extends Fragment {
 		RelativeLayout layout;
 		int maxWidth;
 		ArrayList<Movement> lstMoney;
-		Random rnd;
+		Random rndLeft;
 		double total;
 		int i;
 		MainActivity parent;
@@ -303,7 +303,7 @@ public class MoneyboxFragment extends Fragment {
 		total = 0.0;
 		i = 0;
 
-		rnd = new Random();
+		rndLeft = new Random();
 		lstMoney = MovementsManager.getActiveMovements(parent.getCurrentMoneybox());
 		for (Movement m : lstMoney) {
 			Rect r;
@@ -314,7 +314,7 @@ public class MoneyboxFragment extends Fragment {
 			if (curr != null) {
 				r = curr.getDrawable().getBounds();
 
-				left = rnd.nextInt(maxWidth - r.width());
+				left = rndLeft.nextInt(maxWidth - r.width());
 
 				total += m.getAmount();
 
@@ -322,8 +322,7 @@ public class MoneyboxFragment extends Fragment {
 
 				task = new MoneyTimerTask(this, curr, left, r.width(), total);
 
-				//layout.postDelayed(task, 400 * i);
-				layout.postDelayed(task, 400);
+				layout.postDelayed(task, 300 * i);
 			}
 
 			i++;
