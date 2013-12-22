@@ -20,13 +20,11 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -245,10 +243,13 @@ public class MovementDetailActivity extends Activity {
 	 *            (false)
 	 */
 	private void setEnableGetButton(boolean enabled) {
-		Button btn;
+	    // TODO: Change the action bar button to view: drop or get
+/*	    
+		ImageButton btn;
 
-		btn = (Button) findViewById(R.id.btnGetFromMoneybox);
+		btn = (ImageButton) findViewById(R.id.btnGetFromMoneybox);
 		btn.setEnabled(enabled);
+*/		
 	}
 
 	/**
@@ -259,9 +260,9 @@ public class MovementDetailActivity extends Activity {
 	 *            (false)
 	 */
 	private void setEnableDeleteButton(boolean enabled) {
-		Button btn;
+		ImageButton btn;
 
-		btn = (Button) findViewById(R.id.btnDelete);
+		btn = (ImageButton) findViewById(R.id.btnDelete);
 		btn.setEnabled(enabled);
 	}
 
@@ -274,17 +275,30 @@ public class MovementDetailActivity extends Activity {
 	 */
 	private void setVisibleGetDate(boolean visible) {
 		TextView txt;
-		Button btn;
+		ImageButton btn;
+		LinearLayout detailLayout;
 		View v;
 		int visibility;
-		RelativeLayout.LayoutParams lpParams;
+		
+	 	// RelativeLayout.LayoutParams lpParams;
+	 	LinearLayout.LayoutParams lpParams;
 
 		if (visible) {
 			visibility = View.VISIBLE;
 		} else {
 			visibility = View.GONE;
 		}
+		
+		detailLayout = (LinearLayout) findViewById(R.id.llMovementDetail);
+		
+		detailLayout.getChildAt(4).setVisibility(visibility);
+        detailLayout.getChildAt(5).setVisibility(visibility);
+        detailLayout.getChildAt(6).setVisibility(visibility);
+        detailLayout.getChildAt(7).setVisibility(visibility);
+        detailLayout.getChildAt(8).setVisibility(visibility);
+		
 
+		/*      
 		txt = (TextView) findViewById(R.id.txtGetDateTitle);
 		txt.setVisibility(visibility);
 
@@ -297,7 +311,7 @@ public class MovementDetailActivity extends Activity {
 		txt = (TextView) findViewById(R.id.txtGetDate);
 		txt.setVisibility(visibility);
 
-		btn = (Button) findViewById(R.id.btnChangeGetDate);
+		btn = (ImageButton) findViewById(R.id.btnChangeGetDate);
 		btn.setVisibility(visibility);
 
 		txt = (TextView) findViewById(R.id.txtGetTimeDesc);
@@ -306,7 +320,7 @@ public class MovementDetailActivity extends Activity {
 		txt = (TextView) findViewById(R.id.txtGetTime);
 		txt.setVisibility(visibility);
 
-		btn = (Button) findViewById(R.id.btnChangeGetTime);
+		btn = (ImageButton) findViewById(R.id.btnChangeGetTime);
 		btn.setVisibility(visibility);
 
 		// Change the layout_below property of the end line
@@ -322,6 +336,7 @@ public class MovementDetailActivity extends Activity {
 			lpParams.addRule(RelativeLayout.RIGHT_OF, R.id.txtDescriptionDesc);
 			txt.setLayoutParams(lpParams);
 		}
+*/
 	}
 
 	/**

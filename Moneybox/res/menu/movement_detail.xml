@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item
-        android:id="@id/btnGetFromMoneybox"
-        android:icon="@android:drawable/ic_menu_upload"
+        android:id="@+id/btnGetFromMoneybox"
+        android:icon="@drawable/ic_action_get_from_moneybox"
         android:showAsAction="always"
         android:title="@string/get_from_moneybox"/>
     <item
-        android:id="@id/btnDelete"
+        android:id="@+id/btnDropToMoneybox"
+        android:icon="@drawable/ic_action_drop_to_moneybox"
+        android:showAsAction="always"
+        android:title="@string/drop_to_moneybox_again"/>
+    <item
+        android:id="@+id/btnDelete"
         android:icon="@android:drawable/ic_menu_delete"
         android:showAsAction="always"
         android:title="@string/delete"/>
     <item
-        android:id="@id/btnSave"
+        android:id="@+id/btnSave"
         android:icon="@android:drawable/ic_menu_save"
         android:showAsAction="always"
         android:title="@string/save"/>

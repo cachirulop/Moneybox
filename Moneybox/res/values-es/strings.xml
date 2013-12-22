@@ -27,6 +27,7 @@
     <string name="save">Guardar</string>
     <string name="cancel">Cancelar</string>
     <string name="get_from_moneybox">Coger</string>
+    <string name="drop_to_moneybox_again">Volver a echar a la hucha</string> 
     <string name="delete">Borrar</string>
 
     <string name="error_date_incorrect_future">Fecha no válida, no se puede usar una fecha futura</string>

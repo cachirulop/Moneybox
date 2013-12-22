@@ -322,7 +322,7 @@ public class MoneyboxFragment extends Fragment {
 
 				task = new MoneyTimerTask(this, curr, left, r.width(), total);
 
-				layout.postDelayed(task, 300 * i);
+				layout.postDelayed(task, 400 * i);
 			}
 
 			i++;
