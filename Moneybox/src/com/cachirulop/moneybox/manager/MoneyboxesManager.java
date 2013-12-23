@@ -1,3 +1,4 @@
+
 package com.cachirulop.moneybox.manager;
 
 import java.util.ArrayList;
@@ -11,27 +12,34 @@ import com.cachirulop.moneybox.data.MoneyboxDataHelper;
 import com.cachirulop.moneybox.entity.Moneybox;
 import com.cachirulop.moneybox.entity.Movement;
 
-public class MoneyboxesManager {
+public class MoneyboxesManager
+{
     /**
      * Create a list with all the moneyboxes of the database
      * 
      * @return New ArrayList of Moneybox objects
      */
-    public static ArrayList<Moneybox> getAllMoneyboxes() {
+    public static ArrayList<Moneybox> getAllMoneyboxes ()
+    {
         Cursor c;
         SQLiteDatabase db = null;
 
         try {
-            db = new MoneyboxDataHelper(ContextManager.getContext())
-                    .getReadableDatabase();
+            db = new MoneyboxDataHelper (ContextManager.getContext ()).getReadableDatabase ();
 
-            c = db.query("moneyboxes", null, null, null, null, null,
-                    "description COLLATE NOCASE ASC");
+            c = db.query ("moneyboxes",
+                          null,
+                          null,
+                          null,
+                          null,
+                          null,
+                          "description COLLATE NOCASE ASC");
 
-            return createMoneyboxesList(c);
-        } finally {
+            return createMoneyboxesList (c);
+        }
+        finally {
             if (db != null) {
-                db.close();
+                db.close ();
             }
         }
     }
@@ -43,16 +51,18 @@ public class MoneyboxesManager {
      *            Cursor with the database data
      * @return New ArrayList with the moneyboxes of the cursor
      */
-    private static ArrayList<Moneybox> createMoneyboxesList(Cursor c) {
+    private static ArrayList<Moneybox> createMoneyboxesList (Cursor c)
+    {
         ArrayList<Moneybox> result;
 
-        result = new ArrayList<Moneybox>();
+        result = new ArrayList<Moneybox> ();
 
         if (c != null) {
-            if (c.moveToFirst()) {
+            if (c.moveToFirst ()) {
                 do {
-                    result.add(createMoneybox(c));
-                } while (c.moveToNext());
+                    result.add (createMoneybox (c));
+                }
+                while (c.moveToNext ());
             }
         }
 
@@ -67,14 +77,14 @@ public class MoneyboxesManager {
      * @return New object of {@link com.cachirulop.moneybox.entity.Moneybox}
      *         class with the data of the cursor
      */
-    private static Moneybox createMoneybox(Cursor c) {
+    private static Moneybox createMoneybox (Cursor c)
+    {
         Moneybox result;
 
-        result = new Moneybox();
-        result.setIdMoneybox(c.getLong(c.getColumnIndex("id_moneybox")));
-        result.setDescription(c.getString(c.getColumnIndex("description")));
-        result.setCreationDate(new Date(c.getLong(c
-                .getColumnIndex("creation_date"))));
+        result = new Moneybox ();
+        result.setIdMoneybox (c.getLong (c.getColumnIndex ("id_moneybox")));
+        result.setDescription (c.getString (c.getColumnIndex ("description")));
+        result.setCreationDate (new Date (c.getLong (c.getColumnIndex ("creation_date"))));
 
         return result;
     }
@@ -86,26 +96,32 @@ public class MoneyboxesManager {
      *            ID of the Moneybox to be loaded
      * @return New Moneybox object with the data of the database
      */
-    public static Moneybox getMoneybox(long idMoneybox) {
+    public static Moneybox getMoneybox (long idMoneybox)
+    {
         SQLiteDatabase db = null;
         Cursor c;
 
         try {
-            db = new MoneyboxDataHelper(ContextManager.getContext())
-                    .getReadableDatabase();
+            db = new MoneyboxDataHelper (ContextManager.getContext ()).getReadableDatabase ();
 
-            c = db.query("moneyboxes", null, "id_moneybox = ?",
-                    new String[] { Long.toString(idMoneybox) }, null, null,
-                    null);
+            c = db.query ("moneyboxes",
+                          null,
+                          "id_moneybox = ?",
+                          new String[] { Long.toString (idMoneybox) },
+                          null,
+                          null,
+                          null);
 
-            if (c != null && c.moveToFirst()) {
-                return createMoneybox(c);
-            } else {
+            if (c != null && c.moveToFirst ()) {
+                return createMoneybox (c);
+            }
+            else {
                 return null;
             }
-        } finally {
+        }
+        finally {
             if (db != null) {
-                db.close();
+                db.close ();
             }
         }
     }
@@ -117,27 +133,32 @@ public class MoneyboxesManager {
      *            Moneybox to be added
      * @return The new Moneybox inserted
      */
-    public static Moneybox insertMoneybox(Moneybox m) {
+    public static Moneybox insertMoneybox (Moneybox m)
+    {
         SQLiteDatabase db = null;
 
         try {
-            db = new MoneyboxDataHelper(ContextManager.getContext())
-                    .getWritableDatabase();
+            db = new MoneyboxDataHelper (ContextManager.getContext ()).getWritableDatabase ();
 
             ContentValues values;
 
-            values = new ContentValues();
-            values.put("description", m.getDescription());
-            values.put("creation_date", m.getCreationDateDB());
+            values = new ContentValues ();
+            values.put ("description",
+                        m.getDescription ());
+            values.put ("creation_date",
+                        m.getCreationDateDB ());
 
-            db.insert("moneyboxes", null, values);
+            db.insert ("moneyboxes",
+                       null,
+                       values);
 
-            m.setIdMoneybox(getLastIdMoneybox());
+            m.setIdMoneybox (getLastIdMoneybox ());
 
             return m;
-        } finally {
+        }
+        finally {
             if (db != null) {
-                db.close();
+                db.close ();
             }
         }
     }
@@ -147,9 +168,9 @@ public class MoneyboxesManager {
      * 
      * @return
      */
-    private static long getLastIdMoneybox() {
-        return new MoneyboxDataHelper(ContextManager.getContext())
-                .getLastId("moneyboxes");
+    private static long getLastIdMoneybox ()
+    {
+        return new MoneyboxDataHelper (ContextManager.getContext ()).getLastId ("moneyboxes");
     }
 
     /**
@@ -160,14 +181,15 @@ public class MoneyboxesManager {
      *            Description of the moneybox
      * @return The new Moneybox inserted
      */
-    public static Moneybox insertMoneybox(String description) {
+    public static Moneybox insertMoneybox (String description)
+    {
         Moneybox m;
 
-        m = new Moneybox();
-        m.setDescription(description);
-        m.setCreationDate(new Date());
+        m = new Moneybox ();
+        m.setDescription (description);
+        m.setCreationDate (new Date ());
 
-        return insertMoneybox(m);
+        return insertMoneybox (m);
     }
 
     /**
@@ -176,24 +198,29 @@ public class MoneyboxesManager {
      * @param m
      *            Moneybox to be saved
      */
-    public static void updateMoneybox(Moneybox m) {
+    public static void updateMoneybox (Moneybox m)
+    {
         SQLiteDatabase db = null;
 
         try {
-            db = new MoneyboxDataHelper(ContextManager.getContext())
-                    .getWritableDatabase();
+            db = new MoneyboxDataHelper (ContextManager.getContext ()).getWritableDatabase ();
 
             ContentValues values;
 
-            values = new ContentValues();
-            values.put("description", m.getDescription());
-            values.put("creation_date", m.getCreationDateDB());
+            values = new ContentValues ();
+            values.put ("description",
+                        m.getDescription ());
+            values.put ("creation_date",
+                        m.getCreationDateDB ());
 
-            db.update("moneyboxes", values, "id_moneybox = ?",
-                    new String[] { Long.toString(m.getIdMoneybox()) });
-        } finally {
+            db.update ("moneyboxes",
+                       values,
+                       "id_moneybox = ?",
+                       new String[] { Long.toString (m.getIdMoneybox ()) });
+        }
+        finally {
             if (db != null) {
-                db.close();
+                db.close ();
             }
         }
     }
@@ -204,35 +231,39 @@ public class MoneyboxesManager {
      * @param m
      *            Moneybox to be deleted
      */
-    public static void deleteMoneybox(Moneybox m) {
+    public static void deleteMoneybox (Moneybox m)
+    {
         SQLiteDatabase db = null;
 
         try {
-            db = new MoneyboxDataHelper(ContextManager.getContext())
-                    .getWritableDatabase();
+            db = new MoneyboxDataHelper (ContextManager.getContext ()).getWritableDatabase ();
 
-            db.delete("movements", "id_moneybox = ?",
-                    new String[] { Long.toString(m.getIdMoneybox()) });
-            
-            db.delete("moneyboxes", "id_moneybox = ?",
-                    new String[] { Long.toString(m.getIdMoneybox()) });
-        } finally {
+            db.delete ("movements",
+                       "id_moneybox = ?",
+                       new String[] { Long.toString (m.getIdMoneybox ()) });
+
+            db.delete ("moneyboxes",
+                       "id_moneybox = ?",
+                       new String[] { Long.toString (m.getIdMoneybox ()) });
+        }
+        finally {
             if (db != null) {
-                db.close();
+                db.close ();
             }
         }
     }
-    
-    public static double getMoneyboxTotal(Moneybox m) {
+
+    public static double getMoneyboxTotal (Moneybox m)
+    {
         double result;
         ArrayList<Movement> movements;
-        
+
         result = 0.0;
-        movements = MovementsManager.getActiveMovements(m);
+        movements = MovementsManager.getActiveMovements (m);
         for (Movement mov : movements) {
-            result += mov.getAmount();
+            result += mov.getAmount ();
         }
-        
+
         return result;
     }
 }

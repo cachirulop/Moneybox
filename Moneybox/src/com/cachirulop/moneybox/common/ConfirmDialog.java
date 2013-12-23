@@ -1,3 +1,4 @@
+
 package com.cachirulop.moneybox.common;
 
 import android.app.AlertDialog;
@@ -15,66 +16,81 @@ import com.cachirulop.moneybox.R;
 /**
  * helper for Confirm-Dialog creation
  */
-public abstract class ConfirmDialog extends DialogFragment implements
-		View.OnClickListener {
-	private int _titleId;
-	private int _messageId;
+public abstract class ConfirmDialog
+        extends DialogFragment
+        implements View.OnClickListener
+{
+    private int _titleId;
+    private int _messageId;
 
-	public ConfirmDialog(int titleId, int messageId) {
-		super();
+    public ConfirmDialog (int titleId,
+                          int messageId)
+    {
+        super ();
 
-		_titleId = titleId;
-		_messageId = messageId;
-	}
+        _titleId = titleId;
+        _messageId = messageId;
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		AlertDialog.Builder builder;
+    @Override
+    public Dialog onCreateDialog (Bundle savedInstanceState)
+    {
+        AlertDialog.Builder builder;
 
-		builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(_titleId);
-		builder.setMessage(_messageId);
+        builder = new AlertDialog.Builder (getActivity ());
+        builder.setTitle (_titleId);
+        builder.setMessage (_messageId);
 
-		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
-                // Do nothing here because we override this button later to change the close behaviour. 
-                // However, we still need this because on older versions of Android unless we 
-                // pass a handler the button doesn't get instantiated
-            }
-        });
+        builder.setPositiveButton (android.R.string.ok,
+                                   new DialogInterface.OnClickListener ()
+                                   {
+                                       public void onClick (DialogInterface dialog,
+                                                            int which)
+                                       {
+                                           // Do nothing here because we
+                                           // override this button later to
+                                           // change the close behaviour.
+                                           // However, we still need this
+                                           // because on older versions of
+                                           // Android unless we
+                                           // pass a handler the button doesn't
+                                           // get instantiated
+                                       }
+                                   });
 
-		builder.setNegativeButton(android.R.string.cancel, null);
-        
-		return builder.create();
-	}
+        builder.setNegativeButton (android.R.string.cancel,
+                                   null);
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		
-		AlertDialog dialog;
+        return builder.create ();
+    }
 
-		dialog = (AlertDialog) getDialog();
-		if (dialog != null) {
-			Button positive;
+    @Override
+    public void onStart ()
+    {
+        super.onStart ();
 
-			positive = (Button) dialog.getButton(Dialog.BUTTON_POSITIVE);
+        AlertDialog dialog;
 
-			positive.setOnClickListener(this);
-		}
-	}
+        dialog = (AlertDialog) getDialog ();
+        if (dialog != null) {
+            Button positive;
 
-	public void onClick(View v) {
-		onOkClicked();
-		((AlertDialog) getDialog()).dismiss();
-	}
+            positive = (Button) dialog.getButton (Dialog.BUTTON_POSITIVE);
 
-	/**
-	 * called when "ok" pressed.
-	 * 
-	 * @param input
-	 */
-	abstract public void onOkClicked();
+            positive.setOnClickListener (this);
+        }
+    }
+
+    public void onClick (View v)
+    {
+        onOkClicked ();
+        ((AlertDialog) getDialog ()).dismiss ();
+    }
+
+    /**
+     * called when "ok" pressed.
+     * 
+     * @param input
+     */
+    abstract public void onOkClicked ();
 }

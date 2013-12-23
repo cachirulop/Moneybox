@@ -8,6 +8,7 @@
  * Contributors:
  *     David Magro Martin - initial API and implementation
  ******************************************************************************/
+
 package com.cachirulop.moneybox.data;
 
 import java.io.File;
@@ -34,15 +35,17 @@ import com.cachirulop.moneybox.R;
  * @author dmagro
  * 
  */
-public class MoneyboxDataHelper extends SQLiteOpenHelper {
+public class MoneyboxDataHelper
+        extends SQLiteOpenHelper
+{
     /** Name of the database */
-    private static final String DATABASE_NAME = "moneybox";
+    private static final String DATABASE_NAME    = "moneybox";
 
     /** Current version */
-    private static final int DATABASE_VERSION = 8;
+    private static final int    DATABASE_VERSION = 8;
 
     /** Context where the object is created */
-    private final Context _ctx;
+    private final Context       _ctx;
 
     /**
      * Constructor that receives the context.
@@ -51,8 +54,12 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
      *            Context where the database object is created. Is used to get
      *            the references to the resources.
      */
-    public MoneyboxDataHelper(Context ctx) {
-        super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
+    public MoneyboxDataHelper (Context ctx)
+    {
+        super (ctx,
+               DATABASE_NAME,
+               null,
+               DATABASE_VERSION);
 
         _ctx = ctx;
     }
@@ -62,20 +69,25 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
      * defined in the application resources.
      */
     @Override
-    public void onCreate(SQLiteDatabase db) {
-        String[] sql = _ctx.getString(R.string.SQL_on_create).split(";");
+    public void onCreate (SQLiteDatabase db)
+    {
+        String[] sql = _ctx.getString (R.string.SQL_on_create).split (";");
 
-        db.beginTransaction();
+        db.beginTransaction ();
         try {
             // Create tables
-            execMultipleSQL(db, sql);
+            execMultipleSQL (db,
+                             sql);
 
-            db.setTransactionSuccessful();
-        } catch (SQLException e) {
-            Log.e("Error creating tables", e.toString());
+            db.setTransactionSuccessful ();
+        }
+        catch (SQLException e) {
+            Log.e ("Error creating tables",
+                   e.toString ());
             throw e;
-        } finally {
-            db.endTransaction();
+        }
+        finally {
+            db.endTransaction ();
         }
     }
 
@@ -85,18 +97,25 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
      * resources.
      */
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String[] sql = _ctx.getString(R.string.SQL_on_upgrade).split(";");
+    public void onUpgrade (SQLiteDatabase db,
+                           int oldVersion,
+                           int newVersion)
+    {
+        String[] sql = _ctx.getString (R.string.SQL_on_upgrade).split (";");
 
-        db.beginTransaction();
+        db.beginTransaction ();
         try {
-            execMultipleSQL(db, sql);
-            db.setTransactionSuccessful();
-        } catch (SQLException e) {
-            Log.e("Error upgrading tables", e.toString());
+            execMultipleSQL (db,
+                             sql);
+            db.setTransactionSuccessful ();
+        }
+        catch (SQLException e) {
+            Log.e ("Error upgrading tables",
+                   e.toString ());
             throw e;
-        } finally {
-            db.endTransaction();
+        }
+        finally {
+            db.endTransaction ();
         }
 
         /* onCreate(db); */
@@ -110,10 +129,12 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
      * @param sql
      *            An array of SQL statements to execute
      */
-    private void execMultipleSQL(SQLiteDatabase db, String[] sql) {
+    private void execMultipleSQL (SQLiteDatabase db,
+                                  String[] sql)
+    {
         for (String s : sql) {
-            if (s.trim().length() > 0) {
-                db.execSQL(s);
+            if (s.trim ().length () > 0) {
+                db.execSQL (s);
             }
         }
     }
@@ -121,50 +142,62 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
     /**
      * Copy the database file in the sd card
      */
-    public static void exportDB(Context ctx) {
+    public static void exportDB (Context ctx)
+    {
         try {
             String backup;
 
-            backup = getBackupPath(ctx);
+            backup = getBackupPath (ctx);
 
-            Toast.makeText(
-                    ctx,
-                    String.format(
-                            ctx.getString(R.string.msg_database_exporting),
-                            backup), Toast.LENGTH_LONG).show();
+            Toast.makeText (ctx,
+                            String.format (ctx.getString (R.string.msg_database_exporting),
+                                           backup),
+                            Toast.LENGTH_LONG).show ();
 
-            copyFile(ctx, ctx.getDatabasePath(DATABASE_NAME).getAbsolutePath(),
-                    backup, false);
+            copyFile (ctx,
+                      ctx.getDatabasePath (DATABASE_NAME).getAbsolutePath (),
+                      backup,
+                      false);
 
-            Toast.makeText(ctx, ctx.getString(R.string.msg_database_exported),
-                    Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText (ctx,
+                            ctx.getString (R.string.msg_database_exported),
+                            Toast.LENGTH_LONG).show ();
+        }
+        catch (Exception e) {
+            Toast.makeText (ctx,
+                            e.getMessage (),
+                            Toast.LENGTH_LONG).show ();
         }
     }
 
     /**
      * Import the database file located in the sd card
      */
-    public static void importDB(Context ctx) {
+    public static void importDB (Context ctx)
+    {
         try {
             String backup;
 
-            backup = getBackupPath(ctx);
+            backup = getBackupPath (ctx);
 
-            Toast.makeText(
-                    ctx,
-                    String.format(
-                            ctx.getString(R.string.msg_database_importing),
-                            backup), Toast.LENGTH_LONG).show();
+            Toast.makeText (ctx,
+                            String.format (ctx.getString (R.string.msg_database_importing),
+                                           backup),
+                            Toast.LENGTH_LONG).show ();
 
-            copyFile(ctx, backup, ctx.getDatabasePath(DATABASE_NAME)
-                    .getAbsolutePath(), false);
+            copyFile (ctx,
+                      backup,
+                      ctx.getDatabasePath (DATABASE_NAME).getAbsolutePath (),
+                      false);
 
-            Toast.makeText(ctx, ctx.getString(R.string.msg_database_imported),
-                    Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText (ctx,
+                            ctx.getString (R.string.msg_database_imported),
+                            Toast.LENGTH_LONG).show ();
+        }
+        catch (Exception e) {
+            Toast.makeText (ctx,
+                            e.getMessage (),
+                            Toast.LENGTH_LONG).show ();
         }
     }
 
@@ -185,9 +218,14 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
      *             If the source file can't be read or the destination file
      *             can't be write
      */
-    private static void copyFile(Context ctx, String src, String dst,
-            boolean deleteSrc) throws FileNotFoundException, IOException,
-            Exception {
+    private static void copyFile (Context ctx,
+                                  String src,
+                                  String dst,
+                                  boolean deleteSrc)
+        throws FileNotFoundException,
+            IOException,
+            Exception
+    {
         FileChannel srcChannel = null;
         FileChannel dstChannel = null;
         FileInputStream srcStream = null;
@@ -197,54 +235,58 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
             File dstFile;
             File dstParentFile;
 
-            dstFile = new File(dst);
-            dstParentFile = dstFile.getParentFile();
-            if (!dstParentFile.exists()) {
-                dstParentFile.mkdirs();
+            dstFile = new File (dst);
+            dstParentFile = dstFile.getParentFile ();
+            if (!dstParentFile.exists ()) {
+                dstParentFile.mkdirs ();
             }
 
-            if (dstParentFile.canWrite()) {
+            if (dstParentFile.canWrite ()) {
                 File srcFile;
 
-                srcFile = new File(src);
-                if (srcFile.exists()) {
-                    srcStream = new FileInputStream(srcFile);
-                    dstStream = new FileOutputStream(dstFile);
+                srcFile = new File (src);
+                if (srcFile.exists ()) {
+                    srcStream = new FileInputStream (srcFile);
+                    dstStream = new FileOutputStream (dstFile);
 
-                    srcChannel = srcStream.getChannel();
-                    dstChannel = dstStream.getChannel();
+                    srcChannel = srcStream.getChannel ();
+                    dstChannel = dstStream.getChannel ();
 
-                    dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
+                    dstChannel.transferFrom (srcChannel,
+                                             0,
+                                             srcChannel.size ());
 
                     if (deleteSrc) {
-                        srcFile.delete();
+                        srcFile.delete ();
                     }
-                } else {
-                    throw new Exception(
-                            ctx.getString(R.string.error_cant_read_file));
                 }
-            } else {
-                throw new Exception(
-                        ctx.getString(R.string.error_cant_write_file));
+                else {
+                    throw new Exception (ctx.getString (R.string.error_cant_read_file));
+                }
             }
-        } finally {
+            else {
+                throw new Exception (ctx.getString (R.string.error_cant_write_file));
+            }
+        }
+        finally {
             try {
                 if (srcStream != null) {
-                    srcStream.close();
+                    srcStream.close ();
                 }
 
                 if (dstStream != null) {
-                    dstStream.close();
+                    dstStream.close ();
                 }
 
                 if (srcChannel != null) {
-                    srcChannel.close();
+                    srcChannel.close ();
                 }
 
                 if (dstChannel != null) {
-                    dstChannel.close();
+                    dstChannel.close ();
                 }
-            } catch (Exception e2) {
+            }
+            catch (Exception e2) {
             }
         }
     }
@@ -254,17 +296,18 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
      * 
      * @return The absolute path to the database backup file
      */
-    private static String getBackupPath(Context ctx) {
+    private static String getBackupPath (Context ctx)
+    {
         StringBuffer backupPath;
 
-        backupPath = new StringBuffer();
-        backupPath.append(Environment.getExternalStorageDirectory());
-        backupPath.append(File.separator);
-        backupPath.append(ctx.getString(R.string.app_name));
-        backupPath.append(File.separator);
-        backupPath.append(DATABASE_NAME);
+        backupPath = new StringBuffer ();
+        backupPath.append (Environment.getExternalStorageDirectory ());
+        backupPath.append (File.separator);
+        backupPath.append (ctx.getString (R.string.app_name));
+        backupPath.append (File.separator);
+        backupPath.append (DATABASE_NAME);
 
-        return backupPath.toString();
+        return backupPath.toString ();
     }
 
     /**
@@ -272,28 +315,36 @@ public class MoneyboxDataHelper extends SQLiteOpenHelper {
      * 
      * @return The last identifier of the table in the sqlite_sequence table
      */
-    public long getLastId(String table) {
+    public long getLastId (String table)
+    {
         long index = 0;
         SQLiteDatabase sdb = null;
         Cursor cursor = null;
 
         try {
-            sdb = getReadableDatabase();
-            cursor = sdb.query("sqlite_sequence", new String[] { "seq" },
-                    "name = ?", new String[] { table }, null, null, null, null);
+            sdb = getReadableDatabase ();
+            cursor = sdb.query ("sqlite_sequence",
+                                new String[] { "seq" },
+                                "name = ?",
+                                new String[] { table },
+                                null,
+                                null,
+                                null,
+                                null);
 
-            if (cursor.moveToFirst()) {
-                index = cursor.getLong(cursor.getColumnIndex("seq"));
+            if (cursor.moveToFirst ()) {
+                index = cursor.getLong (cursor.getColumnIndex ("seq"));
             }
 
             return index;
-        } finally {
+        }
+        finally {
             if (cursor != null) {
-                cursor.close();
+                cursor.close ();
             }
 
             if (sdb != null) {
-                sdb.close();
+                sdb.close ();
             }
         }
     }

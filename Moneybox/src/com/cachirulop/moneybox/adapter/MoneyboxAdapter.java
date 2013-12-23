@@ -1,3 +1,4 @@
+
 package com.cachirulop.moneybox.adapter;
 
 import java.util.List;
@@ -29,23 +30,26 @@ import com.cachirulop.moneybox.manager.MoneyboxesManager;
  * @author david
  * 
  */
-public class MoneyboxAdapter extends BaseAdapter implements SpinnerAdapter {
+public class MoneyboxAdapter
+        extends BaseAdapter
+        implements SpinnerAdapter
+{
     /** Inflater to load the xml with the definition of the view */
-    private LayoutInflater _inflater;
+    private LayoutInflater     _inflater;
 
     /** List of moneyboxes to be showed */
-    private List<Moneybox> _lstMoneyboxes = null;
+    private List<Moneybox>     _lstMoneyboxes    = null;
 
     /** Index of the selected row */
-    private int _currentPosition = -1;
+    private int                _currentPosition  = -1;
 
     /** Radio button object of the selected row */
-    private RadioButton _currentButton = null;
+    private RadioButton        _currentButton    = null;
 
     /** Listener for the row clicked event */
     private OnRowClickListener _rowClickListener = null;
-    
-    private IMoneyboxListener _moneyboxListener;
+
+    private IMoneyboxListener  _moneyboxListener;
 
     /**
      * Constructor that receives the context (parent) of the adapter. Creates
@@ -54,8 +58,9 @@ public class MoneyboxAdapter extends BaseAdapter implements SpinnerAdapter {
      * @param context
      *            Parent of the adapter.
      */
-    public MoneyboxAdapter(Context context) {
-        _inflater = LayoutInflater.from(context);
+    public MoneyboxAdapter (Context context)
+    {
+        _inflater = LayoutInflater.from (context);
         _moneyboxListener = (IMoneyboxListener) context;
 
         _currentPosition = 0;
@@ -64,30 +69,34 @@ public class MoneyboxAdapter extends BaseAdapter implements SpinnerAdapter {
     /**
      * Returns the number of items in the list of moneyboxes.
      */
-    public int getCount() {
+    public int getCount ()
+    {
         if (_lstMoneyboxes == null) {
-            refreshMoneyboxes();
+            refreshMoneyboxes ();
         }
 
-        return _lstMoneyboxes.size();
+        return _lstMoneyboxes.size ();
     }
 
     /**
      * Returns the item of the specified position.
      */
-    public Moneybox getItem(int position) {
+    public Moneybox getItem (int position)
+    {
         if (_lstMoneyboxes == null) {
-            refreshMoneyboxes();
+            refreshMoneyboxes ();
         }
 
-        return _lstMoneyboxes.get(position);
+        return _lstMoneyboxes.get (position);
     }
 
-    public List<Moneybox> getItems() {
+    public List<Moneybox> getItems ()
+    {
         return _lstMoneyboxes;
     }
 
-    public int getPosition() {
+    public int getPosition ()
+    {
         return _currentPosition;
     }
 
@@ -95,21 +104,24 @@ public class MoneyboxAdapter extends BaseAdapter implements SpinnerAdapter {
      * Returns the identifier of the item in the specified position. The
      * identifier is the field IdMoneybox of the moneybox object.
      */
-    public long getItemId(int position) {
+    public long getItemId (int position)
+    {
         if (_lstMoneyboxes == null) {
-            refreshMoneyboxes();
+            refreshMoneyboxes ();
         }
 
-        return _lstMoneyboxes.get(position).getIdMoneybox();
+        return _lstMoneyboxes.get (position).getIdMoneybox ();
     }
 
-    public Moneybox getCurrentItem() {
-        return getItem(_currentPosition);
+    public Moneybox getCurrentItem ()
+    {
+        return getItem (_currentPosition);
     }
 
-    public void setCurrentMoneyboxId(long id) {
+    public void setCurrentMoneyboxId (long id)
+    {
         if (_lstMoneyboxes == null) {
-            refreshMoneyboxes();
+            refreshMoneyboxes ();
         }
 
         int i;
@@ -117,11 +129,11 @@ public class MoneyboxAdapter extends BaseAdapter implements SpinnerAdapter {
 
         find = false;
         i = 0;
-        while (i < _lstMoneyboxes.size() && !find) {
+        while (i < _lstMoneyboxes.size () && !find) {
             Moneybox m;
 
-            m = _lstMoneyboxes.get(i);
-            if (m.getIdMoneybox() == id) {
+            m = _lstMoneyboxes.get (i);
+            if (m.getIdMoneybox () == id) {
                 _currentPosition = i;
 
                 find = true;
@@ -131,80 +143,87 @@ public class MoneyboxAdapter extends BaseAdapter implements SpinnerAdapter {
         }
     }
 
-    public void setCurrentMoneybox(Moneybox selected) {
-        setCurrentMoneyboxId(selected.getIdMoneybox());
+    public void setCurrentMoneybox (Moneybox selected)
+    {
+        setCurrentMoneyboxId (selected.getIdMoneybox ());
     }
 
-    public void addMoneybox(String description) {
+    public void addMoneybox (String description)
+    {
         Moneybox m;
 
-        m = MoneyboxesManager.insertMoneybox(description);
+        m = MoneyboxesManager.insertMoneybox (description);
 
-        refreshMoneyboxes(false);
-        setCurrentMoneybox(m);
-        Preferences.setLastMoneyboxId(ContextManager.getContext(),
-                m.getIdMoneybox());
+        refreshMoneyboxes (false);
+        setCurrentMoneybox (m);
+        Preferences.setLastMoneyboxId (ContextManager.getContext (),
+                                       m.getIdMoneybox ());
 
-        _moneyboxListener.onUpdateMoneyboxesList();
-        notifyDataSetChanged();
+        _moneyboxListener.onUpdateMoneyboxesList ();
+        notifyDataSetChanged ();
     }
-    
-    public void setMoneyboxDescription(String description) {
+
+    public void setMoneyboxDescription (String description)
+    {
         Moneybox m;
 
-        m = getCurrentItem();
-        m.setDescription(description);
-        
-        MoneyboxesManager.updateMoneybox(m);
-        
-        refreshMoneyboxes(false);
-        
-        setCurrentMoneybox(m);
+        m = getCurrentItem ();
+        m.setDescription (description);
 
-        _moneyboxListener.onUpdateMoneyboxesList();
-        notifyDataSetChanged();        
+        MoneyboxesManager.updateMoneybox (m);
+
+        refreshMoneyboxes (false);
+
+        setCurrentMoneybox (m);
+
+        _moneyboxListener.onUpdateMoneyboxesList ();
+        notifyDataSetChanged ();
     }
-    
-    public double getTotalAmount() {
+
+    public double getTotalAmount ()
+    {
         double result;
 
         result = 0.0;
         for (Moneybox m : _lstMoneyboxes) {
-            result += MoneyboxesManager.getMoneyboxTotal(m);
+            result += MoneyboxesManager.getMoneyboxTotal (m);
         }
-        
+
         return result;
     }
 
-    public void deleteCurrentMoneybox() throws ArrayIndexOutOfBoundsException {
-        if (_lstMoneyboxes.size() == 1) {
-            throw new ArrayIndexOutOfBoundsException(ContextManager
-                    .getContext().getString(R.string.msg_last_moneybox));
+    public void deleteCurrentMoneybox ()
+        throws ArrayIndexOutOfBoundsException
+    {
+        if (_lstMoneyboxes.size () == 1) {
+            throw new ArrayIndexOutOfBoundsException (ContextManager.getContext ().getString (R.string.msg_last_moneybox));
         }
 
-        MoneyboxesManager.deleteMoneybox(getCurrentItem());
+        MoneyboxesManager.deleteMoneybox (getCurrentItem ());
 
-        refreshMoneyboxes(false);
-        setCurrentMoneybox(_lstMoneyboxes.get(0));
+        refreshMoneyboxes (false);
+        setCurrentMoneybox (_lstMoneyboxes.get (0));
 
-        _moneyboxListener.onUpdateMoneyboxesList();
-        notifyDataSetChanged();
+        _moneyboxListener.onUpdateMoneyboxesList ();
+        notifyDataSetChanged ();
     }
 
     /**
      * Update the list of moneyboxes reading from the database with the method
      * {@link MoneyboxesManager#getAllMoneyboxes}
      */
-    public void refreshMoneyboxes() {
-        refreshMoneyboxes(true);
+    public void refreshMoneyboxes ()
+    {
+        refreshMoneyboxes (true);
     }
 
-    public void refreshMoneyboxes(boolean notify) {
-        _lstMoneyboxes = MoneyboxesManager.getAllMoneyboxes();
-        setCurrentMoneybox(getCurrentItem());
+    public void refreshMoneyboxes (boolean notify)
+    {
+        _lstMoneyboxes = MoneyboxesManager.getAllMoneyboxes ();
+        setCurrentMoneybox (getCurrentItem ());
 
         if (notify) {
-            notifyDataSetChanged();
+            notifyDataSetChanged ();
         }
     }
 
@@ -215,43 +234,50 @@ public class MoneyboxAdapter extends BaseAdapter implements SpinnerAdapter {
      * project.
      * 
      */
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView (final int position,
+                         View convertView,
+                         ViewGroup parent)
+    {
         View view;
         ViewHolder holder;
 
         view = convertView;
         if (view == null) {
-            view = _inflater.inflate(R.layout.moneybox_row, null);
+            view = _inflater.inflate (R.layout.moneybox_row,
+                                      null);
 
-            holder = new ViewHolder();
-            holder.btn = (RadioButton) view
-                    .findViewById(R.id.rbMoneyboxRowMoneybox);
-            holder.txt = (TextView) view.findViewById(R.id.txtMoneyboxTotal);
+            holder = new ViewHolder ();
+            holder.btn = (RadioButton) view.findViewById (R.id.rbMoneyboxRowMoneybox);
+            holder.txt = (TextView) view.findViewById (R.id.txtMoneyboxTotal);
 
-            view.setTag(holder);
-        } else {
-            holder = (ViewHolder) view.getTag();
+            view.setTag (holder);
+        }
+        else {
+            holder = (ViewHolder) view.getTag ();
         }
 
-        holder.btn.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+        holder.btn.setOnClickListener (new OnClickListener ()
+        {
+            public void onClick (View v)
+            {
                 if (position != _currentPosition && _currentButton != null) {
-                    _currentButton.setChecked(false);
+                    _currentButton.setChecked (false);
                 }
 
                 _currentPosition = position;
                 _currentButton = (RadioButton) v;
 
                 if (_rowClickListener != null) {
-                    _rowClickListener.onClick(position);
+                    _rowClickListener.onClick (position);
                 }
             }
         });
 
         if (_currentPosition != position) {
-            holder.btn.setChecked(false);
-        } else {
-            holder.btn.setChecked(true);
+            holder.btn.setChecked (false);
+        }
+        else {
+            holder.btn.setChecked (true);
             if (holder.btn != _currentButton) {
                 _currentButton = holder.btn;
             }
@@ -259,22 +285,23 @@ public class MoneyboxAdapter extends BaseAdapter implements SpinnerAdapter {
 
         Moneybox m;
 
-        m = _lstMoneyboxes.get(position);
+        m = _lstMoneyboxes.get (position);
 
-        holder.btn.setText(m.getDescription());
-        holder.btn.setTag(m);
-        holder.txt.setText(CurrencyManager.formatAmount(MoneyboxesManager
-                .getMoneyboxTotal(m)));
+        holder.btn.setText (m.getDescription ());
+        holder.btn.setTag (m);
+        holder.txt.setText (CurrencyManager.formatAmount (MoneyboxesManager.getMoneyboxTotal (m)));
 
         return view;
     }
 
-    public void setOnRowClickListener(OnRowClickListener listener) {
+    public void setOnRowClickListener (OnRowClickListener listener)
+    {
         _rowClickListener = listener;
     }
 
-    public abstract static interface OnRowClickListener {
-        public abstract void onClick(int position);
+    public abstract static interface OnRowClickListener
+    {
+        public abstract void onClick (int position);
     }
 
     /**
@@ -282,8 +309,9 @@ public class MoneyboxAdapter extends BaseAdapter implements SpinnerAdapter {
      * 
      * @author david
      */
-    private class ViewHolder {
+    private class ViewHolder
+    {
         RadioButton btn;
-        TextView txt;
+        TextView    txt;
     }
 }

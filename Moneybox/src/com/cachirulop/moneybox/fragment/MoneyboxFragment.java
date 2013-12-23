@@ -1,3 +1,4 @@
+
 package com.cachirulop.moneybox.fragment;
 
 import java.util.ArrayList;
@@ -32,335 +33,382 @@ import com.cachirulop.moneybox.manager.MovementsManager;
 import com.cachirulop.moneybox.manager.SoundsManager;
 import com.cachirulop.moneybox.manager.VibratorManager;
 
-public class MoneyboxFragment extends Fragment {
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.moneybox_tab, container, false);
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		initActivity();
-		updateTotal();
+public class MoneyboxFragment
+        extends Fragment
+{
+    @Override
+    public View onCreateView (LayoutInflater inflater,
+                              ViewGroup container,
+                              Bundle savedInstanceState)
+    {
+        return inflater.inflate (R.layout.moneybox_tab,
+                                 container,
+                                 false);
+    }
 
-		registerLayoutListener();
+    @Override
+    public void onActivityCreated (Bundle savedInstanceState)
+    {
+        initActivity ();
+        updateTotal ();
 
-		super.onActivityCreated(savedInstanceState);
-	}
+        registerLayoutListener ();
 
-	/**
-	 * Register the event OnGlobalLayoutListener to fill the moneybox when the
-	 * layout is created.
-	 */
-	private void registerLayoutListener() {
-		final View v;
-		final ViewTreeObserver vto;
-		Activity parent;
-		
-		parent = getActivity();
+        super.onActivityCreated (savedInstanceState);
+    }
 
-		v = parent.findViewById(R.id.moneyDropLayout);
-		vto = v.getViewTreeObserver();
-		if (vto.isAlive()) {
-			vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-				public void onGlobalLayout() {
-					initMoneybox();
+    /**
+     * Register the event OnGlobalLayoutListener to fill the moneybox when the
+     * layout is created.
+     */
+    private void registerLayoutListener ()
+    {
+        final View v;
+        final ViewTreeObserver vto;
+        Activity parent;
 
-					v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-				}
-			});
-		}
-	}
+        parent = getActivity ();
 
-	/**
-	 * Initialize the activity creating the list of buttons with the coins and
-	 * bills.
-	 */
-	private void initActivity() {
-		String currencyName;
+        v = parent.findViewById (R.id.moneyDropLayout);
+        vto = v.getViewTreeObserver ();
+        if (vto.isAlive ()) {
+            vto.addOnGlobalLayoutListener (new ViewTreeObserver.OnGlobalLayoutListener ()
+            {
+                public void onGlobalLayout ()
+                {
+                    initMoneybox ();
 
-		currencyName = getResources().getString(R.string.currency_name);
+                    v.getViewTreeObserver ().removeGlobalOnLayoutListener (this);
+                }
+            });
+        }
+    }
 
-		CurrencyManager.initCurrencyDefList(currencyName);
-		addButtons();
-	}
+    /**
+     * Initialize the activity creating the list of buttons with the coins and
+     * bills.
+     */
+    private void initActivity ()
+    {
+        String currencyName;
 
-	/**
-	 * Launched when a coin or a bill is clicked to be inserted in the moneybox.
-	 * 
-	 * Drop the clicked element inside the moneybox and updates the total
-	 * amount.
-	 * 
-	 * @param v
-	 *            View that launch the event.
-	 */
-	protected void onMoneyClicked(View v) {
-		CurrencyValueDef value;
+        currencyName = getResources ().getString (R.string.currency_name);
 
-		value = (CurrencyValueDef) v.getTag();
-		if (value != null) {
-			MainActivity parent;
-			
-			parent = (MainActivity) getActivity();
+        CurrencyManager.initCurrencyDefList (currencyName);
+        addButtons ();
+    }
 
-			MovementsManager.insertMovement(parent.getCurrentMoneybox(), value.getAmount());
-			dropMoney(v, value);
+    /**
+     * Launched when a coin or a bill is clicked to be inserted in the moneybox.
+     * 
+     * Drop the clicked element inside the moneybox and updates the total
+     * amount.
+     * 
+     * @param v
+     *            View that launch the event.
+     */
+    protected void onMoneyClicked (View v)
+    {
+        CurrencyValueDef value;
 
-			updateTotal();
-			refreshMovements();
-		}
-	}
+        value = (CurrencyValueDef) v.getTag ();
+        if (value != null) {
+            MainActivity parent;
 
-	/**
-	 * Move an image of the money like it was dropping inside the money box
-	 * 
-	 * @param src
-	 *            Image of the money to drop
-	 */
-	private void dropMoney(View src, CurrencyValueDef c) {
-		HorizontalScrollView scroll;
+            parent = (MainActivity) getActivity ();
 
-		scroll = (HorizontalScrollView) getActivity().findViewById(R.id.scrollButtonsView);
+            MovementsManager.insertMovement (parent.getCurrentMoneybox (),
+                                             value.getAmount ());
+            dropMoney (v,
+                       value);
 
-		dropMoney(src.getLeft() - scroll.getScrollX(), src.getRight(), c);
-	}
+            updateTotal ();
+            refreshMovements ();
+        }
+    }
 
-	/**
-	 * Drop money from the top of the layout to the bottom simulating that a
-	 * coin or bill is inserted in the moneybox.
-	 * 
-	 * @param leftMargin
-	 *            Left side of the coin/bill
-	 * @param width
-	 *            Width of the image to slide down
-	 * @param c
-	 *            Value of the money to drop
-	 */
-	protected void dropMoney(int leftMargin, int width, CurrencyValueDef c) {
-		ImageView money;
-		AnimationSet moneyDrop;
-		RelativeLayout layout;
-		RelativeLayout.LayoutParams lpParams;
-		Rect r;
-		Activity parent;
-		
-		parent = getActivity();
+    /**
+     * Move an image of the money like it was dropping inside the money box
+     * 
+     * @param src
+     *            Image of the money to drop
+     */
+    private void dropMoney (View src,
+                            CurrencyValueDef c)
+    {
+        HorizontalScrollView scroll;
 
-		r = c.getDrawable().getBounds();
+        scroll = (HorizontalScrollView) getActivity ().findViewById (R.id.scrollButtonsView);
 
-		money = new ImageView(parent);
-		money.setVisibility(View.INVISIBLE);
-		money.setImageDrawable(c.getDrawable().getConstantState().newDrawable());
-		money.setTag(c);
+        dropMoney (src.getLeft () - scroll.getScrollX (),
+                   src.getRight (),
+                   c);
+    }
 
-		layout = (RelativeLayout) parent.findViewById(R.id.moneyDropLayout);
+    /**
+     * Drop money from the top of the layout to the bottom simulating that a
+     * coin or bill is inserted in the moneybox.
+     * 
+     * @param leftMargin
+     *            Left side of the coin/bill
+     * @param width
+     *            Width of the image to slide down
+     * @param c
+     *            Value of the money to drop
+     */
+    protected void dropMoney (int leftMargin,
+                              int width,
+                              CurrencyValueDef c)
+    {
+        ImageView money;
+        AnimationSet moneyDrop;
+        RelativeLayout layout;
+        RelativeLayout.LayoutParams lpParams;
+        Rect r;
+        Activity parent;
 
-		lpParams = new RelativeLayout.LayoutParams(r.width(), r.height());
-		lpParams.leftMargin = leftMargin;
-		lpParams.rightMargin = layout.getWidth() - (leftMargin + width);
-		lpParams.topMargin = 0;
-		lpParams.bottomMargin = r.height();
+        parent = getActivity ();
 
-		layout.addView(money, lpParams);
+        r = c.getDrawable ().getBounds ();
 
-		moneyDrop = createDropAnimation(money, layout, c);
-		money.setVisibility(View.VISIBLE);
+        money = new ImageView (parent);
+        money.setVisibility (View.INVISIBLE);
+        money.setImageDrawable (c.getDrawable ().getConstantState ().newDrawable ());
+        money.setTag (c);
 
-		SoundsManager.playMoneySound(c.getType());
-		VibratorManager.vibrateMoneyDrop(c.getType());
+        layout = (RelativeLayout) parent.findViewById (R.id.moneyDropLayout);
 
-		money.startAnimation(moneyDrop);
-	}
+        lpParams = new RelativeLayout.LayoutParams (r.width (),
+                                                    r.height ());
+        lpParams.leftMargin = leftMargin;
+        lpParams.rightMargin = layout.getWidth () - (leftMargin + width);
+        lpParams.topMargin = 0;
+        lpParams.bottomMargin = r.height ();
 
-	/**
-	 * Create dynamically an android animation for a coin or a bill droping into
-	 * the moneybox.
-	 * 
-	 * @param img
-	 *            ImageView to receive the animation
-	 * @param layout
-	 *            Layout that paint the image
-	 * @param curr
-	 *            Currency value of the image
-	 * @return Set of animations to apply to the image
-	 */
-	private AnimationSet createDropAnimation(ImageView img, View layout,
-			CurrencyValueDef curr) {
-		AnimationSet result;
+        layout.addView (money,
+                        lpParams);
 
-		result = new AnimationSet(false);
-		result.setFillAfter(true);
+        moneyDrop = createDropAnimation (money,
+                                         layout,
+                                         c);
+        money.setVisibility (View.VISIBLE);
 
-		// Fade in
-		AlphaAnimation fadeIn;
+        SoundsManager.playMoneySound (c.getType ());
+        VibratorManager.vibrateMoneyDrop (c.getType ());
 
-		fadeIn = new AlphaAnimation(0.0f, 1.0f);
-		fadeIn.setDuration(300);
-		result.addAnimation(fadeIn);
+        money.startAnimation (moneyDrop);
+    }
 
-		// drop
-		TranslateAnimation drop;
-		int bottom;
+    /**
+     * Create dynamically an android animation for a coin or a bill droping into
+     * the moneybox.
+     * 
+     * @param img
+     *            ImageView to receive the animation
+     * @param layout
+     *            Layout that paint the image
+     * @param curr
+     *            Currency value of the image
+     * @return Set of animations to apply to the image
+     */
+    private AnimationSet createDropAnimation (ImageView img,
+                                              View layout,
+                                              CurrencyValueDef curr)
+    {
+        AnimationSet result;
 
-		bottom = Math.abs(layout.getHeight() - img.getLayoutParams().height);
-		drop = new TranslateAnimation(1.0f, 1.0f, 1.0f, bottom);
-		drop.setStartOffset(300);
-		drop.setDuration(1500);
+        result = new AnimationSet (false);
+        result.setFillAfter (true);
 
-		if (curr.getType() == CurrencyValueDef.MoneyType.COIN) {
-			drop.setInterpolator(new BounceInterpolator());
-		} else {
-			// drop.setInterpolator(new DecelerateInterpolator(0.7f));
-			drop.setInterpolator(new AnticipateOvershootInterpolator());
-		}
+        // Fade in
+        AlphaAnimation fadeIn;
 
-		result.addAnimation(drop);
+        fadeIn = new AlphaAnimation (0.0f,
+                                     1.0f);
+        fadeIn.setDuration (300);
+        result.addAnimation (fadeIn);
 
-		return result;
-	}
+        // drop
+        TranslateAnimation drop;
+        int bottom;
 
-	/**
-	 * Update the total amount using the main tab activity.
-	 */
-	private void updateTotal() {
-		((IMoneyboxListener) getActivity()).onUpdateTotal();
-	}
-	
-	/**
-	 * Send a request to the activity to refresh the movement list
-	 */
-	private void refreshMovements() {
-		((IMoneyboxListener) getActivity()).onUpdateMovements();
-	}
+        bottom = Math.abs (layout.getHeight () - img.getLayoutParams ().height);
+        drop = new TranslateAnimation (1.0f,
+                                       1.0f,
+                                       1.0f,
+                                       bottom);
+        drop.setStartOffset (300);
+        drop.setDuration (1500);
 
-	/**
-	 * Set a value to the total field using the main tab activity.
-	 * 
-	 * @param val
-	 *            Value to be painted in the total.
-	 */
-	protected void setTotal(double val) {
-		((IMoneyboxListener) getActivity()).onSetTotal(val);
-	}
+        if (curr.getType () == CurrencyValueDef.MoneyType.COIN) {
+            drop.setInterpolator (new BounceInterpolator ());
+        }
+        else {
+            // drop.setInterpolator(new DecelerateInterpolator(0.7f));
+            drop.setInterpolator (new AnticipateOvershootInterpolator ());
+        }
 
-	/**
-	 * Add the currency buttons dynamically from the money_defs.xml file
-	 */
-	private void addButtons() {
-		ArrayList<CurrencyValueDef> currencies;
-		LinearLayout buttons;
-		Activity parent;
-		
-		parent = getActivity();
+        result.addAnimation (drop);
 
-		buttons = (LinearLayout) parent.findViewById(R.id.moneyButtonsLayout);
+        return result;
+    }
 
-		currencies = CurrencyManager.getCurrencyDefList();
+    /**
+     * Update the total amount using the main tab activity.
+     */
+    private void updateTotal ()
+    {
+        ((IMoneyboxListener) getActivity ()).onUpdateTotal ();
+    }
 
-		View.OnClickListener listener;
+    /**
+     * Send a request to the activity to refresh the movement list
+     */
+    private void refreshMovements ()
+    {
+        ((IMoneyboxListener) getActivity ()).onUpdateMovements ();
+    }
 
-		listener = new View.OnClickListener() {
-			public void onClick(View v) {
-				onMoneyClicked(v);
-			}
-		};
+    /**
+     * Set a value to the total field using the main tab activity.
+     * 
+     * @param val
+     *            Value to be painted in the total.
+     */
+    protected void setTotal (double val)
+    {
+        ((IMoneyboxListener) getActivity ()).onSetTotal (val);
+    }
 
-		for (CurrencyValueDef c : currencies) {
-			ImageView v;
+    /**
+     * Add the currency buttons dynamically from the money_defs.xml file
+     */
+    private void addButtons ()
+    {
+        ArrayList<CurrencyValueDef> currencies;
+        LinearLayout buttons;
+        Activity parent;
 
-			v = new ImageView(parent);
-			v.setOnClickListener(listener);
-			v.setImageDrawable(c.getDrawable());
-			v.setLongClickable(true);
-			v.setTag(c);
+        parent = getActivity ();
 
-			buttons.addView(v);
-		}
-	}
+        buttons = (LinearLayout) parent.findViewById (R.id.moneyButtonsLayout);
 
-	/**
-	 * Fill the moneybox with all the movements dropping coins randomly
-	 */
-	public void fillMoneybox() {
-		RelativeLayout layout;
-		int maxWidth;
-		ArrayList<Movement> lstMoney;
-		Random rndLeft;
-		double total;
-		int i;
-		MainActivity parent;
-		
-		parent = (MainActivity) getActivity();
+        currencies = CurrencyManager.getCurrencyDefList ();
 
-		layout = (RelativeLayout) parent.findViewById(R.id.moneyDropLayout);
-		maxWidth = layout.getWidth();
-		if (maxWidth == 0) {
-			// The layout is not initialized
-			return;
-		}
+        View.OnClickListener listener;
 
-		total = 0.0;
-		i = 0;
+        listener = new View.OnClickListener ()
+        {
+            public void onClick (View v)
+            {
+                onMoneyClicked (v);
+            }
+        };
 
-		rndLeft = new Random();
-		lstMoney = MovementsManager.getActiveMovements(parent.getCurrentMoneybox());
-		for (Movement m : lstMoney) {
-			Rect r;
-			CurrencyValueDef curr;
-			int left;
+        for (CurrencyValueDef c : currencies) {
+            ImageView v;
 
-			curr = CurrencyManager.getCurrencyDef(Math.abs(m.getAmount()));
-			if (curr != null) {
-				r = curr.getDrawable().getBounds();
+            v = new ImageView (parent);
+            v.setOnClickListener (listener);
+            v.setImageDrawable (c.getDrawable ());
+            v.setLongClickable (true);
+            v.setTag (c);
 
-				left = rndLeft.nextInt(maxWidth - r.width());
+            buttons.addView (v);
+        }
+    }
 
-				total += m.getAmount();
+    /**
+     * Fill the moneybox with all the movements dropping coins randomly
+     */
+    public void fillMoneybox ()
+    {
+        RelativeLayout layout;
+        int maxWidth;
+        ArrayList<Movement> lstMoney;
+        Random rndLeft;
+        double total;
+        int i;
+        MainActivity parent;
 
-				MoneyTimerTask task;
+        parent = (MainActivity) getActivity ();
 
-				task = new MoneyTimerTask(this, curr, left, r.width(), total);
+        layout = (RelativeLayout) parent.findViewById (R.id.moneyDropLayout);
+        maxWidth = layout.getWidth ();
+        if (maxWidth == 0) {
+            // The layout is not initialized
+            return;
+        }
 
-				layout.postDelayed(task, 400 * i);
-			}
+        total = 0.0;
+        i = 0;
 
-			i++;
-		}
-	}
+        rndLeft = new Random ();
+        lstMoney = MovementsManager.getActiveMovements (parent.getCurrentMoneybox ());
+        for (Movement m : lstMoney) {
+            Rect r;
+            CurrencyValueDef curr;
+            int left;
 
-	/**
-	 * Initialize the activity filling the window with the coins and bills that
-	 * are inside the moneybox. Also center the coins and bills list to show the
-	 * middle item.
-	 */
-	public void initMoneybox() {
-		fillMoneybox();
+            curr = CurrencyManager.getCurrencyDef (Math.abs (m.getAmount ()));
+            if (curr != null) {
+                r = curr.getDrawable ().getBounds ();
 
-		HorizontalScrollView scroll;
-		int offsetX;
-		List<CurrencyValueDef> currList;
-		int elemWidth;
+                left = rndLeft.nextInt (maxWidth - r.width ());
 
-		currList = CurrencyManager.getCurrencyDefList();
-		scroll = (HorizontalScrollView) getActivity().findViewById(R.id.scrollButtonsView);
+                total += m.getAmount ();
 
-		elemWidth = currList.get(0).getDrawable().getBounds().right;
-		offsetX = ((currList.size() * elemWidth) / 2) - (elemWidth / 2);
-		scroll.scrollTo(offsetX, 0);
-	}
+                MoneyTimerTask task;
 
-	/**
-	 * Remove the coins and bills inside the moneybox and refill it.
-	 */
-	public void refresh() {
-		RelativeLayout layout;
+                task = new MoneyTimerTask (this,
+                                           curr,
+                                           left,
+                                           r.width (),
+                                           total);
 
-		layout = (RelativeLayout) getActivity().findViewById(R.id.moneyDropLayout);
-		layout.removeAllViews();
+                layout.postDelayed (task,
+                                    400 * i);
+            }
 
-		fillMoneybox();
-	}
+            i++;
+        }
+    }
+
+    /**
+     * Initialize the activity filling the window with the coins and bills that
+     * are inside the moneybox. Also center the coins and bills list to show the
+     * middle item.
+     */
+    public void initMoneybox ()
+    {
+        fillMoneybox ();
+
+        HorizontalScrollView scroll;
+        int offsetX;
+        List<CurrencyValueDef> currList;
+        int elemWidth;
+
+        currList = CurrencyManager.getCurrencyDefList ();
+        scroll = (HorizontalScrollView) getActivity ().findViewById (R.id.scrollButtonsView);
+
+        elemWidth = currList.get (0).getDrawable ().getBounds ().right;
+        offsetX = ((currList.size () * elemWidth) / 2) - (elemWidth / 2);
+        scroll.scrollTo (offsetX,
+                         0);
+    }
+
+    /**
+     * Remove the coins and bills inside the moneybox and refill it.
+     */
+    public void refresh ()
+    {
+        RelativeLayout layout;
+
+        layout = (RelativeLayout) getActivity ().findViewById (R.id.moneyDropLayout);
+        layout.removeAllViews ();
+
+        fillMoneybox ();
+    }
 }
 
 /**
@@ -369,47 +417,58 @@ public class MoneyboxFragment extends Fragment {
  * 
  * @author dmagro
  */
-final class MoneyTimerTask implements Runnable {
-	MoneyboxFragment _parent;
-	CurrencyValueDef _currency;
-	int _left;
-	int _width;
-	double _total;
+final class MoneyTimerTask
+        implements Runnable
+{
+    MoneyboxFragment _parent;
+    CurrencyValueDef _currency;
+    int              _left;
+    int              _width;
+    double           _total;
 
-	/**
-	 * Creates new object with then necessary values to launch the coin or the
-	 * bill inside the moneybox.
-	 * 
-	 * @param parent
-	 *            Activity to drop the money
-	 * @param currency
-	 *            Currency to be dropped
-	 * @param left
-	 *            Left coordinate of the money inside the layout
-	 * @param width
-	 *            With of the image that paint the money
-	 * @param total
-	 *            Total to be painted in the total layout.
-	 */
-	public MoneyTimerTask(MoneyboxFragment parent, CurrencyValueDef currency,
-			int left, int width, double total) {
-		_parent = parent;
-		_currency = currency;
-		_left = left;
-		_width = width;
-		_total = total;
-	}
+    /**
+     * Creates new object with then necessary values to launch the coin or the
+     * bill inside the moneybox.
+     * 
+     * @param parent
+     *            Activity to drop the money
+     * @param currency
+     *            Currency to be dropped
+     * @param left
+     *            Left coordinate of the money inside the layout
+     * @param width
+     *            With of the image that paint the money
+     * @param total
+     *            Total to be painted in the total layout.
+     */
+    public MoneyTimerTask (MoneyboxFragment parent,
+                           CurrencyValueDef currency,
+                           int left,
+                           int width,
+                           double total)
+    {
+        _parent = parent;
+        _currency = currency;
+        _left = left;
+        _width = width;
+        _total = total;
+    }
 
-	/**
-	 * Drop the money in the moneybox and update the total amount.
-	 */
-	public void run() {
-		_parent.getActivity().runOnUiThread(new Runnable() {
-			public void run() {
-				_parent.dropMoney(_left, _width, _currency);
-				_parent.setTotal(_total);
-			}
-		});
-	}
-	
+    /**
+     * Drop the money in the moneybox and update the total amount.
+     */
+    public void run ()
+    {
+        _parent.getActivity ().runOnUiThread (new Runnable ()
+        {
+            public void run ()
+            {
+                _parent.dropMoney (_left,
+                                   _width,
+                                   _currency);
+                _parent.setTotal (_total);
+            }
+        });
+    }
+
 }
