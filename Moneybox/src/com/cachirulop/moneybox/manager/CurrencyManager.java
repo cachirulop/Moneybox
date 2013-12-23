@@ -46,7 +46,8 @@ public class CurrencyManager
         icons = res.obtainTypedArray (res.getIdentifier (name + "_money_icons",
                                                          "array",
                                                          packageName));
-        values = res.obtainTypedArray (res.getIdentifier (name + "_money_values",
+        values = res.obtainTypedArray (res.getIdentifier (name +
+                                                                  "_money_values",
                                                           "array",
                                                           packageName));
         types = res.obtainTypedArray (res.getIdentifier (name + "_money_types",

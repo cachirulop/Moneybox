@@ -161,19 +161,22 @@ public class MoneyboxMovementAdapter
 
         txtDate.setText (m.getInsertDateFormatted ());
         if (m.getGetDate () != null) {
-            txtAmount.setPaintFlags (txtAmount.getPaintFlags () | Paint.STRIKE_THRU_TEXT_FLAG);
+            txtAmount.setPaintFlags (txtAmount.getPaintFlags () |
+                                     Paint.STRIKE_THRU_TEXT_FLAG);
             txtGetDate.setVisibility (View.VISIBLE);
             txtGetDate.setText (m.getGetDateFormatted ());
         }
         else {
-            txtAmount.setPaintFlags (txtAmount.getPaintFlags () & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            txtAmount.setPaintFlags (txtAmount.getPaintFlags () &
+                                     (~Paint.STRIKE_THRU_TEXT_FLAG));
             txtGetDate.setVisibility (View.GONE);
             txtGetDate.setText ("");
         }
 
         txtAmount.setText (CurrencyManager.formatAmount (m.getAmount ()));
 
-        if (m.getDescription () != null && !m.getDescription ().trim ().equals ("")) {
+        if (m.getDescription () != null &&
+            !m.getDescription ().trim ().equals ("")) {
             txtDescription.setVisibility (View.VISIBLE);
             txtDescription.setText (m.getDescription ());
         }

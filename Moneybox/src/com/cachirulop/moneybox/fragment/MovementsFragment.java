@@ -224,7 +224,8 @@ public class MovementsFragment
     @Override
     public boolean onContextItemSelected (MenuItem item)
     {
-        if (item.getItemId () == CONTEXT_MENU_GET || item.getItemId () == CONTEXT_MENU_DELETE) {
+        if (item.getItemId () == CONTEXT_MENU_GET ||
+            item.getItemId () == CONTEXT_MENU_DELETE) {
 
             AdapterView.AdapterContextMenuInfo info;
             ListView listView;

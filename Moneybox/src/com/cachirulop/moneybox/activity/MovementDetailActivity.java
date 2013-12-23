@@ -21,12 +21,13 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -92,7 +93,7 @@ public class MovementDetailActivity
     {
         final ActionBar actionBar = getActionBar ();
 
-        actionBar.setNavigationMode (ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setNavigationMode (ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayHomeAsUpEnabled (true);
         actionBar.setHomeButtonEnabled (true);
     }
@@ -213,6 +214,16 @@ public class MovementDetailActivity
         getMenuInflater ().inflate (R.menu.movement_detail,
                                     menu);
 
+        MenuItem item;
+        
+        item = menu.findItem (R.id.action_get_from_moneybox);
+        if (_movement.isBreakMoneybox ()) {
+            item.setVisible (false);
+        }
+        else {
+            item.setVisible (MovementsManager.canGetMovement (_movement));
+        }
+        
         return true;
     }
 
@@ -312,7 +323,7 @@ public class MovementDetailActivity
     {
         ImageButton btn;
 
-        btn = (ImageButton) findViewById (R.id.btnDelete);
+        btn = (ImageButton) findViewById (R.id.action_delete_movement);
         btn.setEnabled (enabled);
     }
 
@@ -325,14 +336,8 @@ public class MovementDetailActivity
      */
     private void setVisibleGetDate (boolean visible)
     {
-        TextView txt;
-        ImageButton btn;
         LinearLayout detailLayout;
-        View v;
         int visibility;
-
-        // RelativeLayout.LayoutParams lpParams;
-        LinearLayout.LayoutParams lpParams;
 
         if (visible) {
             visibility = View.VISIBLE;
@@ -348,44 +353,6 @@ public class MovementDetailActivity
         detailLayout.getChildAt (6).setVisibility (visibility);
         detailLayout.getChildAt (7).setVisibility (visibility);
         detailLayout.getChildAt (8).setVisibility (visibility);
-
-        /*
-         * txt = (TextView) findViewById(R.id.txtGetDateTitle);
-         * txt.setVisibility(visibility);
-         * 
-         * v = findViewById(R.id.vGetDateTitleLine);
-         * v.setVisibility(visibility);
-         * 
-         * txt = (TextView) findViewById(R.id.txtGetDateDesc);
-         * txt.setVisibility(visibility);
-         * 
-         * txt = (TextView) findViewById(R.id.txtGetDate);
-         * txt.setVisibility(visibility);
-         * 
-         * btn = (ImageButton) findViewById(R.id.btnChangeGetDate);
-         * btn.setVisibility(visibility);
-         * 
-         * txt = (TextView) findViewById(R.id.txtGetTimeDesc);
-         * txt.setVisibility(visibility);
-         * 
-         * txt = (TextView) findViewById(R.id.txtGetTime);
-         * txt.setVisibility(visibility);
-         * 
-         * btn = (ImageButton) findViewById(R.id.btnChangeGetTime);
-         * btn.setVisibility(visibility);
-         * 
-         * // Change the layout_below property of the end line // to display
-         * correctly if (!visible) { v =
-         * findViewById(R.id.vGetDateTitleEndLine); lpParams =
-         * (RelativeLayout.LayoutParams) v.getLayoutParams();
-         * lpParams.addRule(RelativeLayout.BELOW, R.id.btnChangeTime);
-         * v.setLayoutParams(lpParams);
-         * 
-         * txt = (TextView) findViewById(R.id.txtDescription); lpParams =
-         * (RelativeLayout.LayoutParams) txt.getLayoutParams();
-         * lpParams.addRule(RelativeLayout.RIGHT_OF, R.id.txtDescriptionDesc);
-         * txt.setLayoutParams(lpParams); }
-         */
     }
 
     /**
@@ -726,11 +693,8 @@ public class MovementDetailActivity
      * Handles the click of the save button. Copy the values of the window in
      * the movement object and save in the database using the MovementManager
      * class.
-     * 
-     * @param v
-     *            View that launch the event
      */
-    public void onSaveClick (View v)
+    public void onSaveClick ()
     {
         TextView txt;
         Spinner amount;
@@ -752,11 +716,8 @@ public class MovementDetailActivity
 
     /**
      * Handles the click of the cancel button. Only close the window.
-     * 
-     * @param v
-     *            View that launch the event
      */
-    public void onCancelClick (View v)
+    public void onCancelClick ()
     {
         setResult (RESULT_CANCELED);
         finish ();
@@ -765,11 +726,8 @@ public class MovementDetailActivity
     /**
      * Handles the click of the get button. Set the get date of the movement and
      * save it in the database using the MovementsManager class.
-     * 
-     * @param v
-     *            View that launch the event.
      */
-    public void onGetClick (View v)
+    public void onGetClick ()
     {
         MovementsManager.getMovement (_movement);
 
@@ -780,16 +738,54 @@ public class MovementDetailActivity
     /**
      * Handles the click of the delete button. Delete the current movement of
      * the database using the MovementsManager class.
-     * 
-     * @param v
-     *            View that launch the event.
      */
-    public void onDeleteClick (View v)
+    public void onDeleteClick ()
     {
         MovementsManager.deleteMovement (_movement);
 
         setResult (RESULT_OK);
         finish ();
     }
+    
+    /**
+     * Handles the click of the drop to moneybox button to reinsert a movement 
+     * into the moneybox. To do this it removes the get date of the movement.
+     */
+    public void onDropToMoneyboxClick() 
+    {
+        MovementsManager.removeGetDate (_movement);
+        
+        setResult (RESULT_OK);
+        finish ();
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_get_from_moneybox:
+                onGetClick ();
+                return true;
+                
+            case R.id.action_drop_to_moneybox:
+                onDropToMoneyboxClick ();
+                return true;
+                
+            case R.id.action_delete_movement:
+                onDeleteClick ();
+                return true;
+                
+            case R.id.action_save_movement:
+                onSaveClick ();
+                return true;
+                
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+                
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }    
 
 }

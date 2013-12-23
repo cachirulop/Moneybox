@@ -2,9 +2,7 @@
 package com.cachirulop.moneybox.activity;
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -121,10 +119,12 @@ public class MainActivity
         drawerList.setAdapter (_drawerAdapter);
 
         _drawerLayout = (DrawerLayout) findViewById (R.id.drawer_layout);
-
-        _drawerToggle = new ActionBarDrawerToggle (this, _drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close)
+        _drawerToggle = new ActionBarDrawerToggle (this,
+                                                   _drawerLayout,
+                                                   R.drawable.ic_drawer,
+                                                   R.string.drawer_open,
+                                                   R.string.drawer_close)
         {
-
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed (View view)
             {
@@ -326,7 +326,8 @@ public class MainActivity
     {
         ConfirmDialog dlg;
 
-        dlg = new ConfirmDialog (R.string.break_moneybox, R.string.break_moneybox_confirm)
+        dlg = new ConfirmDialog (R.string.break_moneybox,
+                                 R.string.break_moneybox_confirm)
         {
             @Override
             public void onOkClicked ()
@@ -472,7 +473,8 @@ public class MainActivity
     {
         PromptDialog dlg;
 
-        dlg = new PromptDialog (R.string.moneybox_new_moneybox, R.string.moneybox_new_moneybox_description)
+        dlg = new PromptDialog (R.string.moneybox_new_moneybox,
+                                R.string.moneybox_new_moneybox_description)
         {
             @Override
             public boolean onOkClicked (String input)
@@ -500,7 +502,8 @@ public class MainActivity
         else {
             ConfirmDialog dlg;
 
-            dlg = new ConfirmDialog (R.string.moneybox_delete, R.string.moneybox_delete_confirm)
+            dlg = new ConfirmDialog (R.string.moneybox_delete,
+                                     R.string.moneybox_delete_confirm)
             {
                 @Override
                 public void onOkClicked ()
@@ -523,7 +526,8 @@ public class MainActivity
     {
         PromptDialog dlg;
 
-        dlg = new PromptDialog (R.string.moneybox_edit_moneybox, R.string.moneybox_edit_moneybox_description)
+        dlg = new PromptDialog (R.string.moneybox_edit_moneybox,
+                                R.string.moneybox_edit_moneybox_description)
         {
             @Override
             public boolean onOkClicked (String input)

@@ -466,6 +466,18 @@ public class MovementsManager
     }
 
     /**
+     * Remove the get date of a movement to redrop in the moneybox.
+     * 
+     * @param m
+     *            Movement to be modified
+     */
+    public static void removeGetDate (Movement m)
+    {
+        m.setGetDate (null);
+        MovementsManager.updateMovement (m);
+    }
+
+    /**
      * Returns the total amount in the specified moneybox
      * 
      * @param m

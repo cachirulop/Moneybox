@@ -10,7 +10,7 @@
       David Magro Martin - initial API and implementation
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:android1="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/llMovementDetail"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
     android:layout_margin="10dp"
     android:gravity="top"
     android:orientation="vertical"
-    android1:baselineAligned="true" >
+    tools:context=".activity.MovementDetailActivity" >
 
     <TextView
         android:id="@+id/txtDateTitle"
@@ -235,8 +235,8 @@
             android:layout_below="@+id/txtDescriptionDesc"
             android:layout_toRightOf="@+id/txtDescriptionDesc"
             android:ems="10"
-            android:maxLength="100" 
-            android:inputType="text" >
+            android:inputType="text"
+            android:maxLength="100" >
 
             <requestFocus />
         </EditText>
