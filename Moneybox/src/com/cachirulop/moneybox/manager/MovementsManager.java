@@ -95,8 +95,8 @@ public class MovementsManager
     /**
      * Returns the active movements of the specified moneybox.
      * 
-     * An active movement is a movement that doesn't be getted from the last
-     * break of the moneybox or from the begining if there isn't any break.
+     * An active movement is a movement that doesn't be got from the last break
+     * of the moneybox or from the begining if there isn't any break.
      * 
      * @param m
      *            Moneybox to obtain the movements
@@ -471,7 +471,7 @@ public class MovementsManager
      * @param m
      *            Movement to be modified
      */
-    public static void removeGetDate (Movement m)
+    public static void dropMovement (Movement m)
     {
         m.setGetDate (null);
         MovementsManager.updateMovement (m);
@@ -632,7 +632,9 @@ public class MovementsManager
     }
 
     /**
-     * Returns true if the money can be taken from the moneybox. If the insert
+     * Returns true if the money can be taken from the moneybox. Conditions: -
+     * If the movement is a break moneybox movement then it can't be got - If
+     * the movement is already get movement then return false - If the insert
      * date of the movement is after the last break movement, then the money can
      * be taken.
      * 
@@ -642,6 +644,63 @@ public class MovementsManager
      *         otherwise.
      */
     public static boolean canGetMovement (Movement m)
+    {
+        if (m.isBreakMoneybox ()) {
+            return false;
+        }
+
+        if (m.getGetDate () != null) {
+            return false;
+        }
+
+        return isAfterBreak (m);
+    }
+
+    /**
+     * Return true if the movement can be deleted.
+     * 
+     * A movement can be deleted if there isn't a break moneybox after that or
+     * if the movement is of the break moneybox type.
+     * 
+     * @param m
+     *            Movement to check
+     * @return True if the movement can be deleted from the database
+     */
+    public static boolean canDeleteMovement (Movement m)
+    {
+        if (m.isBreakMoneybox ()) {
+            return true;
+        }
+        return isAfterBreak (m);
+    }
+
+    /**
+     * Return true if the movement can be dropped again in the moneybox.
+     * 
+     * A movement can be dropped again to the moneybox if there isn't any break
+     * moneybox after its insert date, and if it has a valid get date.
+     * 
+     * @param m
+     *            Movement to check if can be dropped
+     * @return True if the movement can be dropped again in the moneybox.
+     */
+    public static boolean canDropMovement (Movement m)
+    {
+        if (m.getGetDate () == null) {
+            return false;
+        }
+
+        return isAfterBreak (m);
+    }
+
+    /**
+     * Check if a movement date if after a break moneybox or not to know if it
+     * is active and can be got, dropped or deleted.
+     * 
+     * @param m
+     * @return
+     */
+    private static boolean isAfterBreak (Movement m)
     {
         Movement last;
 

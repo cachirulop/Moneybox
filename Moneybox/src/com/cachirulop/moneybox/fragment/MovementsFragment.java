@@ -35,8 +35,14 @@ public class MovementsFragment
      */
     static final int CONTEXT_MENU_GET      = 0;
 
+    /**
+     * Constant to identify the context menu option to drop money again to the
+     * moneybox
+     */
+    static final int CONTEXT_MENU_DROP     = 1;
+
     /** Constant to identify the context menu option to delete a movement */
-    static final int CONTEXT_MENU_DELETE   = 1;
+    static final int CONTEXT_MENU_DELETE   = 2;
 
     @Override
     public View onCreateView (LayoutInflater inflater,
@@ -206,14 +212,19 @@ public class MovementsFragment
                              CONTEXT_MENU_GET,
                              0,
                              R.string.get_from_moneybox);
-            if (selected.getGetDate () != null) {
-                item.setEnabled (false);
-            }
+            item.setEnabled (MovementsManager.canGetMovement (selected));
+
+            item = menu.add (Menu.NONE,
+                             CONTEXT_MENU_DROP,
+                             1,
+                             R.string.drop_to_moneybox_again);
+            item.setEnabled (MovementsManager.canDropMovement (selected));
 
             item = menu.add (Menu.NONE,
                              CONTEXT_MENU_DELETE,
-                             1,
+                             2,
                              R.string.delete);
+            item.setEnabled (MovementsManager.canDeleteMovement (selected));
         }
     }
 
@@ -224,8 +235,11 @@ public class MovementsFragment
     @Override
     public boolean onContextItemSelected (MenuItem item)
     {
-        if (item.getItemId () == CONTEXT_MENU_GET ||
-            item.getItemId () == CONTEXT_MENU_DELETE) {
+        int itemId;
+
+        itemId = item.getItemId ();
+        if (itemId == CONTEXT_MENU_GET || itemId == CONTEXT_MENU_DELETE ||
+            itemId == CONTEXT_MENU_DROP) {
 
             AdapterView.AdapterContextMenuInfo info;
             ListView listView;
@@ -236,11 +250,18 @@ public class MovementsFragment
 
             selected = (Movement) ((MoneyboxMovementAdapter) listView.getAdapter ()).getItem (info.position);
 
-            if (item.getItemId () == CONTEXT_MENU_GET) {
-                MovementsManager.getMovement (selected);
-            }
-            else if (item.getItemId () == CONTEXT_MENU_DELETE) {
-                MovementsManager.deleteMovement (selected);
+            switch (itemId) {
+                case CONTEXT_MENU_GET:
+                    MovementsManager.getMovement (selected);
+                    break;
+
+                case CONTEXT_MENU_DROP:
+                    MovementsManager.dropMovement (selected);
+                    break;
+
+                case CONTEXT_MENU_DELETE:
+                    MovementsManager.deleteMovement (selected);
+                    break;
             }
 
             refresh ();

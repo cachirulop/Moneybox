@@ -101,88 +101,97 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/txtGetDateTitle"
+    <LinearLayout
+        android:id="@+id/llGetDate"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/svMovementDetail"
-        android:layout_below="@+id/svMovementDetail"
-        android:text="@string/get_date"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <View
-        android:id="@+id/vGetDateTitleLine"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:background="@drawable/form_title_box" />
-
-    <RelativeLayout
-        android:id="@+id/rlGetDate"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
-        <ImageButton
-            android:id="@+id/btnChangeGetDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/change"
-            android:onClick="onChangeGetDateClick"
-            android:src="@android:drawable/ic_menu_today" />
+        android:layout_gravity="top"
+        android:gravity="top"
+        android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/txtGetDateDesc"
-            android:layout_width="wrap_content"
+            android:id="@+id/txtGetDateTitle"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:text="@string/date"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:layout_alignLeft="@+id/svMovementDetail"
+            android:layout_below="@+id/svMovementDetail"
+            android:text="@string/get_date"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <TextView
-            android:id="@+id/txtGetDate"
+        <View
+            android:id="@+id/vGetDateTitleLine"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="false"
-            android:layout_centerHorizontal="false"
-            android:layout_centerInParent="true"
-            android:text="01/01/2012"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </RelativeLayout>
+            android:layout_height="1dp"
+            android:background="@drawable/form_title_box" />
 
-    <RelativeLayout
-        android:id="@+id/rlGetTime"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        <RelativeLayout
+            android:id="@+id/rlGetDate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
 
-        <ImageButton
-            android:id="@+id/btnChangeGetTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/change"
-            android:onClick="onChangeGetTimeClick"
-            android:src="@android:drawable/ic_menu_today" />
+            <ImageButton
+                android:id="@+id/btnChangeGetDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/change"
+                android:onClick="onChangeGetDateClick"
+                android:src="@android:drawable/ic_menu_today" />
 
-        <TextView
-            android:id="@+id/txtGetTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="00:00"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/txtGetDateDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="@string/date"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TextView
-            android:id="@+id/txtGetTimeDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:text="@string/time"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/txtGetDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="false"
+                android:layout_centerHorizontal="false"
+                android:layout_centerInParent="true"
+                android:text="01/01/2012"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlGetTime"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageButton
+                android:id="@+id/btnChangeGetTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/change"
+                android:onClick="onChangeGetTimeClick"
+                android:src="@android:drawable/ic_menu_today" />
+
+            <TextView
+                android:id="@+id/txtGetTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="00:00"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/txtGetTimeDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="@string/time"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </RelativeLayout>
+    </LinearLayout>
 
     <View
         android:id="@+id/vGetDateTitleEndLine"

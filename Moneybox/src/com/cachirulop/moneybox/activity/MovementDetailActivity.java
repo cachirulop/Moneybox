@@ -18,7 +18,6 @@ import java.util.Date;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -26,7 +25,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -52,21 +50,6 @@ public class MovementDetailActivity
         extends Activity
 {
 
-    // Constants to identify the dialogs
-    // //////////////////////////////////////////////////////
-
-    /** Dialog to set the insert date */
-    static final int INSERT_DATE_DIALOG_ID = 0;
-
-    /** Dialog to set the insert time */
-    static final int INSERT_TIME_DIALOG_ID = 1;
-
-    /** Dialog to set the get date */
-    static final int GET_DATE_DIALOG_ID    = 2;
-
-    /** Dialog to set the get time */
-    static final int GET_TIME_DIALOG_ID    = 3;
-
     /** Movement loaded in the window */
     private Movement _movement;
 
@@ -83,7 +66,7 @@ public class MovementDetailActivity
         loadSpinner ();
         initData ();
         createActionBar ();
-        initButtons ();
+        initForm ();
     }
 
     /**
@@ -99,113 +82,22 @@ public class MovementDetailActivity
     }
 
     /**
-     * Launched by android when creates a new dialog. Can create this dialogs: -
-     * Edit the insert date field - Edit the insert time field - Edit the get
-     * date field - Edit the get time field
+     * Initialize the status of the fields in the form.
      */
-    @Override
-    protected Dialog onCreateDialog (int id)
+    private void initForm ()
     {
-        Calendar cal;
-        DatePickerDialog.OnDateSetListener ld;
-        TimePickerDialog.OnTimeSetListener lt;
-
-        cal = Calendar.getInstance ();
-
-        switch (id) {
-            case INSERT_DATE_DIALOG_ID:
-                ld = new DatePickerDialog.OnDateSetListener ()
-                {
-                    public void onDateSet (DatePicker view,
-                                           int year,
-                                           int month,
-                                           int day)
-                    {
-                        onInsertDateSet (view,
-                                         year,
-                                         month,
-                                         day);
-                    }
-                };
-
-                cal.setTime (_movement.getInsertDate ());
-
-                return new DatePickerDialog (this,
-                                             ld,
-                                             cal.get (Calendar.YEAR),
-                                             cal.get (Calendar.MONTH),
-                                             cal.get (Calendar.DAY_OF_MONTH));
-
-            case INSERT_TIME_DIALOG_ID:
-                lt = new TimePickerDialog.OnTimeSetListener ()
-                {
-                    public void onTimeSet (TimePicker view,
-                                           int hour,
-                                           int minute)
-                    {
-                        onInsertTimeSet (view,
-                                         hour,
-                                         minute);
-                    }
-                };
-
-                cal.setTime (_movement.getInsertDate ());
-
-                return new TimePickerDialog (this,
-                                             lt,
-                                             cal.get (Calendar.HOUR_OF_DAY),
-                                             cal.get (Calendar.MINUTE),
-                                             true);
-            case GET_DATE_DIALOG_ID:
-                ld = new DatePickerDialog.OnDateSetListener ()
-                {
-                    public void onDateSet (DatePicker view,
-                                           int year,
-                                           int month,
-                                           int day)
-                    {
-                        onGetDateSet (view,
-                                      year,
-                                      month,
-                                      day);
-                    }
-                };
-
-                cal.setTime (_movement.getGetDate ());
-
-                return new DatePickerDialog (this,
-                                             ld,
-                                             cal.get (Calendar.YEAR),
-                                             cal.get (Calendar.MONTH),
-                                             cal.get (Calendar.DAY_OF_MONTH));
-
-            case GET_TIME_DIALOG_ID:
-                lt = new TimePickerDialog.OnTimeSetListener ()
-                {
-                    public void onTimeSet (TimePicker view,
-                                           int hour,
-                                           int minute)
-                    {
-                        onGetTimeSet (view,
-                                      hour,
-                                      minute);
-                    }
-                };
-
-                cal.setTime (_movement.getGetDate ());
-
-                return new TimePickerDialog (this,
-                                             lt,
-                                             cal.get (Calendar.HOUR_OF_DAY),
-                                             cal.get (Calendar.MINUTE),
-                                             true);
-        }
-
-        return null;
+        setVisibleGetDate (!(_movement.isBreakMoneybox () || _movement.getGetDate () == null));
+        setVisibleAmount (!_movement.isBreakMoneybox ());
     }
 
     /**
      * Load the menu from the movement_detail.xml file.
+     * 
+     * Activates and deactivates the put and drop menu buttons depending of the
+     * movement.
+     * 
+     * @param menu
+     *            Menu to be inflated with the menu inflater.
      */
     @Override
     public boolean onCreateOptionsMenu (Menu menu)
@@ -215,15 +107,19 @@ public class MovementDetailActivity
                                     menu);
 
         MenuItem item;
-        
+
         item = menu.findItem (R.id.action_get_from_moneybox);
-        if (_movement.isBreakMoneybox ()) {
-            item.setVisible (false);
-        }
-        else {
-            item.setVisible (MovementsManager.canGetMovement (_movement));
-        }
-        
+        item.setVisible (MovementsManager.canGetMovement (_movement));
+        item.setEnabled (item.isVisible ());
+
+        item = menu.findItem (R.id.action_drop_to_moneybox);
+        item.setVisible (MovementsManager.canDropMovement (_movement));
+        item.setEnabled (item.isVisible ());
+
+        item = menu.findItem (R.id.action_delete_movement);
+        item.setVisible (MovementsManager.canDeleteMovement (_movement));
+        item.setEnabled (item.isVisible ());
+
         return true;
     }
 
@@ -261,73 +157,6 @@ public class MovementDetailActivity
     }
 
     /**
-     * Initialize the state of the buttons depending on the type of the
-     * movement.
-     * 
-     * If the movement is normal without get date, the fields with the get date
-     * (date and time) should be invisibles. If the insert date of the movement
-     * is after the last break moneybox then the delete and get button should be
-     * disabled. If the movement is a break moneybox movement, then the get date
-     * fields and the amount field should be invisibles, and the get button
-     * should be disabled.
-     */
-    private void initButtons ()
-    {
-        if (!_movement.isBreakMoneybox ()) {
-            if (_movement.getGetDate () == null) {
-                setVisibleGetDate (false);
-            }
-            else {
-                setEnableGetButton (false);
-            }
-
-            if (!MovementsManager.canGetMovement (_movement)) {
-                setEnableGetButton (false);
-                setEnableDeleteButton (false);
-            }
-
-        }
-        else {
-            setEnableGetButton (false);
-            setVisibleGetDate (false);
-            setVisibleAmount (false);
-        }
-    }
-
-    /**
-     * Change the state (enabled/disabled) of the Get button.
-     * 
-     * @param enabled
-     *            Tells if the button should be enabled (true) or disabled
-     *            (false)
-     */
-    private void setEnableGetButton (boolean enabled)
-    {
-        // TODO: Change the action bar button to view: drop or get
-        /*
-         * ImageButton btn;
-         * 
-         * btn = (ImageButton) findViewById(R.id.btnGetFromMoneybox);
-         * btn.setEnabled(enabled);
-         */
-    }
-
-    /**
-     * Change the state (enabled/disabled) of the Delete button.
-     * 
-     * @param enabled
-     *            Tells if the button should be enabled (true) or disabled
-     *            (false)
-     */
-    private void setEnableDeleteButton (boolean enabled)
-    {
-        ImageButton btn;
-
-        btn = (ImageButton) findViewById (R.id.action_delete_movement);
-        btn.setEnabled (enabled);
-    }
-
-    /**
      * Change the visibility of the get date fields (date and time), including
      * the title and separator.
      * 
@@ -346,13 +175,8 @@ public class MovementDetailActivity
             visibility = View.GONE;
         }
 
-        detailLayout = (LinearLayout) findViewById (R.id.llMovementDetail);
-
-        detailLayout.getChildAt (4).setVisibility (visibility);
-        detailLayout.getChildAt (5).setVisibility (visibility);
-        detailLayout.getChildAt (6).setVisibility (visibility);
-        detailLayout.getChildAt (7).setVisibility (visibility);
-        detailLayout.getChildAt (8).setVisibility (visibility);
+        detailLayout = (LinearLayout) findViewById (R.id.llGetDate);
+        detailLayout.setVisibility (visibility);
     }
 
     /**
@@ -389,7 +213,34 @@ public class MovementDetailActivity
      */
     public void onChangeInsertDateClick (View v)
     {
-        showDialog (INSERT_DATE_DIALOG_ID);
+        Calendar cal;
+        DatePickerDialog dlg;
+        DatePickerDialog.OnDateSetListener ld;
+
+        cal = Calendar.getInstance ();
+
+        ld = new DatePickerDialog.OnDateSetListener ()
+        {
+            public void onDateSet (DatePicker view,
+                                   int year,
+                                   int month,
+                                   int day)
+            {
+                onInsertDateSet (view,
+                                 year,
+                                 month,
+                                 day);
+            }
+        };
+
+        cal.setTime (_movement.getInsertDate ());
+
+        dlg = new DatePickerDialog (this,
+                                    ld,
+                                    cal.get (Calendar.YEAR),
+                                    cal.get (Calendar.MONTH),
+                                    cal.get (Calendar.DAY_OF_MONTH));
+        dlg.show ();
     }
 
     /**
@@ -400,7 +251,33 @@ public class MovementDetailActivity
      */
     public void onChangeInsertTimeClick (View v)
     {
-        showDialog (INSERT_TIME_DIALOG_ID);
+        Calendar cal;
+        TimePickerDialog dlg;
+        TimePickerDialog.OnTimeSetListener lt;
+
+        cal = Calendar.getInstance ();
+
+        lt = new TimePickerDialog.OnTimeSetListener ()
+        {
+            public void onTimeSet (TimePicker view,
+                                   int hour,
+                                   int minute)
+            {
+                onInsertTimeSet (view,
+                                 hour,
+                                 minute);
+            }
+        };
+
+        cal.setTime (_movement.getInsertDate ());
+
+        dlg = new TimePickerDialog (this,
+                                    lt,
+                                    cal.get (Calendar.HOUR_OF_DAY),
+                                    cal.get (Calendar.MINUTE),
+                                    true);
+
+        dlg.show ();
     }
 
     /**
@@ -411,7 +288,34 @@ public class MovementDetailActivity
      */
     public void onChangeGetDateClick (View v)
     {
-        showDialog (GET_DATE_DIALOG_ID);
+        Calendar cal;
+        DatePickerDialog dlg;
+        DatePickerDialog.OnDateSetListener ld;
+
+        cal = Calendar.getInstance ();
+
+        ld = new DatePickerDialog.OnDateSetListener ()
+        {
+            public void onDateSet (DatePicker view,
+                                   int year,
+                                   int month,
+                                   int day)
+            {
+                onGetDateSet (view,
+                              year,
+                              month,
+                              day);
+            }
+        };
+
+        cal.setTime (_movement.getGetDate ());
+
+        dlg = new DatePickerDialog (this,
+                                    ld,
+                                    cal.get (Calendar.YEAR),
+                                    cal.get (Calendar.MONTH),
+                                    cal.get (Calendar.DAY_OF_MONTH));
+        dlg.show ();
     }
 
     /**
@@ -422,7 +326,33 @@ public class MovementDetailActivity
      */
     public void onChangeGetTimeClick (View v)
     {
-        showDialog (GET_TIME_DIALOG_ID);
+        Calendar cal;
+        TimePickerDialog dlg;
+        TimePickerDialog.OnTimeSetListener lt;
+
+        cal = Calendar.getInstance ();
+
+        lt = new TimePickerDialog.OnTimeSetListener ()
+        {
+            public void onTimeSet (TimePicker view,
+                                   int hour,
+                                   int minute)
+            {
+                onGetTimeSet (view,
+                              hour,
+                              minute);
+            }
+        };
+
+        cal.setTime (_movement.getGetDate ());
+
+        dlg = new TimePickerDialog (this,
+                                    lt,
+                                    cal.get (Calendar.HOUR_OF_DAY),
+                                    cal.get (Calendar.MINUTE),
+                                    true);
+
+        dlg.show ();
     }
 
     /**
@@ -746,46 +676,47 @@ public class MovementDetailActivity
         setResult (RESULT_OK);
         finish ();
     }
-    
+
     /**
-     * Handles the click of the drop to moneybox button to reinsert a movement 
+     * Handles the click of the drop to moneybox button to reinsert a movement
      * into the moneybox. To do this it removes the get date of the movement.
      */
-    public void onDropToMoneyboxClick() 
+    public void onDropToMoneyboxClick ()
     {
-        MovementsManager.removeGetDate (_movement);
-        
+        MovementsManager.dropMovement (_movement);
+
         setResult (RESULT_OK);
         finish ();
     }
-    
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected (MenuItem item)
+    {
         // Handle presses on the action bar items
-        switch (item.getItemId()) {
+        switch (item.getItemId ()) {
             case R.id.action_get_from_moneybox:
                 onGetClick ();
                 return true;
-                
+
             case R.id.action_drop_to_moneybox:
                 onDropToMoneyboxClick ();
                 return true;
-                
+
             case R.id.action_delete_movement:
                 onDeleteClick ();
                 return true;
-                
+
             case R.id.action_save_movement:
                 onSaveClick ();
                 return true;
-                
+
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                NavUtils.navigateUpFromSameTask (this);
                 return true;
-                
+
             default:
-                return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected (item);
         }
-    }    
+    }
 
 }
