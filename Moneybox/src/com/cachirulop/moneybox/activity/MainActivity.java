@@ -112,7 +112,7 @@ public class MainActivity
             }
         });
 
-        _drawerAdapter.setCurrentMoneyboxId (Preferences.getLastMoneyboxId (this));
+        //_drawerAdapter.setCurrentMoneyboxId (Preferences.getLastMoneyboxId (this));
         getActionBar ().setTitle (_drawerAdapter.getCurrentItem ().getDescription ());
 
         drawerList = (ListView) findViewById (R.id.lvMoneyboxes);

@@ -63,7 +63,8 @@ public class MoneyboxAdapter
         _inflater = LayoutInflater.from (context);
         _moneyboxListener = (IMoneyboxListener) context;
 
-        _currentPosition = 0;
+        readMoneyboxes ();
+        setCurrentMoneyboxId (Preferences.getLastMoneyboxId (context));
     }
 
     /**
@@ -141,6 +142,12 @@ public class MoneyboxAdapter
 
             i++;
         }
+
+        if (!find) {
+            _currentPosition = 0;
+        }
+
+        updatePreferences ();
     }
 
     public void setCurrentMoneybox (Moneybox selected)
@@ -154,7 +161,7 @@ public class MoneyboxAdapter
 
         m = MoneyboxesManager.insertMoneybox (description);
 
-        refreshMoneyboxes (false);
+        readMoneyboxes ();
         setCurrentMoneybox (m);
         Preferences.setLastMoneyboxId (ContextManager.getContext (),
                                        m.getIdMoneybox ());
@@ -172,8 +179,7 @@ public class MoneyboxAdapter
 
         MoneyboxesManager.updateMoneybox (m);
 
-        refreshMoneyboxes (false);
-
+        readMoneyboxes ();
         setCurrentMoneybox (m);
 
         _moneyboxListener.onUpdateMoneyboxesList ();
@@ -201,7 +207,7 @@ public class MoneyboxAdapter
 
         MoneyboxesManager.deleteMoneybox (getCurrentItem ());
 
-        refreshMoneyboxes (false);
+        readMoneyboxes ();
         setCurrentMoneybox (_lstMoneyboxes.get (0));
 
         _moneyboxListener.onUpdateMoneyboxesList ();
@@ -214,17 +220,21 @@ public class MoneyboxAdapter
      */
     public void refreshMoneyboxes ()
     {
-        refreshMoneyboxes (true);
-    }
-
-    public void refreshMoneyboxes (boolean notify)
-    {
-        _lstMoneyboxes = MoneyboxesManager.getAllMoneyboxes ();
+        readMoneyboxes ();
         setCurrentMoneybox (getCurrentItem ());
 
-        if (notify) {
-            notifyDataSetChanged ();
-        }
+        notifyDataSetChanged ();
+    }
+
+    private void readMoneyboxes ()
+    {
+        _lstMoneyboxes = MoneyboxesManager.getAllMoneyboxes ();
+    }
+
+    private void updatePreferences ()
+    {
+        Preferences.setLastMoneyboxId (ContextManager.getContext (),
+                                       getCurrentItem ().getIdMoneybox ());
     }
 
     /**
@@ -265,6 +275,8 @@ public class MoneyboxAdapter
                 }
 
                 _currentPosition = position;
+                updatePreferences ();
+
                 _currentButton = (RadioButton) v;
 
                 if (_rowClickListener != null) {
