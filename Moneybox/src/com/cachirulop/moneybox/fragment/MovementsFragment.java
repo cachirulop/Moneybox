@@ -104,7 +104,7 @@ public class MovementsFragment
         switch (requestCode) {
             case EDIT_MOVEMENT_REQUEST:
                 if (resultCode == Activity.RESULT_OK) {
-                    refresh ();
+                    refresh (true);
                 }
                 break;
         }
@@ -118,7 +118,7 @@ public class MovementsFragment
     {
         super.onResume ();
 
-        refresh ();
+        refresh (false);
     }
 
     /**
@@ -159,6 +159,22 @@ public class MovementsFragment
      */
     public void refresh ()
     {
+        refresh (false);
+    }
+
+    /**
+     * Refresh the list of movements. Call to the adapter of the ListView with
+     * the movements to refresh the information.
+     * 
+     * If the parameters refreshMoneybox is true then call to the
+     * onUpdateMoneybox method of the activity to refresh the moneybox and the
+     * moneybox list
+     * 
+     * @param refreshMoneybox
+     *            Tells if the moneybox tab should be refreshed too.
+     */
+    public void refresh (boolean refreshMoneybox)
+    {
         ListView listView;
         MoneyboxMovementAdapter adapter;
         MainActivity parent;
@@ -172,6 +188,10 @@ public class MovementsFragment
         adapter.refreshMovements ();
 
         updateTotal ();
+
+        if (refreshMoneybox) {
+            ((IMoneyboxListener) getActivity ()).onUpdateMoneybox ();
+        }
     }
 
     /**
@@ -264,7 +284,7 @@ public class MovementsFragment
                     break;
             }
 
-            refresh ();
+            refresh (true);
         }
 
         return true;

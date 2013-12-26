@@ -1,7 +1,6 @@
 /**
- * Package with the fragment classes for the different tabs. 
- */
-/**
+ * Package with the fragment classes for the different tabs.
+ * 
  * @author David Magro Martin
  *
  */
