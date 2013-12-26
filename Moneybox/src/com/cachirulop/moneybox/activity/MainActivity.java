@@ -7,8 +7,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
@@ -224,46 +222,22 @@ public class MainActivity
     @Override
     public boolean onCreateOptionsMenu (Menu menu)
     {
-        MenuItem item;
-
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater ().inflate (R.menu.main,
                                     menu);
 
-        // Register the callback for the edit moneybox option
-        // TODO: I think that i don't need to do anything
-        item = menu.findItem (R.id.action_edit_moneybox);
-
-        MenuItemCompat.setOnActionExpandListener (item,
-                                                  new OnActionExpandListener ()
-                                                  {
-                                                      public boolean onMenuItemActionCollapse (MenuItem item)
-                                                      {
-                                                          // Do something when
-                                                          // collapsed
-                                                          return true; // Return
-                                                                       // true
-                                                                       // to
-                                                                       // collapse
-                                                                       // action
-                                                                       // view
-                                                      }
-
-                                                      public boolean onMenuItemActionExpand (MenuItem item)
-                                                      {
-                                                          // Do something when
-                                                          // expanded
-                                                          return true; // Return
-                                                                       // true
-                                                                       // to
-                                                                       // expand
-                                                                       // action
-                                                                       // view
-                                                      }
-
-                                                  });
-
         return true;
+    }
+
+    @Override
+    public void onBackPressed ()
+    {
+        if (_viewPager.getCurrentItem () != 0) {
+            _viewPager.setCurrentItem (0);
+        }
+        else {
+            this.finish ();
+        }
     }
 
     /**
@@ -455,11 +429,6 @@ public class MainActivity
     {
         _drawerAdapter.refreshMoneyboxes ();
         _sectionsPagerAdapter.getMovementsFragment ().refresh ();
-    }
-
-    public void onSelectDefaultTab ()
-    {
-        _viewPager.setCurrentItem (0);
     }
 
     public void selectMoneybox (Moneybox m)

@@ -12,6 +12,4 @@ public interface IMoneyboxListener
     void onUpdateMovements ();
 
     void onUpdateMoneyboxesList ();
-
-    void onSelectDefaultTab ();
 }

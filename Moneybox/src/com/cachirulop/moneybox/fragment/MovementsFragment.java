@@ -289,15 +289,4 @@ public class MovementsFragment
 
         return true;
     }
-
-    /**
-     * Don't close the application, select the default tab.
-     * 
-     * It doesn't work!!
-     */
-    public void onBackPressed ()
-    {
-        // TODO: It doesn't work
-        ((IMoneyboxListener) getActivity ()).onSelectDefaultTab ();
-    }
 }
