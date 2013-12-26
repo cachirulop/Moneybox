@@ -21,7 +21,7 @@ public class MoneyboxesManager
      */
     public static ArrayList<Moneybox> getAllMoneyboxes ()
     {
-        Cursor c;
+        Cursor c = null;
         SQLiteDatabase db = null;
 
         try {
@@ -38,6 +38,10 @@ public class MoneyboxesManager
             return createMoneyboxesList (c);
         }
         finally {
+            if (c != null) {
+                c.close ();
+            }
+
             if (db != null) {
                 db.close ();
             }
@@ -99,7 +103,7 @@ public class MoneyboxesManager
     public static Moneybox getMoneybox (long idMoneybox)
     {
         SQLiteDatabase db = null;
-        Cursor c;
+        Cursor c = null;
 
         try {
             db = new MoneyboxDataHelper (ContextManager.getContext ()).getReadableDatabase ();
@@ -120,6 +124,10 @@ public class MoneyboxesManager
             }
         }
         finally {
+            if (c != null) {
+                c.close ();
+            }
+
             if (db != null) {
                 db.close ();
             }

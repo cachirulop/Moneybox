@@ -45,7 +45,7 @@ public class MovementsManager
      */
     public static ArrayList<Movement> getAllMovements (Moneybox m)
     {
-        Cursor c;
+        Cursor c = null;
         SQLiteDatabase db = null;
 
         try {
@@ -62,6 +62,10 @@ public class MovementsManager
             return createMovementList (c);
         }
         finally {
+            if (c != null) {
+                c.close ();
+            }
+
             if (db != null) {
                 db.close ();
             }
@@ -105,7 +109,7 @@ public class MovementsManager
     public static ArrayList<Movement> getActiveMovements (Moneybox m)
     {
         Movement lastBreak;
-        Cursor c;
+        Cursor c = null;
         Context ctx;
         SQLiteDatabase db = null;
 
@@ -128,6 +132,10 @@ public class MovementsManager
             return createMovementList (c);
         }
         finally {
+            if (c != null) {
+                c.close ();
+            }
+
             if (db != null) {
                 db.close ();
             }
@@ -144,7 +152,7 @@ public class MovementsManager
      */
     public static Movement getLastBreakMoneybox (Moneybox m)
     {
-        Cursor c;
+        Cursor c = null;
         SQLiteDatabase db = null;
         Context ctx;
 
@@ -163,6 +171,10 @@ public class MovementsManager
             }
         }
         finally {
+            if (c != null) {
+                c.close ();
+            }
+
             if (db != null) {
                 db.close ();
             }
@@ -178,7 +190,7 @@ public class MovementsManager
      */
     public static Movement getNextBreakMoneybox (Movement reference)
     {
-        Cursor c;
+        Cursor c = null;
         SQLiteDatabase db = null;
         Context ctx;
 
@@ -198,6 +210,10 @@ public class MovementsManager
             }
         }
         finally {
+            if (c != null) {
+                c.close ();
+            }
+
             if (db != null) {
                 db.close ();
             }
@@ -213,7 +229,7 @@ public class MovementsManager
      */
     public static Movement getPrevBreakMoneybox (Movement reference)
     {
-        Cursor c;
+        Cursor c = null;
         SQLiteDatabase db = null;
         Context ctx;
 
@@ -233,6 +249,10 @@ public class MovementsManager
             }
         }
         finally {
+            if (c != null) {
+                c.close ();
+            }
+
             if (db != null) {
                 db.close ();
             }
@@ -487,7 +507,7 @@ public class MovementsManager
     public static double getTotalAmount (Moneybox m)
     {
         SQLiteDatabase db = null;
-        Cursor c;
+        Cursor c = null;
         Context ctx;
         Movement lastBreak;
 
@@ -511,6 +531,10 @@ public class MovementsManager
             return c.getDouble (0);
         }
         finally {
+            if (c != null) {
+                c.close ();
+            }
+
             if (db != null) {
                 db.close ();
             }
@@ -533,7 +557,7 @@ public class MovementsManager
                                                 Date end)
     {
         SQLiteDatabase db = null;
-        Cursor c;
+        Cursor c = null;
         Context ctx;
 
         try {
@@ -550,6 +574,10 @@ public class MovementsManager
             return c.getDouble (0);
         }
         finally {
+            if (c != null) {
+                c.close ();
+            }
+
             if (db != null) {
                 db.close ();
             }
@@ -570,7 +598,7 @@ public class MovementsManager
                                                Date reference)
     {
         SQLiteDatabase db = null;
-        Cursor c;
+        Cursor c = null;
         Context ctx;
 
         try {
@@ -586,6 +614,10 @@ public class MovementsManager
             return c.getDouble (0);
         }
         finally {
+            if (c != null) {
+                c.close ();
+            }
+
             if (db != null) {
                 db.close ();
             }

@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.cachirulop.moneybox.R;
 import com.cachirulop.moneybox.adapter.MoneyboxAdapter;
 import com.cachirulop.moneybox.common.ConfirmDialog;
-import com.cachirulop.moneybox.common.Preferences;
 import com.cachirulop.moneybox.common.PromptDialog;
 import com.cachirulop.moneybox.data.MoneyboxDataHelper;
 import com.cachirulop.moneybox.entity.Moneybox;
@@ -112,7 +111,8 @@ public class MainActivity
             }
         });
 
-        //_drawerAdapter.setCurrentMoneyboxId (Preferences.getLastMoneyboxId (this));
+        // _drawerAdapter.setCurrentMoneyboxId (Preferences.getLastMoneyboxId
+        // (this));
         getActionBar ().setTitle (_drawerAdapter.getCurrentItem ().getDescription ());
 
         drawerList = (ListView) findViewById (R.id.lvMoneyboxes);
