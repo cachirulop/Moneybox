@@ -11,6 +11,8 @@
 
 package com.cachirulop.moneybox.activity;
 
+import com.cachirulop.moneybox.entity.Movement;
+
 public interface IMoneyboxListener
 {
     void onSetTotal (double value);
@@ -22,4 +24,10 @@ public interface IMoneyboxListener
     void onUpdateMovements ();
 
     void onUpdateMoneyboxesList ();
+    
+    void onGetMovement (Movement m);
+    
+    void onDeleteMovement (Movement m);
+    
+    void onDropAgainMovement (Movement m);
 }

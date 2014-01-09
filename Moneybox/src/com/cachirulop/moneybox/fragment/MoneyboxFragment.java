@@ -27,6 +27,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.animation.BounceInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -124,13 +125,14 @@ public class MoneyboxFragment
         value = (CurrencyValueDef) v.getTag ();
         if (value != null) {
             MainActivity parent;
+            Movement result;
 
             parent = (MainActivity) getActivity ();
 
-            MovementsManager.insertMovement (parent.getCurrentMoneybox (),
-                                             value.getAmount ());
+            result = MovementsManager.insertMovement (parent.getCurrentMoneybox (),
+                                                      value.getAmount ());
             dropMoney (v,
-                       value);
+                       result);
 
             updateTotal ();
             refreshMovements ();
@@ -142,9 +144,12 @@ public class MoneyboxFragment
      * 
      * @param src
      *            Image of the money to drop
+     * @param m
+     *            Movement with the value of the money to drop
      */
+
     private void dropMoney (View src,
-                            CurrencyValueDef c)
+                            Movement m)
     {
         HorizontalScrollView scroll;
 
@@ -152,7 +157,7 @@ public class MoneyboxFragment
 
         dropMoney (src.getLeft () - scroll.getScrollX (),
                    src.getRight (),
-                   c);
+                   m);
     }
 
     /**
@@ -163,12 +168,12 @@ public class MoneyboxFragment
      *            Left side of the coin/bill
      * @param width
      *            Width of the image to slide down
-     * @param c
-     *            Value of the money to drop
+     * @param m
+     *            Movement with the value of the money to drop
      */
     protected void dropMoney (int leftMargin,
                               int width,
-                              CurrencyValueDef c)
+                              Movement m)
     {
         ImageView money;
         AnimationSet moneyDrop;
@@ -176,17 +181,20 @@ public class MoneyboxFragment
         RelativeLayout.LayoutParams lpParams;
         Rect r;
         Activity parent;
+        CurrencyValueDef curr;
 
         parent = getActivity ();
 
-        r = c.getDrawable ().getBounds ();
+        curr = CurrencyManager.getCurrencyDef (Math.abs (m.getAmount ()));
+        r = curr.getDrawable ().getBounds ();
 
         money = new ImageView (parent);
         money.setVisibility (View.INVISIBLE);
-        money.setImageDrawable (c.getDrawable ().getConstantState ().newDrawable ());
-        money.setTag (c);
+        money.setImageDrawable (curr.getDrawable ().getConstantState ().newDrawable ());
+        money.setTag (curr);
+        money.setId ((int) m.getIdMovement ());
 
-        layout = (RelativeLayout) parent.findViewById (R.id.moneyDropLayout);
+        layout = findLayout ();
 
         lpParams = new RelativeLayout.LayoutParams (r.width (),
                                                     r.height ());
@@ -200,11 +208,11 @@ public class MoneyboxFragment
 
         moneyDrop = createDropAnimation (money,
                                          layout,
-                                         c);
+                                         curr);
         money.setVisibility (View.VISIBLE);
 
-        SoundsManager.playMoneySound (c.getType ());
-        VibratorManager.vibrateMoneyDrop (c.getType ());
+        SoundsManager.playMoneySound (curr.getType ());
+        VibratorManager.vibrateMoneyDrop (curr.getType ());
 
         money.startAnimation (moneyDrop);
     }
@@ -259,6 +267,80 @@ public class MoneyboxFragment
         }
 
         result.addAnimation (drop);
+
+        return result;
+    }
+
+    /**
+     * Create dynamically an android animation for a coin or a bill getting from
+     * the moneybox.
+     * 
+     * @param img
+     *            ImageView to receive the animation
+     * @param layout
+     *            Layout that paint the image
+     * @return Set of animations to apply to the image
+     */
+    private AnimationSet createGetAnimation (ImageView img,
+                                             View layout)
+    {
+        AnimationSet result;
+
+        result = new AnimationSet (false);
+        result.setFillAfter (true);
+
+        // get
+        TranslateAnimation get;
+        int bottom;
+
+        bottom = Math.abs (layout.getHeight () - img.getLayoutParams ().height);
+        get = new TranslateAnimation (1.0f,
+                                      1.0f,
+                                      bottom,
+                                      1.0f);
+        get.setDuration (1500);
+        result.addAnimation (get);
+
+        // Fade out
+        AlphaAnimation fadeOut;
+
+        fadeOut = new AlphaAnimation (1.0f,
+                                      0.0f);
+        fadeOut.setDuration (300);
+        fadeOut.setStartOffset (1500);
+
+        result.addAnimation (fadeOut);
+
+        return result;
+    }
+
+    /**
+     * Create dynamically an android animation for a coin or a bill deleted from
+     * the moneybox.
+     * 
+     * @param img
+     *            ImageView to receive the animation
+     * @param layout
+     *            Layout that paint the image
+     * @return Set of animations to apply to the image
+     */
+    private AnimationSet createDeleteAnimation (ImageView img,
+                                                View layout)
+    {
+        AnimationSet result;
+
+        result = new AnimationSet (false);
+        result.setFillAfter (true);
+
+        // Fade out
+        AlphaAnimation fadeOut;
+
+        fadeOut = new AlphaAnimation (1.0f,
+                                      0.0f);
+        fadeOut.setStartOffset (300);
+        fadeOut.setDuration (300);
+
+        result.addAnimation (fadeOut);
 
         return result;
     }
@@ -343,7 +425,7 @@ public class MoneyboxFragment
 
         parent = (MainActivity) getActivity ();
 
-        layout = (RelativeLayout) parent.findViewById (R.id.moneyDropLayout);
+        layout = findLayout ();
         maxWidth = layout.getWidth ();
         if (maxWidth == 0) {
             // The layout is not initialized
@@ -371,7 +453,7 @@ public class MoneyboxFragment
                 MoneyTimerTask task;
 
                 task = new MoneyTimerTask (this,
-                                           curr,
+                                           m,
                                            left,
                                            r.width (),
                                            total);
@@ -412,12 +494,98 @@ public class MoneyboxFragment
      */
     public void refresh ()
     {
-        RelativeLayout layout;
-
-        layout = (RelativeLayout) getActivity ().findViewById (R.id.moneyDropLayout);
-        layout.removeAllViews ();
-
+        findLayout ().removeAllViews ();
         fillMoneybox ();
+    }
+
+    /**
+     * Get a money from the moneybox making an animation.
+     * 
+     * @param m
+     *            Movement to be got
+     */
+    public void getMovement (Movement m)
+    {
+        ImageView money;
+
+        money = findMovementImage (m);
+        if (money != null) {
+            AnimationSet moneyGet;
+            moneyGet = createGetAnimation (money,
+                                           findLayout ());
+
+            money.startAnimation (moneyGet);
+        }
+    }
+
+    /**
+     * Delete a movement from the moneybox making an animation.
+     * 
+     * @param m
+     *            Movement to be deleted.
+     */
+    public void deleteMovement (Movement m)
+    {
+        ImageView money;
+
+        money = findMovementImage (m);
+        if (money != null) {
+            AnimationSet moneyDelete;
+
+            moneyDelete = createDeleteAnimation (money,
+                                                 findLayout ());
+
+            money.startAnimation (moneyDelete);
+        }
+    }
+
+    /**
+     * Drop again a movement in the moneybox making an animation.
+     * 
+     * @param m
+     *            Movement to be dropped.
+     */
+    public void dropAgainMovement (Movement m)
+    {
+        ImageView v;
+        CurrencyValueDef c;
+        
+        // TODO: This doesn't work!!!!!!
+        
+        c = CurrencyManager.getCurrencyDef (Math.abs (m.getAmount ()));
+
+        v = new ImageView (getActivity ());
+        v.setLeft (findLayout ().getWidth () / 2);
+        v.setTop (0);
+        v.setImageDrawable (c.getDrawable ());
+        v.setTag (c);
+        
+        dropMoney (v, m);
+    }
+
+    /**
+     * Finds the image of a specific movement in the images created when the
+     * movement is inserted.
+     * 
+     * @param m
+     *            Movement to find
+     * 
+     * @return The ImageView that represents the movement in the moneybox or
+     *         null if the movement doesn't exist.
+     */
+    private ImageView findMovementImage (Movement m)
+    {
+        return (ImageView) findLayout ().findViewById ((int) m.getIdMovement ());
+    }
+
+    /**
+     * Find the main Layout of the fragment
+     * 
+     * @return The main layout of the fragment
+     */
+    private RelativeLayout findLayout ()
+    {
+        return (RelativeLayout) getActivity ().findViewById (R.id.moneyDropLayout);
     }
 }
 
@@ -431,7 +599,7 @@ final class MoneyTimerTask
         implements Runnable
 {
     MoneyboxFragment _parent;
-    CurrencyValueDef _currency;
+    Movement         _movement;
     int              _left;
     int              _width;
     double           _total;
@@ -452,13 +620,13 @@ final class MoneyTimerTask
      *            Total to be painted in the total layout.
      */
     public MoneyTimerTask (MoneyboxFragment parent,
-                           CurrencyValueDef currency,
+                           Movement movement,
                            int left,
                            int width,
                            double total)
     {
         _parent = parent;
-        _currency = currency;
+        _movement = movement;
         _left = left;
         _width = width;
         _total = total;
@@ -475,7 +643,7 @@ final class MoneyTimerTask
             {
                 _parent.dropMoney (_left,
                                    _width,
-                                   _currency);
+                                   _movement);
                 _parent.setTotal (_total);
             }
         });

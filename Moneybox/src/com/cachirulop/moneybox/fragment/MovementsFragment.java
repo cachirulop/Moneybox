@@ -111,13 +111,29 @@ public class MovementsFragment
                                 resultCode,
                                 data);
 
-        switch (requestCode) {
-            case EDIT_MOVEMENT_REQUEST:
-                if (resultCode == Activity.RESULT_OK) {
-                    refresh (true);
-                }
-                break;
+        if (requestCode == EDIT_MOVEMENT_REQUEST) {
+            Movement m;
+            
+            m = (Movement) data.getExtras ().get ("movement");
+            switch (resultCode) {
+                case MovementDetailActivity.RESULT_GET_MOVEMENT:
+                    ((IMoneyboxListener) getActivity ()).onGetMovement (m);
+                    break;
+
+                case MovementDetailActivity.RESULT_DELETE_MOVEMENT:
+                    ((IMoneyboxListener) getActivity ()).onDeleteMovement (m);
+                    break;
+                
+                case MovementDetailActivity.RESULT_DROP_MOVEMENT:
+                    // ((IMoneyboxListener) getActivity ()).onDeleteMovement (m);
+                    break;
+            }
+            
+            if (resultCode != Activity.RESULT_CANCELED) {
+                refresh ();
+            }
         }
+
     }
 
     /**
@@ -128,7 +144,7 @@ public class MovementsFragment
     {
         super.onResume ();
 
-        refresh (false);
+        refresh ();
     }
 
     /**
@@ -169,22 +185,6 @@ public class MovementsFragment
      */
     public void refresh ()
     {
-        refresh (false);
-    }
-
-    /**
-     * Refresh the list of movements. Call to the adapter of the ListView with
-     * the movements to refresh the information.
-     * 
-     * If the parameters refreshMoneybox is true then call to the
-     * onUpdateMoneybox method of the activity to refresh the moneybox and the
-     * moneybox list
-     * 
-     * @param refreshMoneybox
-     *            Tells if the moneybox tab should be refreshed too.
-     */
-    public void refresh (boolean refreshMoneybox)
-    {
         ListView listView;
         MoneyboxMovementAdapter adapter;
         MainActivity parent;
@@ -198,10 +198,6 @@ public class MovementsFragment
         adapter.refreshMovements ();
 
         updateTotal ();
-
-        if (refreshMoneybox) {
-            ((IMoneyboxListener) getActivity ()).onUpdateMoneybox ();
-        }
     }
 
     /**
@@ -283,6 +279,7 @@ public class MovementsFragment
             switch (itemId) {
                 case CONTEXT_MENU_GET:
                     MovementsManager.getMovement (selected);
+                    ((IMoneyboxListener) getActivity ()).onGetMovement (selected);
                     break;
 
                 case CONTEXT_MENU_DROP:
@@ -291,10 +288,11 @@ public class MovementsFragment
 
                 case CONTEXT_MENU_DELETE:
                     MovementsManager.deleteMovement (selected);
+                    ((IMoneyboxListener) getActivity ()).onDeleteMovement (selected);
                     break;
             }
 
-            refresh (true);
+            refresh ();
         }
 
         return true;

@@ -323,8 +323,9 @@ public class MovementsManager
      * 
      * @param m
      *            Movement to be added
+     * @return The new movement inserted
      */
-    public static void insertMovement (Movement m)
+    public static Movement insertMovement (Movement m)
     {
         SQLiteDatabase db = null;
 
@@ -350,6 +351,10 @@ public class MovementsManager
             db.insert ("movements",
                        null,
                        values);
+            
+            m.setIdMovement (getLastIdMovement());
+            
+            return m;
         }
         finally {
             if (db != null) {
@@ -365,14 +370,16 @@ public class MovementsManager
      *            Moneybox in which the movement will be inserted
      * @param amount
      *            Amount of money to add
+     * 
+     * @return The new movement inserted
      */
-    public static void insertMovement (Moneybox m,
-                                       double amount)
+    public static Movement insertMovement (Moneybox m,
+                                           double amount)
     {
-        insertMovement (m,
-                        amount,
-                        null,
-                        false);
+        return insertMovement (m,
+                               amount,
+                               null,
+                               false);
     }
 
     /**
@@ -386,11 +393,12 @@ public class MovementsManager
      *            Description of the movement
      * @param isBreakMoneybox
      *            The movement breaks the moneybox or not
+     * @return The new movement inserted
      */
-    public static void insertMovement (Moneybox m,
-                                       double amount,
-                                       String description,
-                                       boolean isBreakMoneybox)
+    public static Movement insertMovement (Moneybox m,
+                                           double amount,
+                                           String description,
+                                           boolean isBreakMoneybox)
     {
         Movement mov;
 
@@ -404,8 +412,19 @@ public class MovementsManager
             mov.setDescription (description);
         }
 
-        MovementsManager.insertMovement (mov);
+        return MovementsManager.insertMovement (mov);
     }
+    
+    /**
+     * Gets the maximum identifier of the movements table
+     * 
+     * @return
+     */
+    private static long getLastIdMovement ()
+    {
+        return new MoneyboxDataHelper (ContextManager.getContext ()).getLastId ("movements");
+    }
+    
 
     /**
      * Saves the values of a movement in the database

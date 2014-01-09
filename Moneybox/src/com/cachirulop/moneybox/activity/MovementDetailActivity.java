@@ -19,6 +19,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -51,7 +52,16 @@ public class MovementDetailActivity
 {
 
     /** Movement loaded in the window */
-    private Movement _movement;
+    private Movement        _movement;
+
+    /** Result value when the user push the get button */
+    public static final int RESULT_GET_MOVEMENT    = Activity.RESULT_FIRST_USER;
+
+    /** Result value when the user push the delete button */
+    public static final int RESULT_DELETE_MOVEMENT = Activity.RESULT_FIRST_USER + 1;
+
+    /** Result value when the user push the drop again button */
+    public static final int RESULT_DROP_MOVEMENT   = Activity.RESULT_FIRST_USER + 2;
 
     /**
      * Creates the activity. Load the data of the spinner with the available
@@ -640,8 +650,7 @@ public class MovementDetailActivity
 
         MovementsManager.updateMovement (_movement);
 
-        setResult (RESULT_OK);
-        finish ();
+        exitActivity (RESULT_OK);
     }
 
     /**
@@ -649,8 +658,7 @@ public class MovementDetailActivity
      */
     public void onCancelClick ()
     {
-        setResult (RESULT_CANCELED);
-        finish ();
+        exitActivity (RESULT_CANCELED);
     }
 
     /**
@@ -661,8 +669,7 @@ public class MovementDetailActivity
     {
         MovementsManager.getMovement (_movement);
 
-        setResult (RESULT_OK);
-        finish ();
+        exitActivity (RESULT_GET_MOVEMENT);
     }
 
     /**
@@ -673,8 +680,7 @@ public class MovementDetailActivity
     {
         MovementsManager.deleteMovement (_movement);
 
-        setResult (RESULT_OK);
-        finish ();
+        exitActivity (RESULT_DELETE_MOVEMENT);
     }
 
     /**
@@ -685,7 +691,26 @@ public class MovementDetailActivity
     {
         MovementsManager.dropMovement (_movement);
 
-        setResult (RESULT_OK);
+        exitActivity (RESULT_DROP_MOVEMENT);
+    }
+
+    /**
+     * Finish the activity passing the parameter called "movement" in an extra
+     * Intent object.
+     * 
+     * @param resultCode
+     *            Result code to pass to the called activity
+     */
+    private void exitActivity (int resultCode)
+    {
+        Intent data;
+
+        data = new Intent ();
+        data.putExtra ("movement",
+                       _movement);
+
+        setResult (resultCode,
+                   data);
         finish ();
     }
 

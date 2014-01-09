@@ -33,6 +33,7 @@ import com.cachirulop.moneybox.common.ConfirmDialog;
 import com.cachirulop.moneybox.common.PromptDialog;
 import com.cachirulop.moneybox.data.MoneyboxDataHelper;
 import com.cachirulop.moneybox.entity.Moneybox;
+import com.cachirulop.moneybox.entity.Movement;
 import com.cachirulop.moneybox.fragment.MoneyboxFragmentAdapter;
 import com.cachirulop.moneybox.manager.ContextManager;
 import com.cachirulop.moneybox.manager.CurrencyManager;
@@ -536,5 +537,20 @@ public class MainActivity
     public void onUpdateMoneyboxesList ()
     {
         refresh (false);
+    }
+
+    public void onGetMovement (Movement m)
+    {
+        _sectionsPagerAdapter.getMoneyboxFragment ().getMovement (m);
+    }
+
+    public void onDeleteMovement (Movement m)
+    {
+        _sectionsPagerAdapter.getMoneyboxFragment ().deleteMovement (m);
+    }
+
+    public void onDropAgainMovement (Movement m)
+    {
+        _sectionsPagerAdapter.getMoneyboxFragment ().dropAgainMovement (m);
     }
 }
