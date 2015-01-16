@@ -112,25 +112,27 @@ public class MovementsFragment
                                 data);
 
         if (requestCode == EDIT_MOVEMENT_REQUEST) {
-            Movement m;
-            
-            m = (Movement) data.getExtras ().get ("movement");
-            switch (resultCode) {
-                case MovementDetailActivity.RESULT_GET_MOVEMENT:
-                    ((IMoneyboxListener) getActivity ()).onGetMovement (m);
-                    break;
-
-                case MovementDetailActivity.RESULT_DELETE_MOVEMENT:
-                    ((IMoneyboxListener) getActivity ()).onDeleteMovement (m);
-                    break;
+            if (data != null) {
+                Movement m;
                 
-                case MovementDetailActivity.RESULT_DROP_MOVEMENT:
-                    // ((IMoneyboxListener) getActivity ()).onDeleteMovement (m);
-                    break;
-            }
-            
-            if (resultCode != Activity.RESULT_CANCELED) {
-                refresh ();
+                m = (Movement) data.getExtras ().get ("movement");
+                switch (resultCode) {
+                    case MovementDetailActivity.RESULT_GET_MOVEMENT:
+                        ((IMoneyboxListener) getActivity ()).onGetMovement (m);
+                        break;
+    
+                    case MovementDetailActivity.RESULT_DELETE_MOVEMENT:
+                        ((IMoneyboxListener) getActivity ()).onDeleteMovement (m);
+                        break;
+                    
+                    case MovementDetailActivity.RESULT_DROP_MOVEMENT:
+                        // ((IMoneyboxListener) getActivity ()).onDeleteMovement (m);
+                        break;
+                }
+                
+                if (resultCode != Activity.RESULT_CANCELED) {
+                    refresh ();
+                }
             }
         }
 
